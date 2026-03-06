@@ -136,7 +136,7 @@ Additional metrics:
 - Kendall rank correlation
 
 ---
-
+```
 ## Project Structure
 
 RT-Activity-Predictor
@@ -161,3 +161,4 @@ RT-Activity-Predictor
 ├── predict.py
 ├── requirements.txt
 └── README.md
+```
