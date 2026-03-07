@@ -12,7 +12,6 @@ def engineer_features():
     # -----------------------------
     df = load_data()
 
-    # Target variable
     y = df["active"]
 
     # -----------------------------
@@ -22,13 +21,13 @@ def engineer_features():
         "active",
         "rt_name",
         "sequence",
-        "rt_family",       # Prevent family leakage
+        "rt_family",
         "pe_efficiency_pct"
     ]
 
     X = df.drop(columns=drop_cols)
 
-    # Ensure column names are strings (sklearn requirement)
+    # ensure sklearn compatibility
     X.columns = X.columns.astype(str)
 
     # -----------------------------
@@ -44,9 +43,17 @@ def engineer_features():
     )
 
     # -----------------------------
+    # REMOVE FOLDSEEK FEATURES
+    # -----------------------------
+    foldseek_cols = [c for c in X_imputed.columns if "foldseek" in c]
+
+    X_imputed = X_imputed.drop(columns=foldseek_cols)
+
+    print("Removed FoldSeek features:", len(foldseek_cols))
+
+    # -----------------------------
     # Identify embedding columns
     # -----------------------------
-    # In this dataset the LAST 1280 columns correspond to ESM embeddings
     esm_cols = X_imputed.columns[-1280:]
 
     # -----------------------------
@@ -71,17 +78,11 @@ def engineer_features():
         axis=1
     )
 
-    # -----------------------------
-    # Final output
-    # -----------------------------
     print("Final feature matrix shape:", X_imputed.shape)
 
     return X_imputed, y
 
 
-# -----------------------------
-# Run standalone test
-# -----------------------------
 if __name__ == "__main__":
 
     X, y = engineer_features()
