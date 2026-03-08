@@ -5,25 +5,11 @@ from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.metrics import f1_score
 
 from feature_engineering import engineer_features
-from data_loader import load_data
 
 
-def train_lofo():
-
-    # Load ML-ready features
-    X, y = engineer_features()
-
-    # Load family labels for grouping
-    df = load_data()
-    groups = df["rt_family"]
+def run_lofo_validation(model, X, y, groups):
 
     logo = LeaveOneGroupOut()
-
-    model = RandomForestClassifier(
-        n_estimators=200,
-        max_depth=6,
-        random_state=42
-    )
 
     all_preds = []
     all_true = []
@@ -57,6 +43,25 @@ def train_lofo():
     overall_f1 = f1_score(all_true, all_preds)
 
     print("\nOverall LOFO F1:", overall_f1)
+
+    return overall_f1
+
+
+def train_lofo():
+
+    # Load engineered features
+    X, y, groups = engineer_features()
+
+    # Baseline model
+    model = RandomForestClassifier(
+        n_estimators=200,
+        max_depth=6,
+        random_state=42
+    )
+
+    score = run_lofo_validation(model, X, y, groups)
+
+    return score
 
 
 if __name__ == "__main__":
