@@ -162,3 +162,5 @@ RT-Activity-Predictor
 ├── requirements.txt
 └── README.md
 ```
+<img width="736" height="1408" alt="image" src="https://github.com/user-attachments/assets/69822c11-9c3d-4494-9923-c7d1a96a5ce6" />
+
