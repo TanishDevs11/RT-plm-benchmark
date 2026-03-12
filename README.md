@@ -283,6 +283,8 @@ Features: engineered biochemical + embedding features
 Validation: Leave-One-Family-Out
 Performance: LOFO F1 ≈ 0.70
 ```
+<img width="1536" height="754" alt="Final score" src="https://github.com/user-attachments/assets/fa5564c7-f5e0-4422-8c33-d9dbb2fdef73" />
+
 ---
 ```
 ## Project Structure
