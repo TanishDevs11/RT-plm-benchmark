@@ -1,10 +1,10 @@
 {
-    "timestamp": "2026-03-08 21:59:09.990487",
+    "timestamp": "2026-03-12 21:08:20.048215",
     "results": {
-        "RandomForest_default": 0.5333333333333333,
+        "RandomForest_default": 0.5517241379310345,
         "RandomForest_shallow": 0.5333333333333333,
-        "LogisticRegression": 0.5294117647058824,
-        "XGBoost": 0.48484848484848486
+        "LogisticRegression": 0.5161290322580645,
+        "XGBoost": 0.5
     },
     "best_model": "RandomForest_default"
 }
