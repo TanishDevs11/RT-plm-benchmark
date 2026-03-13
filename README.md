@@ -126,12 +126,12 @@ Extracted from predicted 3D structures:
 ### Active-site geometry
 
 Additional catalytic features were engineered:
-
+```
 - catalytic triad spread
 - triad compactness
 - catalytic distance ratios
 - active-site angle proxies
-
+```
 These features capture **spatial organization of catalytic residues**.
 
 ---
