@@ -5,8 +5,6 @@ __pycache__/
 # Virtual environment
 venv/
 
-# Dataset (large files)
-data/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
