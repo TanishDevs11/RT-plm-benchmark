@@ -8,30 +8,25 @@ import pandas as pd
 import numpy as np
 
 from sklearn.model_selection import LeaveOneGroupOut
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.calibration import CalibratedClassifierCV
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import precision_recall_curve, auc
 from scipy.stats import spearmanr
 
 from feature_engineering import engineer_features
 
 
-print("🚀 Calibrated LOFO pipeline started")
+print("LOFO regression pipeline started")
 
 
 # ---------------------------------------------------
 # Load engineered features
 # ---------------------------------------------------
 
-print("Loading engineered features...")
-
 X, y, groups = engineer_features()
-
-print("Initial feature matrix:", X.shape)
 
 
 # ---------------------------------------------------
-# Load selected features
+# Load selected features safely
 # ---------------------------------------------------
 
 selected_features = pd.read_csv(
@@ -39,22 +34,9 @@ selected_features = pd.read_csv(
     header=None
 )[0].tolist()
 
-print("Selected feature count:", len(selected_features))
+selected_features = [f for f in selected_features if f in X.columns]
 
-
-# ---------------------------------------------------
-# Remove features that don't exist
-# ---------------------------------------------------
-
-available_features = [f for f in selected_features if f in X.columns]
-missing_features = [f for f in selected_features if f not in X.columns]
-
-print("Available features:", len(available_features))
-print("Missing features:", missing_features)
-
-X = X[available_features]
-
-print("Final feature matrix:", X.shape)
+X = X[selected_features]
 
 
 # ---------------------------------------------------
@@ -65,7 +47,7 @@ seq = pd.read_csv("data/rt_sequences.csv")
 
 
 # ---------------------------------------------------
-# LOFO setup
+# Prepare containers
 # ---------------------------------------------------
 
 logo = LeaveOneGroupOut()
@@ -76,8 +58,6 @@ all_eff = []
 all_preds = []
 all_names = []
 
-print("\nRunning LOFO predictions...\n")
-
 
 # ---------------------------------------------------
 # LOFO loop
@@ -85,39 +65,36 @@ print("\nRunning LOFO predictions...\n")
 
 for train_idx, test_idx in logo.split(X, y, groups):
 
-    fam = groups.iloc[test_idx].unique()[0]
-    print("Testing family:", fam)
-
     X_train = X.iloc[train_idx]
     X_test = X.iloc[test_idx]
 
-    y_train = y.iloc[train_idx]
-    y_test = y.iloc[test_idx]
+    y_train_eff = seq.iloc[train_idx]["pe_efficiency_pct"]
+    y_test_eff = seq.iloc[test_idx]["pe_efficiency_pct"]
 
-    base_model = RandomForestClassifier(
+    y_test_binary = y.iloc[test_idx]
+
+
+    # REGRESSION MODEL (important change)
+    model = RandomForestRegressor(
         n_estimators=400,
         max_depth=8,
-        random_state=42
+        random_state=42,
+        n_jobs=-1
     )
 
-    model = CalibratedClassifierCV(
-        base_model,
-        method="sigmoid",
-        cv=3
-    )
+    model.fit(X_train, y_train_eff)
 
-    model.fit(X_train, y_train)
-
-    prob = model.predict_proba(X_test)[:, 1]
+    prob = model.predict(X_test)
 
     pred = (prob > 0.5).astype(int)
 
+
     all_scores.extend(prob)
-    all_labels.extend(y_test)
+    all_labels.extend(y_test_binary)
     all_preds.extend(pred)
 
-    all_eff.extend(seq.iloc[test_idx]["pe_efficiency_pct"])
-    all_names.extend(seq.iloc[test_idx]["rt_name"])
+    all_eff.extend(y_test_eff.values)
+    all_names.extend(seq.iloc[test_idx]["rt_name"].values)
 
 
 # ---------------------------------------------------
@@ -130,7 +107,7 @@ all_eff = np.array(all_eff)
 
 
 # ---------------------------------------------------
-# PR-AUC
+# Metrics
 # ---------------------------------------------------
 
 precision, recall, _ = precision_recall_curve(
@@ -140,19 +117,8 @@ precision, recall, _ = precision_recall_curve(
 
 pr_auc = auc(recall, precision)
 
-
-# ---------------------------------------------------
-# Weighted Spearman
-# ---------------------------------------------------
-
 corr, _ = spearmanr(all_scores, all_eff)
-
 wspearman = max(corr, 0)
-
-
-# ---------------------------------------------------
-# CLS
-# ---------------------------------------------------
 
 cls = 2 * (pr_auc * wspearman) / (pr_auc + wspearman + 1e-8)
 
@@ -165,21 +131,39 @@ print("==============================")
 
 
 # ---------------------------------------------------
-# Save predictions
+# Save predictions safely
 # ---------------------------------------------------
 
 os.makedirs("results", exist_ok=True)
 
-pred_df = pd.DataFrame({
+
+results_df = pd.DataFrame({
     "rt_name": all_names,
     "predicted_active": all_preds,
     "predicted_score": all_scores
 })
 
-pred_df.to_csv(
+results_df.to_csv(
     "results/calibrated_predictions_selected_features.csv",
     index=False
 )
 
-print("\nSaved predictions → results/calibrated_predictions_selected_features.csv")
-print("✅ Finished")
+
+submission = pd.DataFrame({
+    "rt_name": all_names,
+    "predicted_score": all_scores
+})
+
+
+submission = (
+    submission
+    .set_index("rt_name")
+    .reindex(seq["rt_name"])
+    .reset_index()
+)
+
+
+submission.to_csv("submission.csv", index=False)
+
+
+print("\nSaved predictions successfully")
