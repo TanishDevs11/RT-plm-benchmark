@@ -8,7 +8,7 @@ from feature_engineering import engineer_features
 
 def select_features(top_k=30):
 
-    print("🚀 Loading engineered features...\n")
+    print("Loading engineered features...\n")
 
     # Load engineered features
     X, y, groups = engineer_features()
@@ -104,4 +104,4 @@ if __name__ == "__main__":
     for f in features:
         print(f)
 
-    print("\n✅ Feature selection complete.")
+    print("\nFeature selection complete.")

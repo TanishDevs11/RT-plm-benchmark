@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from scipy.stats import rankdata
 
-print("🔬 Mis-Ranking Analysis")
+print("Mis-Ranking Analysis")
 
 # -----------------------------
 # Load predictions
@@ -91,4 +91,4 @@ df.to_csv(
 )
 
 print("\nSaved → results/misranking_analysis.csv")
-print("✅ Analysis complete")
+print("Analysis complete")

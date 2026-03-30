@@ -22,20 +22,30 @@ def load_data():
     # -----------------------------
     # Load ESM embeddings
     # -----------------------------
-    esm = np.load("data/esm2_embeddings.npz")
+    esm = np.load("data/esm2_embeddings.npz", allow_pickle=True)
 
-    esm_embeddings = esm["embeddings"]
+    embeddings = esm["embeddings"]
+    names = esm["names"]
 
-    esm_df = pd.DataFrame(esm_embeddings)
+    # Convert to dataframe
+    esm_df = pd.DataFrame(
+        embeddings,
+        columns=[f"esm_{i}" for i in range(embeddings.shape[1])]
+    )
+
+    # Attach correct IDs from embedding file
+    esm_df["rt_name"] = names
+
 
     # -----------------------------
-    # Merge datasets
+    # Merge datasets correctly
     # -----------------------------
     df = seq_df.merge(feat_df, on="rt_name", how="left")
 
     df = df.merge(struct_df, on="rt_name", how="left")
 
-    df = pd.concat([df, esm_df], axis=1)
+    df = df.merge(esm_df, on="rt_name", how="left")
+
 
     return df
 

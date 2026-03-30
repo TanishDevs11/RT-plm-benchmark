@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 
 from sklearn.impute import SimpleImputer
-from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 from data_loader import load_data
@@ -15,13 +14,17 @@ def add_active_site_features(df):
 
         print("Adding active-site geometry features...")
 
-        df["triad_distance_ratio"] = df["D1_D2_dist"] / (df["D2_D3_dist"] + 1e-6)
+        df["triad_distance_ratio"] = df["D1_D2_dist"] / (
+            df["D2_D3_dist"] + 1e-6
+        )
 
         df["triad_spread"] = (
             df["D1_D2_dist"] + df["D2_D3_dist"]
         ) / 2
 
-        df["triad_compactness"] = 1 / (df["triad_spread"] + 1e-6)
+        df["triad_compactness"] = 1 / (
+            df["triad_spread"] + 1e-6
+        )
 
         a = df["D1_D2_dist"]
         b = df["D2_D3_dist"]
@@ -78,7 +81,10 @@ def engineer_features():
     # -----------------------------
     # Remove FoldSeek features
     # -----------------------------
-    foldseek_cols = [c for c in X_imputed.columns if "foldseek" in c]
+    foldseek_cols = [
+        c for c in X_imputed.columns
+        if "foldseek" in c.lower()
+    ]
 
     if foldseek_cols:
         X_imputed = X_imputed.drop(columns=foldseek_cols)
@@ -86,29 +92,18 @@ def engineer_features():
     print("Removed FoldSeek features:", len(foldseek_cols))
 
     # -----------------------------
-    # Detect ESM embeddings
+    # Detect ESM embeddings correctly
     # -----------------------------
     if X_imputed.shape[1] >= 1280:
 
         esm_cols = X_imputed.columns[-1280:]
 
         print("Detected ESM embedding columns:", len(esm_cols))
+        print("Keeping raw ESM embeddings (no PCA applied)")
 
-        pca = PCA(n_components=20, random_state=42)
+    else:
 
-        esm_reduced = pca.fit_transform(X_imputed[esm_cols])
-
-        esm_df = pd.DataFrame(
-            esm_reduced,
-            columns=[f"esm_pca_{i}" for i in range(20)]
-        )
-
-        X_imputed = X_imputed.drop(columns=esm_cols)
-
-        X_imputed = pd.concat(
-            [X_imputed.reset_index(drop=True), esm_df],
-            axis=1
-        )
+        print("WARNING: Expected 1280 embedding columns but found fewer")
 
     # -----------------------------
     # Feature Scaling
@@ -123,27 +118,9 @@ def engineer_features():
     )
 
     # -----------------------------
-    # Apply Feature Selection
+    # Disable feature selection filtering
     # -----------------------------
-    try:
-
-        selected_features = pd.read_csv(
-            "data/selected_features.csv",
-            header=None
-        )[0].tolist()
-
-        # keep only features that exist
-        selected_features = [
-            f for f in selected_features if f in X_scaled.columns
-        ]
-
-        X_scaled = X_scaled[selected_features]
-
-        print("Applied feature selection:", len(selected_features))
-
-    except FileNotFoundError:
-
-        print("No selected_features.csv found — using all features")
+    print("Using full feature set (feature selection disabled)")
 
     print("Final feature matrix shape:", X_scaled.shape)
 

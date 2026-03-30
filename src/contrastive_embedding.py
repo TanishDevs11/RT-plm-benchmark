@@ -1,5 +1,5 @@
 import sys
-print("🚀 Contrastive script started", flush=True)
+print("Contrastive script started", flush=True)
 
 try:
     import torch

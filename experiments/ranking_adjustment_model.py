@@ -145,4 +145,4 @@ pred_df.to_csv(
 )
 
 print("\nSaved → results/ranking_adjusted_predictions.csv")
-print("✅ Finished")
+print("Finished")

@@ -47,13 +47,18 @@ X = X.drop(columns=foldseek_cols)
 print("Removed FoldSeek:",len(foldseek_cols))
 print("Feature matrix:",X.shape)
 
+# -----------------------------
+# Clean features
+# -----------------------------
+
+X = X.replace([np.inf,-np.inf],np.nan)
+X = X.fillna(X.median())
 
 # -----------------------------
 # Log transform efficiency
 # -----------------------------
 
 y_reg = np.log1p(y_eff)
-
 
 # -----------------------------
 # LOFO setup
@@ -66,9 +71,7 @@ all_labels = []
 all_eff = []
 all_names = []
 
-
 print("\nRunning LOFO regression...\n")
-
 
 # -----------------------------
 # LOFO loop
@@ -84,10 +87,9 @@ for train_idx, test_idx in logo.split(X,y_binary,groups):
 
     y_train = y_reg.iloc[train_idx]
 
-    # regression model
     model = RandomForestRegressor(
-        n_estimators=500,
-        max_depth=10,
+        n_estimators=600,
+        max_depth=12,
         random_state=42
     )
 
@@ -109,7 +111,6 @@ all_scores = np.array(all_scores)
 all_labels = np.array(all_labels)
 all_eff = np.array(all_eff)
 
-
 # -----------------------------
 # PR-AUC
 # -----------------------------
@@ -121,15 +122,15 @@ precision, recall, _ = precision_recall_curve(
 
 pr_auc = auc(recall,precision)
 
-
 # -----------------------------
 # Weighted Spearman
 # -----------------------------
 
-corr,_ = spearmanr(all_scores,all_eff)
+weights = all_eff + 0.1
+
+corr,_ = spearmanr(all_scores * weights, all_eff * weights)
 
 wspearman = max(corr,0)
-
 
 # -----------------------------
 # CLS
@@ -137,20 +138,19 @@ wspearman = max(corr,0)
 
 cls = 2*(pr_auc*wspearman)/(pr_auc+wspearman+1e-8)
 
-
 print("\n==============================")
 print("PR-AUC:",pr_auc)
 print("Weighted Spearman:",wspearman)
 print("CLS:",cls)
 print("==============================")
 
-
 # -----------------------------
 # Convert to submission format
 # -----------------------------
 
-predicted_active = (all_scores > 0).astype(int)
+threshold = np.percentile(all_scores,70)
 
+predicted_active = (all_scores > threshold).astype(int)
 
 pred_df = pd.DataFrame({
     "rt_name":all_names,
@@ -166,4 +166,4 @@ pred_df.to_csv(
 )
 
 print("\nSaved → results/regression_predictions.csv")
-print("✅ Finished")
+print("Finished")

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from pathlib import Path
 
-print("📊 Generating Model Comparison Plot...")
+print("Generating model comparison plot...")
 
 # -----------------------------
 # Model results
@@ -69,4 +69,4 @@ plt.savefig(
 
 plt.show()
 
-print("✅ Saved: results/model_comparison.png")
+print(" Saved: results/model_comparison.png")
