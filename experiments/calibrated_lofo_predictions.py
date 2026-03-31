@@ -27,14 +27,14 @@ seq = pd.read_csv("data/rt_sequences.csv")
 
 
 # ---------------------------------------------------
-# Generate selected_features.csv (FAST VERSION)
+# Regenerate balanced selected_features.csv if missing
 # ---------------------------------------------------
 
-GENERATE_FEATURES = False  # set False after first run
+selected_features_path = "data/selected_features.csv"
 
-if GENERATE_FEATURES:
+if not os.path.exists(selected_features_path):
 
-    print("Generating selected_features.csv (fast mode)...")
+    print("selected_features.csv missing — regenerating balanced features...")
 
     target = seq["pe_efficiency_pct"].rank()
 
@@ -49,19 +49,43 @@ if GENERATE_FEATURES:
 
         feature_scores[col] = abs(corr)
 
-    top_features = sorted(
-        feature_scores,
-        key=feature_scores.get,
+
+    # -------------------------
+    # Split ESM vs structural
+    # -------------------------
+
+    esm_features = [f for f in feature_scores if f.startswith("esm_")]
+
+    struct_features = [
+        f for f in feature_scores
+        if not f.startswith("esm_")
+    ]
+
+
+    top_esm = sorted(
+        esm_features,
+        key=lambda x: feature_scores[x],
         reverse=True
-    )[:30]
+    )[:20]
+
+
+    top_struct = sorted(
+        struct_features,
+        key=lambda x: feature_scores[x],
+        reverse=True
+    )[:10]
+
+
+    top_features = top_esm + top_struct
+
 
     pd.Series(top_features).to_csv(
-        "data/selected_features.csv",
+        selected_features_path,
         index=False,
         header=False
     )
 
-    print("Saved selected_features.csv")
+    print("Balanced selected_features.csv generated successfully")
 
 
 # ---------------------------------------------------
@@ -69,16 +93,19 @@ if GENERATE_FEATURES:
 # ---------------------------------------------------
 
 selected_features = pd.read_csv(
-    "data/selected_features.csv",
+    selected_features_path,
     header=None
 )[0].tolist()
+
 
 selected_features = [
     f for f in selected_features
     if f in X.columns
 ]
 
+
 X = X[selected_features]
+
 
 print("Applied feature selection:", len(selected_features))
 
@@ -93,6 +120,7 @@ EPSILON = 0.01
 def weighted_spearman(predicted_scores, true_efficiency):
 
     pred_ranks = np.argsort(np.argsort(predicted_scores)).astype(float)
+
     true_ranks = np.argsort(np.argsort(true_efficiency)).astype(float)
 
     weights = true_efficiency + EPSILON
@@ -105,6 +133,7 @@ def weighted_spearman(predicted_scores, true_efficiency):
     dt = true_ranks - mu_t
 
     cov = np.sum(weights * dp * dt)
+
     std_p = np.sqrt(np.sum(weights * dp ** 2))
     std_t = np.sqrt(np.sum(weights * dt ** 2))
 
@@ -131,14 +160,21 @@ for train_idx, test_idx in logo.split(X, y, groups):
     X_train = X.iloc[train_idx]
     X_test = X.iloc[test_idx]
 
-    y_train_eff = (
-        seq.iloc[train_idx]["pe_efficiency_pct"]
-        .rank(method="average")
-    )
+
+    train_eff = seq.iloc[train_idx]["pe_efficiency_pct"]
+    train_family = groups.iloc[train_idx]
+
+
+    train_family_mean = train_eff.groupby(train_family).transform("mean")
+
+
+    y_train_eff = (train_eff - train_family_mean).rank(method="average")
+
 
     y_test_eff = seq.iloc[test_idx]["pe_efficiency_pct"]
 
     y_test_binary = y.iloc[test_idx]
+
 
     model = RandomForestRegressor(
         n_estimators=400,
@@ -147,9 +183,12 @@ for train_idx, test_idx in logo.split(X, y, groups):
         n_jobs=-1
     )
 
+
     model.fit(X_train, y_train_eff)
 
+
     preds = model.predict(X_test)
+
 
     all_scores.extend(preds)
     all_labels.extend(y_test_binary)
@@ -198,12 +237,14 @@ precision, recall, _ = precision_recall_curve(
 
 pr_auc = auc(recall, precision)
 
+
 wspearman = weighted_spearman(
     all_scores,
     all_eff
 )
 
 wspearman = max(wspearman, 0)
+
 
 cls = 2 * (pr_auc * wspearman) / (
     pr_auc + wspearman + 1e-8
@@ -223,6 +264,7 @@ print("==============================")
 
 os.makedirs("results", exist_ok=True)
 
+
 pd.DataFrame({
     "rt_name": all_names,
     "predicted_score": all_scores
@@ -238,12 +280,14 @@ submission = pd.DataFrame({
     "predicted_score": all_scores
 })
 
+
 submission = (
     submission
     .set_index("rt_name")
     .reindex(seq["rt_name"])
     .reset_index()
 )
+
 
 submission.to_csv("submission.csv", index=False)
 
