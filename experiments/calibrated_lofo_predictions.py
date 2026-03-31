@@ -30,7 +30,7 @@ seq = pd.read_csv("data/rt_sequences.csv")
 # Generate selected_features.csv (FAST VERSION)
 # ---------------------------------------------------
 
-GENERATE_FEATURES = True   # set False after first run
+GENERATE_FEATURES = False # set False after first run
 
 if GENERATE_FEATURES:
 
@@ -234,6 +234,7 @@ pd.DataFrame({
 
 submission = pd.DataFrame({
     "rt_name": all_names,
+    "predicted_active": (all_scores >= 0.5).astype(int),
     "predicted_score": all_scores
 })
 
