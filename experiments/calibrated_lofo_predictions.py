@@ -27,70 +27,18 @@ seq = pd.read_csv("data/rt_sequences.csv")
 
 
 # ---------------------------------------------------
-# Regenerate balanced selected_features.csv if missing
+# Load EXISTING selected_features.csv only
+# (do NOT regenerate automatically)
 # ---------------------------------------------------
 
 selected_features_path = "data/selected_features.csv"
 
 if not os.path.exists(selected_features_path):
 
-    print("selected_features.csv missing — regenerating balanced features...")
-
-    target = seq["pe_efficiency_pct"].rank()
-
-    feature_scores = {}
-
-    for col in X.columns:
-
-        corr = np.corrcoef(X[col], target)[0, 1]
-
-        if np.isnan(corr):
-            corr = 0
-
-        feature_scores[col] = abs(corr)
-
-
-    # -------------------------
-    # Split ESM vs structural
-    # -------------------------
-
-    esm_features = [f for f in feature_scores if f.startswith("esm_")]
-
-    struct_features = [
-        f for f in feature_scores
-        if not f.startswith("esm_")
-    ]
-
-
-    top_esm = sorted(
-        esm_features,
-        key=lambda x: feature_scores[x],
-        reverse=True
-    )[:20]
-
-
-    top_struct = sorted(
-        struct_features,
-        key=lambda x: feature_scores[x],
-        reverse=True
-    )[:10]
-
-
-    top_features = top_esm + top_struct
-
-
-    pd.Series(top_features).to_csv(
-        selected_features_path,
-        index=False,
-        header=False
+    raise FileNotFoundError(
+        "selected_features.csv missing. Restore your best feature list first."
     )
 
-    print("Balanced selected_features.csv generated successfully")
-
-
-# ---------------------------------------------------
-# Apply feature selection
-# ---------------------------------------------------
 
 selected_features = pd.read_csv(
     selected_features_path,
@@ -120,7 +68,6 @@ EPSILON = 0.01
 def weighted_spearman(predicted_scores, true_efficiency):
 
     pred_ranks = np.argsort(np.argsort(predicted_scores)).astype(float)
-
     true_ranks = np.argsort(np.argsort(true_efficiency)).astype(float)
 
     weights = true_efficiency + EPSILON
@@ -160,35 +107,31 @@ for train_idx, test_idx in logo.split(X, y, groups):
     X_train = X.iloc[train_idx]
     X_test = X.iloc[test_idx]
 
-
     train_eff = seq.iloc[train_idx]["pe_efficiency_pct"]
     train_family = groups.iloc[train_idx]
 
-
     train_family_mean = train_eff.groupby(train_family).transform("mean")
-
 
     y_train_eff = (train_eff - train_family_mean).rank(method="average")
 
-
     y_test_eff = seq.iloc[test_idx]["pe_efficiency_pct"]
-
     y_test_binary = y.iloc[test_idx]
 
+    # ---------------------------------------------------
+    # UPDATED RandomForest (better LOFO stability)
+    # ---------------------------------------------------
 
     model = RandomForestRegressor(
-        n_estimators=400,
-        max_depth=8,
+        n_estimators=600,
+        max_depth=7,
+        min_samples_leaf=2,
         random_state=42,
         n_jobs=-1
     )
 
-
     model.fit(X_train, y_train_eff)
 
-
     preds = model.predict(X_test)
-
 
     all_scores.extend(preds)
     all_labels.extend(y_test_binary)
@@ -237,14 +180,12 @@ precision, recall, _ = precision_recall_curve(
 
 pr_auc = auc(recall, precision)
 
-
 wspearman = weighted_spearman(
     all_scores,
     all_eff
 )
 
 wspearman = max(wspearman, 0)
-
 
 cls = 2 * (pr_auc * wspearman) / (
     pr_auc + wspearman + 1e-8
