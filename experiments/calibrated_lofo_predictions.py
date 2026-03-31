@@ -1,7 +1,6 @@
 import sys
 import os
 
-# allow imports from src/
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
 
 import pandas as pd
@@ -10,6 +9,8 @@ import numpy as np
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import precision_recall_curve, auc
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 
 from feature_engineering import engineer_features
 
@@ -17,36 +18,9 @@ from feature_engineering import engineer_features
 print("LOFO hybrid rank-classifier pipeline started")
 
 
-# ---------------------------------------------------
-# Load engineered features
-# ---------------------------------------------------
-
 X, y, groups = engineer_features()
 seq = pd.read_csv("data/rt_sequences.csv")
 
-
-# ---------------------------------------------------
-# Load selected_features.csv safely
-# ---------------------------------------------------
-
-selected_features = pd.read_csv(
-    "data/selected_features.csv",
-    header=None
-)[0].tolist()
-
-selected_features = [
-    f for f in selected_features
-    if f in X.columns
-]
-
-X = X[selected_features]
-
-print("Applied feature selection:", len(selected_features))
-
-
-# ---------------------------------------------------
-# Weighted Spearman implementation
-# ---------------------------------------------------
 
 EPSILON = 0.01
 
@@ -76,10 +50,6 @@ def weighted_spearman(predicted_scores, true_efficiency):
     return cov / (std_p * std_t)
 
 
-# ---------------------------------------------------
-# LOFO Cross-validation
-# ---------------------------------------------------
-
 logo = LeaveOneGroupOut()
 
 all_scores = []
@@ -93,30 +63,23 @@ for train_idx, test_idx in logo.split(X, y, groups):
     X_train = X.iloc[train_idx]
     X_test = X.iloc[test_idx]
 
-    train_eff = seq.iloc[train_idx]["pe_efficiency_pct"]
-    train_family = groups.iloc[train_idx]
-
-    # ---------------------------------------------------
-    # FAMILY Z-SCORE NORMALIZATION
-    # ---------------------------------------------------
-
-    fam_mean = train_eff.groupby(train_family).transform("mean")
-    fam_std = train_eff.groupby(train_family).transform("std")
-
-    fam_std = fam_std.fillna(1).replace(0, 1)
-
-    normalized_eff = (train_eff - fam_mean) / fam_std
-    normalized_eff = normalized_eff.fillna(0)
-
-    y_train_eff = normalized_eff.rank(method="average")
+    y_train = y.iloc[train_idx]
+    y_test = y.iloc[test_idx]
 
     y_test_eff = seq.iloc[test_idx]["pe_efficiency_pct"]
-    y_test_binary = y.iloc[test_idx]
 
-    # ---------------------------------------------------
-    # Rank regression model
-    # ---------------------------------------------------
+    # ✅ fold-safe preprocessing
+    imputer = SimpleImputer(strategy="median")
 
+    X_train = imputer.fit_transform(X_train)
+    X_test = imputer.transform(X_test)
+
+    scaler = StandardScaler()
+
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    # regression branch
     rank_model = RandomForestRegressor(
         n_estimators=700,
         max_depth=8,
@@ -125,13 +88,10 @@ for train_idx, test_idx in logo.split(X, y, groups):
         n_jobs=-1
     )
 
-    rank_model.fit(X_train, y_train_eff)
+    rank_model.fit(X_train, y_train.astype(float))
     rank_preds = rank_model.predict(X_test)
 
-    # ---------------------------------------------------
-    # Activity classifier model
-    # ---------------------------------------------------
-
+    # classifier branch
     clf_model = RandomForestClassifier(
         n_estimators=700,
         max_depth=8,
@@ -140,47 +100,21 @@ for train_idx, test_idx in logo.split(X, y, groups):
         n_jobs=-1
     )
 
-    clf_model.fit(X_train, y.iloc[train_idx])
+    clf_model.fit(X_train, y_train)
     clf_probs = clf_model.predict_proba(X_test)[:, 1]
-
-    # ---------------------------------------------------
-    # Hybrid stacking
-    # ---------------------------------------------------
 
     preds = 0.65 * rank_preds + 0.35 * clf_probs
 
-    # ---------------------------------------------------
-    # FAMILY-SPECIFIC ADAPTIVE CALIBRATION (NEW)
-    # ---------------------------------------------------
-
-    family_bias = train_eff.groupby(train_family).mean()
-
-    family_adjustment = family_bias.loc[train_family].values.mean()
-
-    preds = preds + 0.20 * family_adjustment
-
-    # ---------------------------------------------------
-    # Store predictions
-    # ---------------------------------------------------
-
     all_scores.extend(preds)
-    all_labels.extend(y_test_binary)
+    all_labels.extend(y_test)
     all_eff.extend(y_test_eff.values)
     all_names.extend(seq.iloc[test_idx]["rt_name"].values)
 
-
-# ---------------------------------------------------
-# Convert arrays
-# ---------------------------------------------------
 
 all_scores = np.array(all_scores)
 all_labels = np.array(all_labels)
 all_eff = np.array(all_eff)
 
-
-# ---------------------------------------------------
-# Normalize predictions
-# ---------------------------------------------------
 
 all_scores = (
     (all_scores - all_scores.min()) /
@@ -188,17 +122,9 @@ all_scores = (
 )
 
 
-# ---------------------------------------------------
-# Temperature scaling (correct placement)
-# ---------------------------------------------------
-
 temperature = 0.85
 all_scores = np.power(all_scores, temperature)
 
-
-# ---------------------------------------------------
-# Auto direction correction
-# ---------------------------------------------------
 
 ws = weighted_spearman(all_scores, all_eff)
 
@@ -206,10 +132,6 @@ if ws < 0:
     print("Auto-flipping prediction direction")
     all_scores = 1 - all_scores
 
-
-# ---------------------------------------------------
-# Metrics
-# ---------------------------------------------------
 
 precision, recall, _ = precision_recall_curve(
     all_labels,
@@ -237,10 +159,6 @@ print("CLS:", cls)
 print("==============================")
 
 
-# ---------------------------------------------------
-# Save predictions
-# ---------------------------------------------------
-
 os.makedirs("results", exist_ok=True)
 
 pd.DataFrame({
@@ -266,6 +184,5 @@ submission = (
 )
 
 submission.to_csv("submission.csv", index=False)
-
 
 print("\nSaved predictions successfully")

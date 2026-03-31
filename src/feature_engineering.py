@@ -1,15 +1,11 @@
 import pandas as pd
 import numpy as np
 
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
-
 from data_loader import load_data
 
 
 def add_active_site_features(df):
 
-    # Only compute if catalytic distances exist
     if {"D1_D2_dist", "D2_D3_dist"}.issubset(df.columns):
 
         print("Adding active-site geometry features...")
@@ -38,22 +34,47 @@ def add_active_site_features(df):
     return df
 
 
+def add_interaction_features(df):
+
+    print("Adding interaction features...")
+
+    if {"triad_compactness", "pocket_hydrophobic"}.issubset(df.columns):
+
+        df["triad_hydrophobic_interaction"] = (
+            df["triad_compactness"] * df["pocket_hydrophobic"]
+        )
+
+    if {"triad_distance_ratio", "n_hbonds"}.issubset(df.columns):
+
+        df["triad_hbond_interaction"] = (
+            df["triad_distance_ratio"] * df["n_hbonds"]
+        )
+
+    if {"radius_gyration", "salt_per_res"}.issubset(df.columns):
+
+        df["gyration_salt_interaction"] = (
+            df["radius_gyration"] * df["salt_per_res"]
+        )
+
+    if {"triad_spread", "hydrophobic_per_res"}.issubset(df.columns):
+
+        df["spread_hydrophobic_interaction"] = (
+            df["triad_spread"] * df["hydrophobic_per_res"]
+        )
+
+    return df
+
+
 def engineer_features():
 
-    # -----------------------------
-    # Load dataset
-    # -----------------------------
     df = load_data()
 
-    # Add catalytic geometry features
     df = add_active_site_features(df)
+    df = add_interaction_features(df)
 
     y = df["active"]
     groups = df["rt_family"]
 
-    # -----------------------------
-    # Remove non-feature columns
-    # -----------------------------
     drop_cols = [
         "active",
         "rt_name",
@@ -66,70 +87,22 @@ def engineer_features():
 
     X.columns = X.columns.astype(str)
 
-    # -----------------------------
-    # Handle missing values
-    # -----------------------------
-    imputer = SimpleImputer(strategy="median")
-
-    X_imputed = imputer.fit_transform(X)
-
-    X_imputed = pd.DataFrame(
-        X_imputed,
-        columns=X.columns
-    )
-
-    # -----------------------------
-    # Remove FoldSeek features
-    # -----------------------------
+    # Remove FoldSeek features safely
     foldseek_cols = [
-        c for c in X_imputed.columns
+        c for c in X.columns
         if "foldseek" in c.lower()
     ]
 
     if foldseek_cols:
-        X_imputed = X_imputed.drop(columns=foldseek_cols)
+        X = X.drop(columns=foldseek_cols)
 
     print("Removed FoldSeek features:", len(foldseek_cols))
+    print("Returning raw feature matrix (no scaling applied)")
+    print("Feature matrix shape:", X.shape)
 
-    # -----------------------------
-    # Detect ESM embeddings correctly
-    # -----------------------------
-    if X_imputed.shape[1] >= 1280:
-
-        esm_cols = X_imputed.columns[-1280:]
-
-        print("Detected ESM embedding columns:", len(esm_cols))
-        print("Keeping raw ESM embeddings (no PCA applied)")
-
-    else:
-
-        print("WARNING: Expected 1280 embedding columns but found fewer")
-
-    # -----------------------------
-    # Feature Scaling
-    # -----------------------------
-    scaler = StandardScaler()
-
-    X_scaled = scaler.fit_transform(X_imputed)
-
-    X_scaled = pd.DataFrame(
-        X_scaled,
-        columns=X_imputed.columns
-    )
-
-    # -----------------------------
-    # Disable feature selection filtering
-    # -----------------------------
-    print("Using full feature set (feature selection disabled)")
-
-    print("Final feature matrix shape:", X_scaled.shape)
-
-    return X_scaled, y, groups
+    return X, y, groups
 
 
-# -----------------------------
-# Standalone test
-# -----------------------------
 if __name__ == "__main__":
 
     X, y, groups = engineer_features()
