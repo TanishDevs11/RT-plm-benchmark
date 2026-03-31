@@ -8,13 +8,13 @@ import pandas as pd
 import numpy as np
 
 from sklearn.model_selection import LeaveOneGroupOut
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import precision_recall_curve, auc
 
 from feature_engineering import engineer_features
 
 
-print("LOFO rank-regression pipeline started")
+print("LOFO hybrid rank-classifier pipeline started")
 
 
 # ---------------------------------------------------
@@ -29,15 +29,8 @@ seq = pd.read_csv("data/rt_sequences.csv")
 # Load selected_features.csv safely
 # ---------------------------------------------------
 
-selected_features_path = "data/selected_features.csv"
-
-if not os.path.exists(selected_features_path):
-    raise FileNotFoundError(
-        "selected_features.csv missing. Restore your best feature list first."
-    )
-
 selected_features = pd.read_csv(
-    selected_features_path,
+    "data/selected_features.csv",
     header=None
 )[0].tolist()
 
@@ -104,42 +97,68 @@ for train_idx, test_idx in logo.split(X, y, groups):
     train_family = groups.iloc[train_idx]
 
     # ---------------------------------------------------
-    # FAMILY Z-SCORE NORMALIZATION (SAFE VERSION)
+    # FAMILY Z-SCORE NORMALIZATION
     # ---------------------------------------------------
 
-    train_family_mean = train_eff.groupby(train_family).transform("mean")
-    train_family_std = train_eff.groupby(train_family).transform("std")
+    fam_mean = train_eff.groupby(train_family).transform("mean")
+    fam_std = train_eff.groupby(train_family).transform("std")
 
-    train_family_std = train_family_std.fillna(1)
-    train_family_std = train_family_std.replace(0, 1)
+    fam_std = fam_std.fillna(1).replace(0, 1)
 
-    family_normalized = (train_eff - train_family_mean) / train_family_std
-    family_normalized = family_normalized.fillna(0)
+    normalized_eff = (train_eff - fam_mean) / fam_std
+    normalized_eff = normalized_eff.fillna(0)
 
-    y_train_eff = family_normalized.rank(method="average")
-
-    # ---------------------------------------------------
-    # Test labels
-    # ---------------------------------------------------
+    y_train_eff = normalized_eff.rank(method="average")
 
     y_test_eff = seq.iloc[test_idx]["pe_efficiency_pct"]
     y_test_binary = y.iloc[test_idx]
 
     # ---------------------------------------------------
-    # Model
+    # Rank regression model
     # ---------------------------------------------------
 
-    model = RandomForestRegressor(
-        n_estimators=600,
-        max_depth=7,
+    rank_model = RandomForestRegressor(
+        n_estimators=700,
+        max_depth=8,
         min_samples_leaf=2,
         random_state=42,
         n_jobs=-1
     )
 
-    model.fit(X_train, y_train_eff)
+    rank_model.fit(X_train, y_train_eff)
+    rank_preds = rank_model.predict(X_test)
 
-    preds = model.predict(X_test)
+    # ---------------------------------------------------
+    # Activity classifier model
+    # ---------------------------------------------------
+
+    clf_model = RandomForestClassifier(
+        n_estimators=700,
+        max_depth=8,
+        min_samples_leaf=2,
+        random_state=42,
+        n_jobs=-1
+    )
+
+    clf_model.fit(X_train, y.iloc[train_idx])
+    clf_probs = clf_model.predict_proba(X_test)[:, 1]
+
+    # ---------------------------------------------------
+    # Hybrid stacking
+    # ---------------------------------------------------
+
+    preds = 0.65 * rank_preds + 0.35 * clf_probs
+
+    # ---------------------------------------------------
+    # Family calibration
+    # ---------------------------------------------------
+
+    family_bias = train_eff.groupby(train_family).mean().mean()
+    preds = preds + 0.20 * family_bias
+
+    # ---------------------------------------------------
+    # Store fold predictions
+    # ---------------------------------------------------
 
     all_scores.extend(preds)
     all_labels.extend(y_test_binary)
@@ -157,23 +176,21 @@ all_eff = np.array(all_eff)
 
 
 # ---------------------------------------------------
-# Prediction smoothing boost
+# Normalize predictions
 # ---------------------------------------------------
-
-all_scores = all_scores ** 1.2
-
-
-# ---------------------------------------------------
-# Normalize predictions safely
-# ---------------------------------------------------
-
-if len(all_scores) == 0:
-    raise RuntimeError("Prediction array empty — LOFO failed.")
 
 all_scores = (
     (all_scores - all_scores.min()) /
     (all_scores.max() - all_scores.min() + 1e-8)
 )
+
+
+# ---------------------------------------------------
+# Temperature scaling (applied correctly AFTER normalize)
+# ---------------------------------------------------
+
+temperature = 0.85
+all_scores = np.power(all_scores, temperature)
 
 
 # ---------------------------------------------------
@@ -246,6 +263,5 @@ submission = (
 )
 
 submission.to_csv("submission.csv", index=False)
-
 
 print("\nSaved predictions successfully")
