@@ -27,44 +27,25 @@ seq = pd.read_csv("data/rt_sequences.csv")
 
 
 # ---------------------------------------------------
-# Generate LOFO-optimized selected_features.csv
+# Generate selected_features.csv (FAST VERSION)
 # ---------------------------------------------------
 
-GENERATE_FEATURES = True   # run once, then change to False
+GENERATE_FEATURES = True   # set False after first run
 
 if GENERATE_FEATURES:
 
-    print("Generating LOFO-optimized selected_features.csv...")
+    print("Generating selected_features.csv (fast mode)...")
+
+    target = seq["pe_efficiency_pct"].rank()
 
     feature_scores = {}
 
     for col in X.columns:
 
-        logo = LeaveOneGroupOut()
+        corr = np.corrcoef(X[col], target)[0, 1]
 
-        preds = np.zeros(len(X))
-
-        for train_idx, test_idx in logo.split(X, y, groups):
-
-            model = RandomForestRegressor(
-                n_estimators=200,
-                random_state=42,
-                n_jobs=-1
-            )
-
-            model.fit(
-                X.iloc[train_idx][[col]],
-                seq.iloc[train_idx]["pe_efficiency_pct"]
-            )
-
-            preds[test_idx] = model.predict(
-                X.iloc[test_idx][[col]]
-            )
-
-        corr = np.corrcoef(
-            preds,
-            seq["pe_efficiency_pct"]
-        )[0, 1]
+        if np.isnan(corr):
+            corr = 0
 
         feature_scores[col] = abs(corr)
 
@@ -80,7 +61,7 @@ if GENERATE_FEATURES:
         header=False
     )
 
-    print("Saved LOFO-optimized selected_features.csv")
+    print("Saved selected_features.csv")
 
 
 # ---------------------------------------------------
@@ -103,7 +84,7 @@ print("Applied feature selection:", len(selected_features))
 
 
 # ---------------------------------------------------
-# Weighted Spearman
+# Weighted Spearman implementation
 # ---------------------------------------------------
 
 EPSILON = 0.01
@@ -134,7 +115,7 @@ def weighted_spearman(predicted_scores, true_efficiency):
 
 
 # ---------------------------------------------------
-# LOFO CV
+# LOFO Cross-validation
 # ---------------------------------------------------
 
 logo = LeaveOneGroupOut()
