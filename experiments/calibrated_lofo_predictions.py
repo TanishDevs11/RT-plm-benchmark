@@ -150,14 +150,17 @@ for train_idx, test_idx in logo.split(X, y, groups):
     preds = 0.65 * rank_preds + 0.35 * clf_probs
 
     # ---------------------------------------------------
-    # Family calibration
+    # FAMILY-SPECIFIC ADAPTIVE CALIBRATION (NEW)
     # ---------------------------------------------------
 
-    family_bias = train_eff.groupby(train_family).mean().mean()
-    preds = preds + 0.20 * family_bias
+    family_bias = train_eff.groupby(train_family).mean()
+
+    family_adjustment = family_bias.loc[train_family].values.mean()
+
+    preds = preds + 0.20 * family_adjustment
 
     # ---------------------------------------------------
-    # Store fold predictions
+    # Store predictions
     # ---------------------------------------------------
 
     all_scores.extend(preds)
@@ -186,7 +189,7 @@ all_scores = (
 
 
 # ---------------------------------------------------
-# Temperature scaling (applied correctly AFTER normalize)
+# Temperature scaling (correct placement)
 # ---------------------------------------------------
 
 temperature = 0.85
@@ -263,5 +266,6 @@ submission = (
 )
 
 submission.to_csv("submission.csv", index=False)
+
 
 print("\nSaved predictions successfully")
