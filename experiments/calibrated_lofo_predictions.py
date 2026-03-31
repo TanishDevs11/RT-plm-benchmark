@@ -22,38 +22,31 @@ print("LOFO rank-regression pipeline started")
 # ---------------------------------------------------
 
 X, y, groups = engineer_features()
-
 seq = pd.read_csv("data/rt_sequences.csv")
 
 
 # ---------------------------------------------------
-# Load EXISTING selected_features.csv only
-# (do NOT regenerate automatically)
+# Load selected_features.csv safely
 # ---------------------------------------------------
 
 selected_features_path = "data/selected_features.csv"
 
 if not os.path.exists(selected_features_path):
-
     raise FileNotFoundError(
         "selected_features.csv missing. Restore your best feature list first."
     )
-
 
 selected_features = pd.read_csv(
     selected_features_path,
     header=None
 )[0].tolist()
 
-
 selected_features = [
     f for f in selected_features
     if f in X.columns
 ]
 
-
 X = X[selected_features]
-
 
 print("Applied feature selection:", len(selected_features))
 
@@ -110,15 +103,30 @@ for train_idx, test_idx in logo.split(X, y, groups):
     train_eff = seq.iloc[train_idx]["pe_efficiency_pct"]
     train_family = groups.iloc[train_idx]
 
-    train_family_mean = train_eff.groupby(train_family).transform("mean")
+    # ---------------------------------------------------
+    # FAMILY Z-SCORE NORMALIZATION (SAFE VERSION)
+    # ---------------------------------------------------
 
-    y_train_eff = (train_eff - train_family_mean).rank(method="average")
+    train_family_mean = train_eff.groupby(train_family).transform("mean")
+    train_family_std = train_eff.groupby(train_family).transform("std")
+
+    train_family_std = train_family_std.fillna(1)
+    train_family_std = train_family_std.replace(0, 1)
+
+    family_normalized = (train_eff - train_family_mean) / train_family_std
+    family_normalized = family_normalized.fillna(0)
+
+    y_train_eff = family_normalized.rank(method="average")
+
+    # ---------------------------------------------------
+    # Test labels
+    # ---------------------------------------------------
 
     y_test_eff = seq.iloc[test_idx]["pe_efficiency_pct"]
     y_test_binary = y.iloc[test_idx]
 
     # ---------------------------------------------------
-    # UPDATED RandomForest (better LOFO stability)
+    # Model
     # ---------------------------------------------------
 
     model = RandomForestRegressor(
@@ -149,8 +157,18 @@ all_eff = np.array(all_eff)
 
 
 # ---------------------------------------------------
-# Normalize predictions
+# Prediction smoothing boost
 # ---------------------------------------------------
+
+all_scores = all_scores ** 1.2
+
+
+# ---------------------------------------------------
+# Normalize predictions safely
+# ---------------------------------------------------
+
+if len(all_scores) == 0:
+    raise RuntimeError("Prediction array empty — LOFO failed.")
 
 all_scores = (
     (all_scores - all_scores.min()) /
@@ -205,7 +223,6 @@ print("==============================")
 
 os.makedirs("results", exist_ok=True)
 
-
 pd.DataFrame({
     "rt_name": all_names,
     "predicted_score": all_scores
@@ -221,14 +238,12 @@ submission = pd.DataFrame({
     "predicted_score": all_scores
 })
 
-
 submission = (
     submission
     .set_index("rt_name")
     .reindex(seq["rt_name"])
     .reset_index()
 )
-
 
 submission.to_csv("submission.csv", index=False)
 
