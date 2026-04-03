@@ -147,10 +147,10 @@ def run_hybrid_lofo(X, y, groups, seq):
         )
 
         preds = (
-            0.10 * baseline_score +
-            0.50 * safe_pct_score +
-            0.10 * both_zsig_score +
-            0.30 * current605_score
+            0.08753518915015526 * baseline_score +
+            0.5166916963208713 * safe_pct_score +
+            0.09725995720020378 * both_zsig_score +
+            0.2985131573287696 * current605_score
         )
 
         all_scores.extend(preds)
