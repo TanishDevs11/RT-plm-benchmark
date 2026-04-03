@@ -10,10 +10,12 @@ from sklearn.ensemble import (
     RandomForestClassifier,
     RandomForestRegressor,
 )
+from sklearn.feature_selection import mutual_info_classif
 from sklearn.impute import SimpleImputer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.preprocessing import StandardScaler, normalize
+from sklearn.svm import SVC
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 sys.path.append(os.path.join(ROOT, "src"))
@@ -25,20 +27,23 @@ from feature_engineering import engineer_features
 
 print("LOFO hybrid rank-classifier pipeline started")
 
-RANK_POWER = 1.659185
+RANK_POWER = 0.693099
 
 RANK_BLEND_WEIGHTS = {
-    "baseline": 0.00004285737399621929,
-    "safe_pct_l1": 0.3673412469189074,
-    "both_zsig_l1": 0.08359368547080827,
-    "current605_l1": 0.07870653614221362,
-    "safe_pct_l2": 0.006000827665010136,
-    "both_zsig_l2": 0.02827731590999886,
-    "et_full_038": 0.25592607131369943,
-    "hand_et_085": 0.07215854296309297,
-    "clf_only_etl2": 0.0511610108155141,
-    "globalmm_l2": 0.0061958447478275775,
-    "proto_posneg": 0.05059606067893159,
+    "baseline": 0.0,
+    "safe_pct_l1": 0.0,
+    "both_zsig_l1": 0.014726894226731025,
+    "current605_l1": 0.0002206635166409542,
+    "safe_pct_l2": 0.0041784373587197094,
+    "both_zsig_l2": 0.00824147782853431,
+    "et_full_038": 0.0,
+    "hand_et_085": 0.21150846523389819,
+    "clf_only_etl2": 0.013351310829896164,
+    "globalmm_l2": 0.008540245197140986,
+    "proto_posneg": 0.1320663005896985,
+    "svc_mi64": 0.031271438832825474,
+    "svc_hand64": 0.2709736010061529,
+    "svc_hand32": 0.30492116537976177,
 }
 
 
@@ -91,6 +96,9 @@ def run_hybrid_lofo(X, y, groups, seq):
         "hand_et_085": [],
         "clf_only_etl2": [],
         "proto_posneg": [],
+        "svc_mi64": [],
+        "svc_hand64": [],
+        "svc_hand32": [],
     }
     raw_rank_l2 = []
     clf_zsig_l2 = []
@@ -270,6 +278,41 @@ def run_hybrid_lofo(X, y, groups, seq):
             * np.power(hand_et_test + 1e-8, 0.15)
         )
 
+        svc_feature_sets = [
+            ("svc_mi64", X_train, X_test, 64, 1.5),
+            ("svc_hand64", X_train_hand, X_test_hand, 64, 2.0),
+            ("svc_hand32", X_train_hand, X_test_hand, 32, 1.0),
+        ]
+
+        for branch_name, train_features, test_features, k, c in svc_feature_sets:
+            max_k = min(k, train_features.shape[1])
+            selector_scores = mutual_info_classif(
+                train_features,
+                y_train_bin,
+                random_state=42,
+            )
+            top_idx = np.argsort(selector_scores)[-max_k:]
+
+            svc_train = train_features[:, top_idx]
+            svc_test = test_features[:, top_idx]
+
+            svc = SVC(
+                C=c,
+                gamma="scale",
+                kernel="rbf",
+                probability=True,
+                class_weight="balanced",
+                random_state=42,
+            )
+            svc.fit(svc_train, y_train_bin)
+
+            component_scores[branch_name].extend(
+                zsig_by_train(
+                    svc.predict_proba(svc_train)[:, 1],
+                    svc.predict_proba(svc_test)[:, 1],
+                )
+            )
+
         X_train_esm = X_train_df[esm_cols].to_numpy(dtype=float, copy=True)
         X_test_esm = X_test_df[esm_cols].to_numpy(dtype=float, copy=True)
         esm_medians = np.nanmedian(X_train_esm, axis=0)
@@ -328,6 +371,8 @@ def run_hybrid_lofo(X, y, groups, seq):
 
     final_scores = np.zeros(len(all_names), dtype=float)
     for name, weight in RANK_BLEND_WEIGHTS.items():
+        if weight <= 0:
+            continue
         final_scores += weight * np.power(
             global_rank_percentile(component_arrays[name]),
             RANK_POWER,
