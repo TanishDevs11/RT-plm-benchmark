@@ -11,8 +11,9 @@ from sklearn.ensemble import (
     RandomForestRegressor,
 )
 from sklearn.impute import SimpleImputer
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import LeaveOneGroupOut
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, normalize
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 sys.path.append(os.path.join(ROOT, "src"))
@@ -23,6 +24,22 @@ from feature_engineering import engineer_features
 
 
 print("LOFO hybrid rank-classifier pipeline started")
+
+RANK_POWER = 1.659185
+
+RANK_BLEND_WEIGHTS = {
+    "baseline": 0.00004285737399621929,
+    "safe_pct_l1": 0.3673412469189074,
+    "both_zsig_l1": 0.08359368547080827,
+    "current605_l1": 0.07870653614221362,
+    "safe_pct_l2": 0.006000827665010136,
+    "both_zsig_l2": 0.02827731590999886,
+    "et_full_038": 0.25592607131369943,
+    "hand_et_085": 0.07215854296309297,
+    "clf_only_etl2": 0.0511610108155141,
+    "globalmm_l2": 0.0061958447478275775,
+    "proto_posneg": 0.05059606067893159,
+}
 
 
 def zsig_by_train(train_scores, test_scores):
@@ -51,8 +68,17 @@ def global_minmax(values):
     return (values - values.min()) / (values.max() - values.min() + 1e-8)
 
 
+def global_rank_percentile(values):
+    values = np.asarray(values, dtype=float)
+    return (
+        np.argsort(np.argsort(values)).astype(float) + 1.0
+    ) / (len(values) + 1.0)
+
+
 def run_hybrid_lofo(X, y, groups, seq):
     logo = LeaveOneGroupOut()
+    hand_cols = [c for c in X.columns if not str(c).startswith("esm_")]
+    esm_cols = [c for c in X.columns if str(c).startswith("esm_")]
 
     component_scores = {
         "baseline": [],
@@ -64,6 +90,7 @@ def run_hybrid_lofo(X, y, groups, seq):
         "et_full_038": [],
         "hand_et_085": [],
         "clf_only_etl2": [],
+        "proto_posneg": [],
     }
     raw_rank_l2 = []
     clf_zsig_l2 = []
@@ -139,9 +166,6 @@ def run_hybrid_lofo(X, y, groups, seq):
         component_scores["baseline"].extend(
             0.67 * baseline_rank_test + 0.33 * baseline_clf_test
         )
-        rf_full_036 = np.power(baseline_rank_test + 1e-8, 0.36) * np.power(
-            baseline_clf_test + 1e-8, 0.64
-        )
 
         current_rank_train = current_reg.predict(X_train)
         current_rank_test_raw = current_reg.predict(X_test)
@@ -160,19 +184,16 @@ def run_hybrid_lofo(X, y, groups, seq):
         )
 
         component_scores["safe_pct_l1"].extend(
-            np.power(current_rank_test_pct + 1e-8, 0.44) * np.power(
-                current_clf_test + 1e-8, 0.56
-            )
+            np.power(current_rank_test_pct + 1e-8, 0.44)
+            * np.power(current_clf_test + 1e-8, 0.56)
         )
         component_scores["both_zsig_l1"].extend(
-            np.power(current_rank_test_zsig + 1e-8, 0.44) * np.power(
-                current_clf_test + 1e-8, 0.56
-            )
+            np.power(current_rank_test_zsig + 1e-8, 0.44)
+            * np.power(current_clf_test + 1e-8, 0.56)
         )
         component_scores["current605_l1"].extend(
-            np.power(current_rank_test_zsig + 1e-8, 0.32) * np.power(
-                current_clf_test + 1e-8, 0.68
-            )
+            np.power(current_rank_test_zsig + 1e-8, 0.32)
+            * np.power(current_clf_test + 1e-8, 0.68)
         )
 
         current_clf_l2 = ExtraTreesClassifier(
@@ -192,14 +213,12 @@ def run_hybrid_lofo(X, y, groups, seq):
         )
 
         component_scores["safe_pct_l2"].extend(
-            np.power(current_rank_test_pct + 1e-8, 0.44) * np.power(
-                current_clf_l2_test + 1e-8, 0.56
-            )
+            np.power(current_rank_test_pct + 1e-8, 0.44)
+            * np.power(current_clf_l2_test + 1e-8, 0.56)
         )
         component_scores["both_zsig_l2"].extend(
-            np.power(current_rank_test_zsig + 1e-8, 0.36) * np.power(
-                current_clf_l2_test + 1e-8, 0.64
-            )
+            np.power(current_rank_test_zsig + 1e-8, 0.36)
+            * np.power(current_clf_l2_test + 1e-8, 0.64)
         )
         raw_rank_l2.extend(current_rank_test_raw)
         clf_zsig_l2.extend(current_clf_l2_test)
@@ -221,12 +240,10 @@ def run_hybrid_lofo(X, y, groups, seq):
             et_full.predict_proba(X_test)[:, 1],
         )
         component_scores["et_full_038"].extend(
-            np.power(current_rank_test_zsig + 1e-8, 0.38) * np.power(
-                et_full_test + 1e-8, 0.62
-            )
+            np.power(current_rank_test_zsig + 1e-8, 0.38)
+            * np.power(et_full_test + 1e-8, 0.62)
         )
 
-        hand_cols = [c for c in X.columns if not str(c).startswith("esm_")]
         hand_imputer = SimpleImputer(strategy="median")
         X_train_hand = hand_imputer.fit_transform(X_train_df[hand_cols])
         X_test_hand = hand_imputer.transform(X_test_df[hand_cols])
@@ -249,12 +266,53 @@ def run_hybrid_lofo(X, y, groups, seq):
             hand_et.predict_proba(X_test_hand)[:, 1],
         )
         component_scores["hand_et_085"].extend(
-            np.power(current_rank_test_zsig + 1e-8, 0.85) * np.power(
-                hand_et_test + 1e-8, 0.15
-            )
+            np.power(current_rank_test_zsig + 1e-8, 0.85)
+            * np.power(hand_et_test + 1e-8, 0.15)
         )
 
-        _ = rf_full_036
+        X_train_esm = X_train_df[esm_cols].to_numpy(dtype=float, copy=True)
+        X_test_esm = X_test_df[esm_cols].to_numpy(dtype=float, copy=True)
+        esm_medians = np.nanmedian(X_train_esm, axis=0)
+
+        train_nan = np.where(np.isnan(X_train_esm))
+        X_train_esm[train_nan] = np.take(esm_medians, train_nan[1])
+
+        test_nan = np.where(np.isnan(X_test_esm))
+        X_test_esm[test_nan] = np.take(esm_medians, test_nan[1])
+
+        X_train_esm = normalize(X_train_esm)
+        X_test_esm = normalize(X_test_esm)
+
+        active_mask = y_train_eff.to_numpy() > 0
+        active_weights = np.log1p(y_train_eff.to_numpy()[active_mask])
+        active_weights = active_weights / active_weights.sum()
+
+        proto_active = normalize(
+            (
+                X_train_esm[active_mask] * active_weights[:, None]
+            ).sum(axis=0, keepdims=True)
+        )
+
+        if (~active_mask).any():
+            proto_inactive = normalize(
+                X_train_esm[~active_mask].mean(axis=0, keepdims=True)
+            )
+        else:
+            proto_inactive = -proto_active
+
+        proto_train = (
+            cosine_similarity(X_train_esm, proto_active).ravel()
+            - cosine_similarity(X_train_esm, proto_inactive).ravel()
+        )
+        proto_test = (
+            cosine_similarity(X_test_esm, proto_active).ravel()
+            - cosine_similarity(X_test_esm, proto_inactive).ravel()
+        )
+
+        component_scores["proto_posneg"].extend(
+            zsig_by_train(proto_train, proto_test)
+        )
+
         all_names.extend(X_test_df.index)
 
     globalmm_l2 = np.power(
@@ -262,18 +320,18 @@ def run_hybrid_lofo(X, y, groups, seq):
         0.20,
     ) * np.power(np.asarray(clf_zsig_l2, dtype=float) + 1e-8, 0.80)
 
-    final_scores = (
-        0.0014509314472144666 * np.asarray(component_scores["baseline"], dtype=float) +
-        0.28904656984589244 * np.asarray(component_scores["safe_pct_l1"], dtype=float) +
-        0.007377624699222617 * np.asarray(component_scores["both_zsig_l1"], dtype=float) +
-        0.12231384811764691 * np.asarray(component_scores["current605_l1"], dtype=float) +
-        0.04606269416873803 * np.asarray(component_scores["safe_pct_l2"], dtype=float) +
-        0.26051360724138833 * np.asarray(component_scores["both_zsig_l2"], dtype=float) +
-        0.06101274899649034 * globalmm_l2 +
-        0.12713302728791645 * np.asarray(component_scores["et_full_038"], dtype=float) +
-        0.07927264181940237 * np.asarray(component_scores["hand_et_085"], dtype=float) +
-        0.005609423996971588 * np.asarray(component_scores["clf_only_etl2"], dtype=float)
-    )
+    component_arrays = {
+        key: np.asarray(values, dtype=float)
+        for key, values in component_scores.items()
+    }
+    component_arrays["globalmm_l2"] = globalmm_l2
+
+    final_scores = np.zeros(len(all_names), dtype=float)
+    for name, weight in RANK_BLEND_WEIGHTS.items():
+        final_scores += weight * np.power(
+            global_rank_percentile(component_arrays[name]),
+            RANK_POWER,
+        )
 
     prediction_df = pd.DataFrame({
         "rt_name": all_names,
