@@ -46,25 +46,42 @@ def rankpct_by_train(train_scores, test_scores):
     return pos / max(len(train_sorted), 1)
 
 
+def global_minmax(values):
+    values = np.asarray(values, dtype=float)
+    return (values - values.min()) / (values.max() - values.min() + 1e-8)
+
+
 def run_hybrid_lofo(X, y, groups, seq):
     logo = LeaveOneGroupOut()
 
-    all_scores = []
+    component_scores = {
+        "baseline": [],
+        "safe_pct_l1": [],
+        "both_zsig_l1": [],
+        "current605_l1": [],
+        "safe_pct_l2": [],
+        "both_zsig_l2": [],
+        "et_full_038": [],
+        "hand_et_085": [],
+        "clf_only_etl2": [],
+    }
+    raw_rank_l2 = []
+    clf_zsig_l2 = []
     all_names = []
 
     for train_idx, test_idx in logo.split(X, y, groups):
-        X_train = X.iloc[train_idx]
-        X_test = X.iloc[test_idx]
+        X_train_df = X.iloc[train_idx]
+        X_test_df = X.iloc[test_idx]
 
         y_train_bin = y.iloc[train_idx]
-        y_train_eff = seq.loc[X_train.index, "pe_efficiency_pct"]
+        y_train_eff = seq.loc[X_train_df.index, "pe_efficiency_pct"]
         y_train_eff_norm = (
             y_train_eff - y_train_eff.mean()
         ) / (y_train_eff.std() + 1e-8)
 
         imputer = SimpleImputer(strategy="median")
-        X_train = imputer.fit_transform(X_train)
-        X_test = imputer.transform(X_test)
+        X_train = imputer.fit_transform(X_train_df)
+        X_test = imputer.transform(X_test_df)
 
         scaler = StandardScaler()
         X_train = scaler.fit_transform(X_train)
@@ -119,16 +136,22 @@ def run_hybrid_lofo(X, y, groups, seq):
             baseline_clf_train,
             baseline_clf.predict_proba(X_test)[:, 1],
         )
-        baseline_score = 0.67 * baseline_rank_test + 0.33 * baseline_clf_test
+        component_scores["baseline"].extend(
+            0.67 * baseline_rank_test + 0.33 * baseline_clf_test
+        )
+        rf_full_036 = np.power(baseline_rank_test + 1e-8, 0.36) * np.power(
+            baseline_clf_test + 1e-8, 0.64
+        )
 
         current_rank_train = current_reg.predict(X_train)
+        current_rank_test_raw = current_reg.predict(X_test)
         current_rank_test_zsig = zsig_by_train(
             current_rank_train,
-            current_reg.predict(X_test),
+            current_rank_test_raw,
         )
         current_rank_test_pct = rankpct_by_train(
             current_rank_train,
-            current_reg.predict(X_test),
+            current_rank_test_raw,
         )
         current_clf_train = current_clf.predict_proba(X_train)[:, 1]
         current_clf_test = zsig_by_train(
@@ -136,29 +159,125 @@ def run_hybrid_lofo(X, y, groups, seq):
             current_clf.predict_proba(X_test)[:, 1],
         )
 
-        safe_pct_score = np.power(current_rank_test_pct + 1e-8, 0.44) * np.power(
-            current_clf_test + 1e-8, 0.56
+        component_scores["safe_pct_l1"].extend(
+            np.power(current_rank_test_pct + 1e-8, 0.44) * np.power(
+                current_clf_test + 1e-8, 0.56
+            )
         )
-        both_zsig_score = np.power(current_rank_test_zsig + 1e-8, 0.44) * np.power(
-            current_clf_test + 1e-8, 0.56
+        component_scores["both_zsig_l1"].extend(
+            np.power(current_rank_test_zsig + 1e-8, 0.44) * np.power(
+                current_clf_test + 1e-8, 0.56
+            )
         )
-        current605_score = np.power(current_rank_test_zsig + 1e-8, 0.32) * np.power(
-            current_clf_test + 1e-8, 0.68
+        component_scores["current605_l1"].extend(
+            np.power(current_rank_test_zsig + 1e-8, 0.32) * np.power(
+                current_clf_test + 1e-8, 0.68
+            )
         )
 
-        preds = (
-            0.08753518915015526 * baseline_score +
-            0.5166916963208713 * safe_pct_score +
-            0.09725995720020378 * both_zsig_score +
-            0.2985131573287696 * current605_score
+        current_clf_l2 = ExtraTreesClassifier(
+            n_estimators=1200,
+            max_depth=None,
+            min_samples_leaf=2,
+            class_weight="balanced",
+            max_features="sqrt",
+            random_state=42,
+            n_jobs=1,
+        )
+        current_clf_l2.fit(X_train, y_train_bin)
+        current_clf_l2_train = current_clf_l2.predict_proba(X_train)[:, 1]
+        current_clf_l2_test = zsig_by_train(
+            current_clf_l2_train,
+            current_clf_l2.predict_proba(X_test)[:, 1],
         )
 
-        all_scores.extend(preds)
-        all_names.extend(X.index[test_idx])
+        component_scores["safe_pct_l2"].extend(
+            np.power(current_rank_test_pct + 1e-8, 0.44) * np.power(
+                current_clf_l2_test + 1e-8, 0.56
+            )
+        )
+        component_scores["both_zsig_l2"].extend(
+            np.power(current_rank_test_zsig + 1e-8, 0.36) * np.power(
+                current_clf_l2_test + 1e-8, 0.64
+            )
+        )
+        raw_rank_l2.extend(current_rank_test_raw)
+        clf_zsig_l2.extend(current_clf_l2_test)
+        component_scores["clf_only_etl2"].extend(current_clf_l2_test)
+
+        et_full = ExtraTreesClassifier(
+            n_estimators=700,
+            max_depth=8,
+            min_samples_leaf=2,
+            class_weight="balanced",
+            max_features="sqrt",
+            random_state=42,
+            n_jobs=1,
+        )
+        et_full.fit(X_train, y_train_bin)
+        et_full_train = et_full.predict_proba(X_train)[:, 1]
+        et_full_test = zsig_by_train(
+            et_full_train,
+            et_full.predict_proba(X_test)[:, 1],
+        )
+        component_scores["et_full_038"].extend(
+            np.power(current_rank_test_zsig + 1e-8, 0.38) * np.power(
+                et_full_test + 1e-8, 0.62
+            )
+        )
+
+        hand_cols = [c for c in X.columns if not str(c).startswith("esm_")]
+        hand_imputer = SimpleImputer(strategy="median")
+        X_train_hand = hand_imputer.fit_transform(X_train_df[hand_cols])
+        X_test_hand = hand_imputer.transform(X_test_df[hand_cols])
+        hand_scaler = StandardScaler()
+        X_train_hand = hand_scaler.fit_transform(X_train_hand)
+        X_test_hand = hand_scaler.transform(X_test_hand)
+        hand_et = ExtraTreesClassifier(
+            n_estimators=900,
+            max_depth=8,
+            min_samples_leaf=2,
+            class_weight="balanced",
+            max_features="sqrt",
+            random_state=42,
+            n_jobs=1,
+        )
+        hand_et.fit(X_train_hand, y_train_bin)
+        hand_et_train = hand_et.predict_proba(X_train_hand)[:, 1]
+        hand_et_test = zsig_by_train(
+            hand_et_train,
+            hand_et.predict_proba(X_test_hand)[:, 1],
+        )
+        component_scores["hand_et_085"].extend(
+            np.power(current_rank_test_zsig + 1e-8, 0.85) * np.power(
+                hand_et_test + 1e-8, 0.15
+            )
+        )
+
+        _ = rf_full_036
+        all_names.extend(X_test_df.index)
+
+    globalmm_l2 = np.power(
+        global_minmax(raw_rank_l2) + 1e-8,
+        0.20,
+    ) * np.power(np.asarray(clf_zsig_l2, dtype=float) + 1e-8, 0.80)
+
+    final_scores = (
+        0.0014509314472144666 * np.asarray(component_scores["baseline"], dtype=float) +
+        0.28904656984589244 * np.asarray(component_scores["safe_pct_l1"], dtype=float) +
+        0.007377624699222617 * np.asarray(component_scores["both_zsig_l1"], dtype=float) +
+        0.12231384811764691 * np.asarray(component_scores["current605_l1"], dtype=float) +
+        0.04606269416873803 * np.asarray(component_scores["safe_pct_l2"], dtype=float) +
+        0.26051360724138833 * np.asarray(component_scores["both_zsig_l2"], dtype=float) +
+        0.06101274899649034 * globalmm_l2 +
+        0.12713302728791645 * np.asarray(component_scores["et_full_038"], dtype=float) +
+        0.07927264181940237 * np.asarray(component_scores["hand_et_085"], dtype=float) +
+        0.005609423996971588 * np.asarray(component_scores["clf_only_etl2"], dtype=float)
+    )
 
     prediction_df = pd.DataFrame({
         "rt_name": all_names,
-        "predicted_score": np.asarray(all_scores, dtype=float),
+        "predicted_score": final_scores,
     })
 
     prediction_df = (
