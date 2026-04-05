@@ -24,26 +24,31 @@ sys.path.append(os.path.join(ROOT, "evaluation"))
 from evaluate import compute_cls
 from feature_engineering import engineer_features
 
+# Quantum libraries
+from qiskit.circuit.library import ZZFeatureMap
+from qiskit_machine_learning.kernels import FidelityQuantumKernel
+
 
 print("LOFO hybrid rank-classifier pipeline started")
 
-RANK_POWER = 0.693099
+RANK_POWER = 1.0572668905394913
 
 RANK_BLEND_WEIGHTS = {
-    "baseline": 0.0,
-    "safe_pct_l1": 0.0,
-    "both_zsig_l1": 0.014726894226731025,
-    "current605_l1": 0.0002206635166409542,
-    "safe_pct_l2": 0.0041784373587197094,
-    "both_zsig_l2": 0.00824147782853431,
-    "et_full_038": 0.0,
-    "hand_et_085": 0.21150846523389819,
-    "clf_only_etl2": 0.013351310829896164,
-    "globalmm_l2": 0.008540245197140986,
-    "proto_posneg": 0.1320663005896985,
-    "svc_mi64": 0.031271438832825474,
-    "svc_hand64": 0.2709736010061529,
-    "svc_hand32": 0.30492116537976177,
+    "baseline": -0.3976860000485712,
+    "safe_pct_l1": -1.157809332644361,
+    "both_zsig_l1": 0.21816060833884665,
+    "current605_l1": 1.0484578231829036,
+    "safe_pct_l2": -0.4809184979151996,
+    "both_zsig_l2": -1.3561511922844391,
+    "et_full_038": 0.6190520840403787,
+    "hand_et_085": 0.31131968319579295,
+    "clf_only_etl2": -0.634359369355944,
+    "proto_posneg": 1.2044206497655987,
+    "svc_mi64": 0.7636530865497366,
+    "svc_hand64": 0.2143973505833996,
+    "svc_hand32": 1.3811237253659305,
+    "globalmm_l2": 1.4094387718249006,
+    "qsvc_hand4": -0.2371290120271502,
 }
 
 
@@ -99,6 +104,7 @@ def run_hybrid_lofo(X, y, groups, seq):
         "svc_mi64": [],
         "svc_hand64": [],
         "svc_hand32": [],
+        "qsvc_hand4": [],
     }
     raw_rank_l2 = []
     clf_zsig_l2 = []
@@ -313,6 +319,31 @@ def run_hybrid_lofo(X, y, groups, seq):
                 )
             )
 
+        # ==========================================
+        # Quantum SVM (QSVC) branch
+        # ==========================================
+        max_k_q = min(4, X_train_hand.shape[1])
+        selector_scores_q = mutual_info_classif(X_train_hand, y_train_bin, random_state=42)
+        top_idx_q = np.argsort(selector_scores_q)[-max_k_q:]
+        q_train_features = X_train_hand[:, top_idx_q]
+        q_test_features = X_test_hand[:, top_idx_q]
+        
+        feature_map = ZZFeatureMap(feature_dimension=max_k_q, reps=1)
+        qkernel = FidelityQuantumKernel(feature_map=feature_map)
+        
+        qkernel_train = qkernel.evaluate(x_vec=q_train_features)
+        qkernel_test = qkernel.evaluate(x_vec=q_test_features, y_vec=q_train_features)
+        
+        qsvc_sklearn = SVC(kernel="precomputed", probability=True, class_weight="balanced", C=1.0, random_state=42)
+        qsvc_sklearn.fit(qkernel_train, y_train_bin)
+        
+        component_scores["qsvc_hand4"].extend(
+            zsig_by_train(
+                qsvc_sklearn.predict_proba(qkernel_train)[:, 1],
+                qsvc_sklearn.predict_proba(qkernel_test)[:, 1],
+            )
+        )
+
         X_train_esm = X_train_df[esm_cols].to_numpy(dtype=float, copy=True)
         X_test_esm = X_test_df[esm_cols].to_numpy(dtype=float, copy=True)
         esm_medians = np.nanmedian(X_train_esm, axis=0)
@@ -369,14 +400,15 @@ def run_hybrid_lofo(X, y, groups, seq):
     }
     component_arrays["globalmm_l2"] = globalmm_l2
 
+    rank_arrays = {
+        name: global_rank_percentile(component_arrays[name])
+        for name in component_arrays.keys()
+    }
+
     final_scores = np.zeros(len(all_names), dtype=float)
-    for name, weight in RANK_BLEND_WEIGHTS.items():
-        if weight <= 0:
-            continue
-        final_scores += weight * np.power(
-            global_rank_percentile(component_arrays[name]),
-            RANK_POWER,
-        )
+    for name, w in RANK_BLEND_WEIGHTS.items():
+        if w != 0 and name in rank_arrays:
+            final_scores += w * np.power(rank_arrays[name], RANK_POWER)
 
     prediction_df = pd.DataFrame({
         "rt_name": all_names,
