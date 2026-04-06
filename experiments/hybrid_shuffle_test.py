@@ -25,12 +25,13 @@ print("Active count:", int(seq["active"].sum()))
 def shuffled_targets(seq_df, seed):
     rng = np.random.default_rng(seed)
     shuffled = seq_df.copy()
-    perm = rng.permutation(len(shuffled))
+    perm_a = rng.permutation(len(shuffled))
+    perm_e = rng.permutation(len(shuffled))
 
-    shuffled["active"] = shuffled["active"].to_numpy()[perm]
-    shuffled["pe_efficiency_pct"] = (
-        shuffled["pe_efficiency_pct"].to_numpy()[perm]
-    )
+    # Shuffle classification and regression targets independently to ensure
+    # any coupling learned from real labels is destroyed.
+    shuffled["active"] = shuffled["active"].to_numpy()[perm_a]
+    shuffled["pe_efficiency_pct"] = shuffled["pe_efficiency_pct"].to_numpy()[perm_e]
 
     return shuffled
 

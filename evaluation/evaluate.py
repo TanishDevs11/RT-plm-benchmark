@@ -174,7 +174,7 @@ def evaluate(predictions_path):
     print()
     print(f"  PR-AUC:             {result['pr_auc']:.4f}")
     print(f"  Weighted Spearman:  {result['w_spearman']:.4f}")
-    print(f"  ─────────────────────────────")
+    print("  " + "-" * 29)
     print(f"  CLS:                {result['cls']:.4f}")
     print()
 

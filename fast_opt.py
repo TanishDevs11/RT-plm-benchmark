@@ -46,7 +46,7 @@ def obj_func(params):
 
 bounds = [(-1.5, 1.5) for _ in branch_names] + [(0.2, 1.5)]
 print("Running DE...")
-res = differential_evolution(obj_func, bounds, maxiter=500, popsize=20, tol=1e-4, seed=42)
+res = differential_evolution(obj_func, bounds, maxiter=1000, popsize=20, tol=1e-4, seed=42)
 
 print(f"BEST CLS: {-res.fun:.6f}")
 print("WEIGHTS = {")
