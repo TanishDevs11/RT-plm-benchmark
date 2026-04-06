@@ -1,11 +1,11 @@
-import pandas as pd
+﻿import pandas as pd
 import numpy as np
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_recall_curve, auc
 from scipy.stats import spearmanr
 
-print("🚀 Ranking Adjustment Model")
+print("ðŸš€ Ranking Adjustment Model")
 
 # -------------------------
 # Load data
@@ -144,5 +144,5 @@ pred_df.to_csv(
     index=False
 )
 
-print("\nSaved → results/ranking_adjusted_predictions.csv")
+print("\nSaved â†’ results/ranking_adjusted_predictions.csv")
 print("Finished")

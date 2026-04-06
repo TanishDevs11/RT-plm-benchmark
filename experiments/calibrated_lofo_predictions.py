@@ -31,24 +31,24 @@ from qiskit_machine_learning.kernels import FidelityQuantumKernel
 
 print("LOFO hybrid rank-classifier pipeline started")
 
-RANK_POWER = 1.0572668905394913
+RANK_POWER = 1.408715395639527
 
 RANK_BLEND_WEIGHTS = {
-    "baseline": -0.3976860000485712,
-    "safe_pct_l1": -1.157809332644361,
-    "both_zsig_l1": 0.21816060833884665,
-    "current605_l1": 1.0484578231829036,
-    "safe_pct_l2": -0.4809184979151996,
-    "both_zsig_l2": -1.3561511922844391,
-    "et_full_038": 0.6190520840403787,
-    "hand_et_085": 0.31131968319579295,
-    "clf_only_etl2": -0.634359369355944,
-    "proto_posneg": 1.2044206497655987,
-    "svc_mi64": 0.7636530865497366,
-    "svc_hand64": 0.2143973505833996,
-    "svc_hand32": 1.3811237253659305,
-    "globalmm_l2": 1.4094387718249006,
-    "qsvc_hand4": -0.2371290120271502,
+    "baseline": -0.04867410060369404,
+    "safe_pct_l1": 0.04357328414322137,
+    "both_zsig_l1": 1.0889779580311232,
+    "current605_l1": 0.5149317945924597,
+    "safe_pct_l2": -1.4272610848754903,
+    "both_zsig_l2": -0.2355235670750192,
+    "et_full_038": -0.26331256065795056,
+    "hand_et_085": -0.4808459637036665,
+    "clf_only_etl2": -0.3101569498715384,
+    "proto_posneg": 0.39976472498212423,
+    "svc_mi64": 0.09611439215052842,
+    "svc_hand64": 0.11969391436391308,
+    "svc_hand32": 0.7347704429305597,
+    "qsvc_hand4": -0.31774012086497894,
+    "globalmm_l2": 0.9709850994621647,
 }
 
 
@@ -359,29 +359,76 @@ def run_hybrid_lofo(X, y, groups, seq):
 
         active_mask = y_train_eff.to_numpy() > 0
         active_weights = np.log1p(y_train_eff.to_numpy()[active_mask])
-        active_weights = active_weights / active_weights.sum()
-
-        proto_active = normalize(
-            (
-                X_train_esm[active_mask] * active_weights[:, None]
-            ).sum(axis=0, keepdims=True)
-        )
-
-        if (~active_mask).any():
-            proto_inactive = normalize(
-                X_train_esm[~active_mask].mean(axis=0, keepdims=True)
-            )
+        if active_weights.sum() > 0:
+            active_weights = active_weights / active_weights.sum()
         else:
-            proto_inactive = -proto_active
+            active_weights = np.ones_like(active_weights) / len(active_weights)
 
-        proto_train = (
-            cosine_similarity(X_train_esm, proto_active).ravel()
-            - cosine_similarity(X_train_esm, proto_inactive).ravel()
-        )
-        proto_test = (
-            cosine_similarity(X_test_esm, proto_active).ravel()
-            - cosine_similarity(X_test_esm, proto_inactive).ravel()
-        )
+        global_active_proto = (X_train_esm[active_mask] * active_weights[:, None]).sum(axis=0, keepdims=True)
+        if (~active_mask).any():
+            global_inactive_proto = X_train_esm[~active_mask].mean(axis=0, keepdims=True)
+        else:
+            global_inactive_proto = np.zeros_like(global_active_proto)
+            
+        train_groups = groups.iloc[train_idx].values
+        fam_active_protos = []
+        fam_inactive_protos = []
+        fam_sigmas = []
+        
+        unique_train_fams = np.unique(train_groups)
+        for fam in unique_train_fams:
+            fam_mask = train_groups == fam
+            fam_act_mask = fam_mask & active_mask
+            if fam_act_mask.any():
+                f_w = np.log1p(y_train_eff.to_numpy()[fam_act_mask])
+                f_w = f_w / f_w.sum() if f_w.sum() > 0 else np.ones_like(f_w)/len(f_w)
+                fam_proto_act = (X_train_esm[fam_act_mask] * f_w[:, None]).sum(axis=0, keepdims=True)
+                fam_active_protos.append(fam_proto_act)
+                
+                f_std = np.std(X_train_esm[fam_mask], axis=0).mean()
+                fam_sigmas.append(max(f_std, 0.1))
+                
+            fam_inact_mask = fam_mask & (~active_mask)
+            if fam_inact_mask.any():
+                fam_inactive_protos.append(X_train_esm[fam_inact_mask].mean(axis=0, keepdims=True))
+                
+        if len(fam_inactive_protos) == 0:
+            fam_inactive_protos.append(global_inactive_proto)
+            
+        fam_active_protos = np.vstack(fam_active_protos) if len(fam_active_protos) > 0 else global_active_proto
+        fam_inactive_protos = np.vstack(fam_inactive_protos)
+        fam_sigmas = np.array(fam_sigmas) if len(fam_sigmas) > 0 else np.array([1.0])
+
+        from sklearn.metrics.pairwise import euclidean_distances
+        def rbf_sim(x, p, s):
+            return np.exp(-euclidean_distances(x, p, squared=True) / (s**2))
+
+        def calc_similarity_features(X_curr, is_train=True):
+            s_scales = [0.3, 1.0, 3.0]
+            g_act = np.mean([rbf_sim(X_curr, global_active_proto, s).ravel() for s in s_scales], axis=0)
+            g_inact = np.mean([rbf_sim(X_curr, global_inactive_proto, s).ravel() for s in s_scales], axis=0)
+            global_score = g_act - g_inact
+            
+            f_act_sims = np.zeros((X_curr.shape[0], len(fam_active_protos)))
+            for i, p in enumerate(fam_active_protos):
+                s = fam_sigmas[i] if i < len(fam_sigmas) else 1.0
+                f_act_sims[:, i] = rbf_sim(X_curr, p.reshape(1, -1), s).ravel()
+                
+            f_inact_sims = np.zeros((X_curr.shape[0], len(fam_inactive_protos)))
+            s_mean = np.mean(fam_sigmas) if len(fam_sigmas) > 0 else 1.0
+            for i, p in enumerate(fam_inactive_protos):
+                f_inact_sims[:, i] = rbf_sim(X_curr, p.reshape(1, -1), s_mean).ravel()
+                
+            family_score = np.max(f_act_sims, axis=1) - np.mean(f_inact_sims, axis=1)
+            
+            dists_to_active = euclidean_distances(X_curr, X_train_esm[active_mask])
+            sims_to_active = np.exp(-dists_to_active**2 / 1.0)
+            neighbor_score = np.mean(np.sort(sims_to_active, axis=1)[:, -3:], axis=1)
+            
+            return 0.6 * family_score + 0.3 * global_score + 0.1 * neighbor_score
+
+        proto_train = calc_similarity_features(X_train_esm, is_train=True)
+        proto_test = calc_similarity_features(X_test_esm, is_train=False)
 
         component_scores["proto_posneg"].extend(
             zsig_by_train(proto_train, proto_test)
@@ -426,15 +473,14 @@ def run_hybrid_lofo(X, y, groups, seq):
         seq["pe_efficiency_pct"].values,
     )
 
-    return prediction_df, result
-
+    return prediction_df, result, component_arrays
 
 if __name__ == "__main__":
     X, y, groups = engineer_features()
     seq = pd.read_csv("data/rt_sequences.csv").set_index("rt_name")
     seq = seq.loc[X.index]
 
-    prediction_df, result = run_hybrid_lofo(X, y, groups, seq)
+    prediction_df, result, component_arrays = run_hybrid_lofo(X, y, groups, seq)
 
     print("\n==============================")
     print(f"PR-AUC: {result['pr_auc']:.6f}")
@@ -443,6 +489,9 @@ if __name__ == "__main__":
     print("==============================")
 
     os.makedirs("results", exist_ok=True)
+    import json
+    with open("results/component_arrays.json", "w") as f:
+        json.dump({k: v.tolist() for k, v in component_arrays.items()}, f)
 
     prediction_df.to_csv(
         "results/calibrated_predictions_selected_features.csv",

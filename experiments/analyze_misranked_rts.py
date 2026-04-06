@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 import numpy as np
 from scipy.stats import rankdata
 
@@ -90,5 +90,5 @@ df.to_csv(
     index=False
 )
 
-print("\nSaved → results/misranking_analysis.csv")
+print("\nSaved â†’ results/misranking_analysis.csv")
 print("Analysis complete")

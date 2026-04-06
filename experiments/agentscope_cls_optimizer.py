@@ -1,4 +1,4 @@
-import os
+﻿import os
 import json
 import random
 import datetime
@@ -111,7 +111,7 @@ def run_lofo(weights):
     if match:
         return float(match.group(1))
 
-    print("❌ CLS extraction failed")
+    print("âŒ CLS extraction failed")
     return None
 
 
@@ -179,7 +179,7 @@ def mutate_weights(weights, iteration):
 
 def optimize():
 
-    print("\n🚀 Starting CLS optimizer...\n")
+    print("\nðŸš€ Starting CLS optimizer...\n")
 
     best_weights = load_best_weights()
 
@@ -204,7 +204,7 @@ def optimize():
 
         if cls_score > best_cls:
 
-            print("✅ Improvement found!")
+            print("âœ… Improvement found!")
 
             best_cls = cls_score
             best_weights = candidate_weights
@@ -215,7 +215,7 @@ def optimize():
 
         if best_cls >= TARGET_CLS:
 
-            print("\n🎯 TARGET CLS REACHED:", best_cls)
+            print("\nðŸŽ¯ TARGET CLS REACHED:", best_cls)
             break
 
     print("\nOptimization finished")

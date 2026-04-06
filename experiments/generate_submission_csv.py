@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import os
 
 # ------------------------------------------------
@@ -53,4 +53,4 @@ submission = pd.DataFrame({
 
 submission.to_csv(os.path.join(PROJECT_ROOT, "submission.csv"), index=False)
 
-print("submission.csv created successfully! ✅")
+print("submission.csv created successfully! âœ…")

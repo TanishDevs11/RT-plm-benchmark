@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import os
 
 print("LOFO Efficiency Regression")
@@ -165,5 +165,5 @@ pred_df.to_csv(
     index=False
 )
 
-print("\nSaved → results/regression_predictions.csv")
+print("\nSaved â†’ results/regression_predictions.csv")
 print("Finished")

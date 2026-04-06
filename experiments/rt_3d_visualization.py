@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -69,6 +69,6 @@ fig.update_traces(marker=dict(size=6))
 
 fig.write_html("results/rt_3d_feature_space.html")
 
-print("Saved → results/rt_3d_feature_space.html")
+print("Saved â†’ results/rt_3d_feature_space.html")
 
 fig.show()

@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -18,7 +18,7 @@ from evaluate import compute_cls
 
 def run_shuffle_test():
 
-    print("🚨 SHUFFLE LABEL SANITY TEST (Leakage Detector)")
+    print("ðŸš¨ SHUFFLE LABEL SANITY TEST (Leakage Detector)")
 
     # --------------------------------------------------
     # Load engineered features
