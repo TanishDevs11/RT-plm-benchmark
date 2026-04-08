@@ -20,7 +20,10 @@ df = pred.merge(
 )
 
 y_true = df["active"]
-y_pred = df["predicted_active"]
+if "predicted_active" in df.columns:
+    y_pred = df["predicted_active"]
+else:
+    y_pred = (df["predicted_score"] >= 0.5).astype(int)
 
 # ----------------------------
 # Confusion matrix
