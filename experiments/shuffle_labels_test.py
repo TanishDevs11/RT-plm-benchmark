@@ -18,7 +18,7 @@ from evaluate import compute_cls
 
 def run_shuffle_test():
 
-    print("ðŸš¨ SHUFFLE LABEL SANITY TEST (Leakage Detector)")
+    print("SHUFFLE LABEL SANITY TEST (Leakage Detector)")
 
     # --------------------------------------------------
     # Load engineered features
@@ -81,7 +81,7 @@ def run_shuffle_test():
             max_depth=8,
             min_samples_leaf=2,
             random_state=42,
-            n_jobs=-1
+            n_jobs=1
         )
 
         model.fit(X_train, y_train)

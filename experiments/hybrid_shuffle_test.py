@@ -40,7 +40,7 @@ shuffle_runs = []
 
 for seed in [7, 17, 27]:
     shuffled_seq = shuffled_targets(seq, seed)
-    _, result, _ = run_hybrid_lofo(
+    _, result, _, _ = run_hybrid_lofo(
         X,
         shuffled_seq["active"],
         groups,
