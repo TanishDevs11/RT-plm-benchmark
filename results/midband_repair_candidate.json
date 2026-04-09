@@ -1,0 +1,14 @@
+{
+  "pr_auc": 0.9686577554998608,
+  "w_spearman": 0.9561139323538698,
+  "cls": 0.9623449695987278,
+  "params": {
+    "w_margin": 0.0,
+    "w_local": 0.0,
+    "w_inactive": 0.0,
+    "w_topology": -0.005,
+    "w_mmlv": 0.005,
+    "w_active_margin": 0.0,
+    "curvature_alpha": 0.0
+  }
+}

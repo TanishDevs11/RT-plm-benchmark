@@ -1,0 +1,98 @@
+{
+  "pr_auc": 0.9728905597326651,
+  "w_spearman": 0.9513802447449654,
+  "cls": 0.9620151765279139,
+  "folds": [
+    {
+      "held_family": "CRISPR-associated",
+      "inner_cls": 0.9614772232346536,
+      "params": {
+        "topk": 18,
+        "w_mmlv": 0.0,
+        "w_inactive": 0.0,
+        "w_margin": 0.0,
+        "w_topology": 0.0,
+        "smooth_k": 0,
+        "curvature_alpha": 0.0
+      }
+    },
+    {
+      "held_family": "Group_II_Intron",
+      "inner_cls": 0.9592598458353438,
+      "params": {
+        "topk": 18,
+        "w_mmlv": 0.0,
+        "w_inactive": 0.0,
+        "w_margin": 0.0,
+        "w_topology": 0.0,
+        "smooth_k": 0,
+        "curvature_alpha": 0.0
+      }
+    },
+    {
+      "held_family": "LTR_Retrotransposon",
+      "inner_cls": 0.9679699021398879,
+      "params": {
+        "topk": 18,
+        "w_mmlv": 0.0,
+        "w_inactive": 0.0,
+        "w_margin": 0.0,
+        "w_topology": 0.0,
+        "smooth_k": 0,
+        "curvature_alpha": 0.0
+      }
+    },
+    {
+      "held_family": "Other",
+      "inner_cls": 0.9621207962606458,
+      "params": {
+        "topk": 18,
+        "w_mmlv": 0.0,
+        "w_inactive": 0.0,
+        "w_margin": 0.0,
+        "w_topology": 0.0,
+        "smooth_k": 0,
+        "curvature_alpha": 0.0
+      }
+    },
+    {
+      "held_family": "Retron",
+      "inner_cls": 0.9892821190031796,
+      "params": {
+        "topk": 18,
+        "w_mmlv": 0.0,
+        "w_inactive": 0.0,
+        "w_margin": 0.0,
+        "w_topology": 0.0,
+        "smooth_k": 0,
+        "curvature_alpha": 0.0
+      }
+    },
+    {
+      "held_family": "Retroviral",
+      "inner_cls": 0.8449818722843248,
+      "params": {
+        "topk": 18,
+        "w_mmlv": 0.0,
+        "w_inactive": 0.0,
+        "w_margin": 0.0,
+        "w_topology": 0.0,
+        "smooth_k": 0,
+        "curvature_alpha": 0.0
+      }
+    },
+    {
+      "held_family": "Unclassified",
+      "inner_cls": 0.9624467406399001,
+      "params": {
+        "topk": 18,
+        "w_mmlv": 0.0,
+        "w_inactive": 0.0,
+        "w_margin": 0.0,
+        "w_topology": 0.0,
+        "smooth_k": 0,
+        "curvature_alpha": 0.0
+      }
+    }
+  ]
+}
