@@ -14,7 +14,7 @@ from midband_repair_search import (
 import sys
 
 sys.path.append(str(ROOT / "evaluation"))
-from evaluate import compute_cls
+from evaluate import compute_cls, weighted_spearman
 
 
 def apply_zone_repair(frame, signal_df, params):
@@ -30,6 +30,11 @@ def apply_zone_repair(frame, signal_df, params):
     anisotropic_mmlv = signal_df["anisotropic_mmlv_sim"].to_numpy(dtype=float)
     inactive_sim = signal_df["inactive_sim"].to_numpy(dtype=float)
     topology_rank = signal_df["topology_rank"].to_numpy(dtype=float) - 0.5
+    pca_margin = signal_df["pca_margin"].to_numpy(dtype=float)
+    inactive_mahal = signal_df["inactive_mahal"].to_numpy(dtype=float)
+    family_margin = signal_df["family_margin"].to_numpy(dtype=float)
+    knn_eff_proxy = signal_df["knn_eff_proxy"].to_numpy(dtype=float)
+    topology_residual = signal_df["topology_residual"].to_numpy(dtype=float)
 
     score[zone_a] += params["zone_a_margin"] * manifold_margin[zone_a]
     score[zone_a] += params["zone_a_mmlv"] * anisotropic_mmlv[zone_a]
@@ -42,6 +47,20 @@ def apply_zone_repair(frame, signal_df, params):
     score[zone_b] -= params["zone_b_inactive"] * inactive_sim[zone_b]
     score[zone_b] += params["zone_b_mmlv"] * anisotropic_mmlv[zone_b]
     score[zone_b] += params["zone_b_topology"] * topology_rank[zone_b]
+    score[zone_b] += params["zone_b_pca_margin"] * pca_margin[zone_b]
+    score[zone_b] += params["zone_b_inactive_mahal"] * inactive_mahal[zone_b]
+    score[zone_b] += params["zone_b_family_margin"] * family_margin[zone_b]
+    score[zone_b] += params["zone_b_knn_eff"] * knn_eff_proxy[zone_b]
+    score[zone_b] += params["zone_b_topology_residual"] * topology_residual[zone_b]
+
+    if params["neighbor_alpha"] != 0:
+        score_desc = score[order].copy()
+        neighbor_avg = (np.roll(score_desc, 1) + np.roll(score_desc, -1)) / 2.0
+        zone_b_positions = np.arange(25, 45)
+        score[order[25:45]] += (
+            params["neighbor_alpha"]
+            * (neighbor_avg[zone_b_positions] - score_desc[zone_b_positions])
+        )
 
     smooth_start = int(params["smooth_start"])
     smooth_end = int(params["smooth_end"])
@@ -75,6 +94,12 @@ def search_grid(frame, signal_df):
             "zone_b_inactive": 0.0,
             "zone_b_mmlv": 0.006,
             "zone_b_topology": 0.0,
+            "zone_b_pca_margin": 0.012,
+            "zone_b_inactive_mahal": 0.008,
+            "zone_b_family_margin": 0.012,
+            "zone_b_knn_eff": 0.01,
+            "zone_b_topology_residual": 0.008,
+            "neighbor_alpha": 0.006,
             "smooth_start": 15,
             "smooth_end": 45,
             "smooth_alpha": 0.002,
@@ -90,6 +115,12 @@ def search_grid(frame, signal_df):
             "zone_b_inactive": 0.0,
             "zone_b_mmlv": 0.0,
             "zone_b_topology": 0.0,
+            "zone_b_pca_margin": 0.0,
+            "zone_b_inactive_mahal": 0.0,
+            "zone_b_family_margin": 0.0,
+            "zone_b_knn_eff": 0.0,
+            "zone_b_topology_residual": 0.0,
+            "neighbor_alpha": 0.0,
             "smooth_start": 15,
             "smooth_end": 45,
             "smooth_alpha": 0.0,
@@ -109,6 +140,12 @@ def search_grid(frame, signal_df):
                 "zone_b_inactive": float(rng.uniform(0.0, 0.008)),
                 "zone_b_mmlv": float(rng.uniform(-0.004, 0.01)),
                 "zone_b_topology": float(rng.uniform(-0.012, 0.006)),
+                "zone_b_pca_margin": float(rng.uniform(-0.004, 0.02)),
+                "zone_b_inactive_mahal": float(rng.uniform(-0.004, 0.012)),
+                "zone_b_family_margin": float(rng.uniform(-0.004, 0.02)),
+                "zone_b_knn_eff": float(rng.uniform(-0.004, 0.02)),
+                "zone_b_topology_residual": float(rng.uniform(-0.004, 0.016)),
+                "neighbor_alpha": float(rng.uniform(0.0, 0.01)),
                 "smooth_start": 15,
                 "smooth_end": 45,
                 "smooth_alpha": float(rng.uniform(0.0, 0.003)),
@@ -145,10 +182,19 @@ def refine_de(frame, signal_df, start_params):
         "zone_b_inactive",
         "zone_b_mmlv",
         "zone_b_topology",
+        "zone_b_pca_margin",
+        "zone_b_inactive_mahal",
+        "zone_b_family_margin",
+        "zone_b_knn_eff",
+        "zone_b_topology_residual",
+        "neighbor_alpha",
         "smooth_alpha",
     ]
     x0 = np.array([start_params[k] for k in keys], dtype=float)
-    widths = np.array([0.006, 0.004, 0.004, 0.008, 0.006, 0.006, 0.004, 0.004, 0.004, 0.008, 0.002], dtype=float)
+    widths = np.array(
+        [0.006, 0.004, 0.004, 0.008, 0.006, 0.006, 0.004, 0.004, 0.004, 0.008, 0.008, 0.008, 0.008, 0.008, 0.008, 0.006, 0.002],
+        dtype=float,
+    )
     bounds = [(max(-0.02, v - w), min(0.04, v + w)) for v, w in zip(x0, widths)]
 
     def objective(x):
@@ -156,12 +202,13 @@ def refine_de(frame, signal_df, start_params):
         for key, value in zip(keys, x):
             params[key] = float(value)
         score = apply_zone_repair(frame, signal_df, params)
-        result = compute_cls(
-            frame["active"].to_numpy(dtype=float),
-            score,
-            frame["pe_efficiency_pct"].to_numpy(dtype=float),
+        return -float(
+            weighted_spearman(
+                score,
+                frame["pe_efficiency_pct"].to_numpy(dtype=float),
+                frame["pe_efficiency_pct"].to_numpy(dtype=float) + 0.01,
+            )
         )
-        return -float(result["cls"])
 
     result = differential_evolution(
         objective,
