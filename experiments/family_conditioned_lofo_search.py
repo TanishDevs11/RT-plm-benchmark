@@ -3,10 +3,12 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from scipy.optimize import differential_evolution
+from scipy.optimize import differential_evolution, minimize
+from scipy.special import logsumexp
 from scipy.stats import rankdata
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestRegressor
 from sklearn.decomposition import PCA
+from sklearn.cross_decomposition import PLSRegression
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import LeaveOneGroupOut
@@ -279,30 +281,208 @@ def build_composition_projection(train_comp, test_comp, y_train, eff_train):
     )
 
 
+def build_similarity_diffusion(train_emb, test_emb, y_train, eff_train, alpha=0.65):
+    train_emb = np.asarray(train_emb, dtype=float)
+    test_emb = np.asarray(test_emb, dtype=float)
+    y_train = np.asarray(y_train, dtype=int)
+    eff_train = np.asarray(eff_train, dtype=float)
+
+    train_norm = train_emb / (np.linalg.norm(train_emb, axis=1, keepdims=True) + 1e-8)
+    test_norm = test_emb / (np.linalg.norm(test_emb, axis=1, keepdims=True) + 1e-8)
+
+    sim_train = train_norm @ train_norm.T
+    np.fill_diagonal(sim_train, 0.0)
+    sim_train = np.maximum(sim_train, 0.0)
+    row_sum = sim_train.sum(axis=1, keepdims=True) + 1e-8
+    trans = sim_train / row_sum
+
+    eff_seed = minmax(eff_train)
+    act_seed = y_train.astype(float)
+    seed = 0.65 * eff_seed + 0.35 * act_seed
+    propagated = np.linalg.solve(
+        np.eye(len(train_emb)) - alpha * trans,
+        (1.0 - alpha) * seed,
+    )
+
+    sim_test = np.maximum(test_norm @ train_norm.T, 0.0)
+    test_w = sim_test / (sim_test.sum(axis=1, keepdims=True) + 1e-8)
+    test_prop = test_w @ propagated
+    train_prop = propagated
+    return train_prop, test_prop
+
+
+def load_pdb_graph_features(rt_names, threshold=10.0):
+    rows = []
+    struct_dir = ROOT / "data" / "structures"
+    for name in rt_names:
+        pdb_path = struct_dir / f"{name}.pdb"
+        coords = []
+        if pdb_path.exists():
+            with pdb_path.open("r", encoding="utf-8", errors="ignore") as handle:
+                for line in handle:
+                    if not line.startswith("ATOM"):
+                        continue
+                    atom_name = line[12:16].strip()
+                    if atom_name != "CA":
+                        continue
+                    try:
+                        x = float(line[30:38])
+                        y = float(line[38:46])
+                        z = float(line[46:54])
+                    except ValueError:
+                        continue
+                    coords.append((x, y, z))
+        arr = np.asarray(coords, dtype=float)
+        if arr.shape[0] < 3:
+            rows.append(
+                {
+                    "rt_name": name,
+                    "graph_edge_density": 0.0,
+                    "graph_mean_degree": 0.0,
+                    "graph_std_degree": 0.0,
+                    "graph_spectral_radius": 0.0,
+                    "graph_lambda2": 0.0,
+                    "graph_contact_entropy": 0.0,
+                }
+            )
+            continue
+
+        diff = arr[:, None, :] - arr[None, :, :]
+        dist = np.sqrt(np.sum(diff**2, axis=2))
+        adj = ((dist < threshold) & (dist > 0)).astype(float)
+        deg = adj.sum(axis=1)
+        n = adj.shape[0]
+        edge_density = adj.sum() / (n * (n - 1) + 1e-8)
+        spectral_radius = float(np.max(np.linalg.eigvalsh(adj)))
+        lap = np.diag(deg) - adj
+        lap_eigs = np.sort(np.linalg.eigvalsh(lap))
+        lambda2 = float(lap_eigs[1]) if lap_eigs.size > 1 else 0.0
+        p = deg / (deg.sum() + 1e-8)
+        contact_entropy = float(-(p * np.log(p + 1e-8)).sum())
+        rows.append(
+            {
+                "rt_name": name,
+                "graph_edge_density": float(edge_density),
+                "graph_mean_degree": float(deg.mean()),
+                "graph_std_degree": float(deg.std()),
+                "graph_spectral_radius": float(spectral_radius),
+                "graph_lambda2": float(lambda2),
+                "graph_contact_entropy": float(contact_entropy),
+            }
+        )
+
+    return pd.DataFrame(rows).set_index("rt_name")
+
+
+def build_graph_proxy_features(X_train_df, X_test_df, graph_train_df, graph_test_df, structure_cols, topology_cols):
+    cols = [c for c in (structure_cols + topology_cols) if c in X_train_df.columns]
+    train_num = graph_train_df.copy()
+    test_num = graph_test_df.copy()
+
+    if cols:
+        train_num = pd.concat([train_num, X_train_df[cols].copy()], axis=1)
+        test_num = pd.concat([test_num, X_test_df[cols].copy()], axis=1)
+    if train_num.shape[1] == 0:
+        return np.zeros((len(X_train_df), 1)), np.zeros((len(X_test_df), 1))
+
+    for left in ["radius_gyration", "avg_ca_distance", "top_mean_ca_dist", "top_max_ca_dist"]:
+        for right in ["top_contact_density", "top_mean_degree", "top_entropy_degree", "top_contact_entropy"]:
+            if left in train_num.columns and right in train_num.columns:
+                name = f"{left}__x__{right}"
+                train_num[name] = train_num[left] * train_num[right]
+                test_num[name] = test_num[left] * test_num[right]
+
+    for left, right, name in [
+        ("top_mean_degree", "top_std_degree", "degree_cv_proxy"),
+        ("top_contact_density", "top_long_range_ratio", "contact_long_range_mul"),
+        ("top_clustering_proxy", "top_contact_entropy", "cluster_entropy_mul"),
+    ]:
+        if left in train_num.columns and right in train_num.columns:
+            train_num[name] = train_num[left] / (train_num[right] + 1e-8)
+            test_num[name] = test_num[left] / (test_num[right] + 1e-8)
+
+    imp = SimpleImputer(strategy="median")
+    scaler = StandardScaler()
+    train_arr = scaler.fit_transform(imp.fit_transform(train_num))
+    test_arr = scaler.transform(imp.transform(test_num))
+    return train_arr, test_arr
+
+
 def fit_weighted_rank_head(train_features, eff_train, y_train, sample_weight, test_features):
-    active_mask = np.asarray(y_train, dtype=int) == 1
-    if active_mask.sum() < 3:
-        active_mask = np.ones_like(active_mask, dtype=bool)
+    base_mask = np.asarray(y_train, dtype=int) == 1
+    if base_mask.sum() < 3:
+        base_mask = np.ones_like(base_mask, dtype=bool)
 
-    active_eff = eff_train[active_mask]
-    if active_eff.size >= 6:
-        lo = np.quantile(active_eff, 0.30)
-        hi = np.quantile(active_eff, 0.70)
-        extreme_mask = active_mask.copy()
-        extreme_mask[active_mask] = (active_eff <= lo) | (active_eff >= hi)
-        if extreme_mask.sum() >= 4:
-            active_mask = extreme_mask
+    masked_eff = eff_train[base_mask]
+    use_mask = base_mask.copy()
+    if masked_eff.size >= 6:
+        lo = np.quantile(masked_eff, 0.30)
+        hi = np.quantile(masked_eff, 0.70)
+        use_mask[base_mask] = (masked_eff <= lo) | (masked_eff >= hi)
+        if use_mask.sum() < 4:
+            use_mask = base_mask
 
-    rank_targets = rankdata(eff_train[active_mask], method="average").astype(float)
+    rank_targets = rankdata(eff_train[use_mask], method="average").astype(float)
+    rank_targets = rank_targets / (rank_targets.max() + 1e-8)
+    local_weight = np.asarray(sample_weight[use_mask], dtype=float).copy()
+    local_weight *= np.where(np.asarray(y_train, dtype=int)[use_mask] == 1, 2.0, 1.0)
     model = Ridge(alpha=1.5, random_state=42)
     model.fit(
-        train_features[active_mask],
+        train_features[use_mask],
         rank_targets,
-        sample_weight=sample_weight[active_mask],
+        sample_weight=local_weight,
     )
-    train_scores = model.predict(train_features[active_mask])
+    train_scores = model.predict(train_features[use_mask])
     test_scores = model.predict(test_features)
-    return train_scores, test_scores
+    return train_scores, test_scores, use_mask
+
+
+def fit_listwise_rank_head(train_features, eff_train, y_train, sample_weight, test_features):
+    mask = np.asarray(y_train, dtype=int) == 1
+    if mask.sum() < 4:
+        mask = np.ones_like(mask, dtype=bool)
+
+    x_train = np.asarray(train_features[mask], dtype=float)
+    x_test = np.asarray(test_features, dtype=float)
+    y_eff = np.asarray(eff_train[mask], dtype=float)
+    w = np.asarray(sample_weight[mask], dtype=float)
+
+    scaler = StandardScaler()
+    x_train = scaler.fit_transform(x_train)
+    x_test = scaler.transform(x_test)
+
+    order = np.argsort(y_eff)[::-1]
+    x_ord = x_train[order]
+    w_ord = w[order] / (w.sum() + 1e-8)
+
+    def objective(theta):
+        beta = theta[:-1]
+        bias = theta[-1]
+        scores = x_ord @ beta + bias
+        tails = np.empty_like(scores)
+        acc = -np.inf
+        for idx in range(len(scores) - 1, -1, -1):
+            acc = np.logaddexp(acc, scores[idx])
+            tails[idx] = acc
+        loss = -np.sum(w_ord * (scores - tails))
+        reg = 1e-3 * np.sum(beta**2)
+        return float(loss + reg)
+
+    theta0 = np.zeros(x_train.shape[1] + 1, dtype=float)
+    result = minimize(objective, theta0, method="L-BFGS-B")
+    if not result.success:
+        ridge = Ridge(alpha=1.0, random_state=42)
+        rank_targets = rankdata(y_eff, method="average").astype(float)
+        rank_targets = rank_targets / (rank_targets.max() + 1e-8)
+        ridge.fit(x_train, rank_targets, sample_weight=w)
+        train_scores = ridge.predict(x_train)
+        test_scores = ridge.predict(x_test)
+    else:
+        beta = result.x[:-1]
+        bias = result.x[-1]
+        train_scores = x_train @ beta + bias
+        test_scores = x_test @ beta + bias
+    return train_scores, test_scores, mask
 
 
 def run_search():
@@ -311,6 +491,7 @@ def run_search():
     seq = seq.loc[X.index]
     seq_comp = build_sequence_features(seq["sequence"])
     embeddings = load_embeddings(X.index.tolist())
+    pdb_graph = load_pdb_graph_features(X.index.tolist()).loc[X.index]
     base_pred = pd.read_csv(ROOT / "results" / "calibrated_predictions_selected_features.csv")
     base_map = base_pred.set_index("rt_name")["predicted_score"]
     base_oof = base_map.loc[X.index].to_numpy(dtype=float)
@@ -330,6 +511,10 @@ def run_search():
     rank_branch = np.zeros(len(X), dtype=float)
     effproj_branch = np.zeros(len(X), dtype=float)
     margin_branch = np.zeros(len(X), dtype=float)
+    diffusion_branch = np.zeros(len(X), dtype=float)
+    graph_branch = np.zeros(len(X), dtype=float)
+    listwise_branch = np.zeros(len(X), dtype=float)
+    adapter_branch = np.zeros(len(X), dtype=float)
 
     for train_idx, test_idx in logo.split(X, y, groups):
         X_train_df = X.iloc[train_idx]
@@ -363,6 +548,26 @@ def run_search():
             test_comp,
             y_train,
             eff_train,
+        )
+        diff_train_feat, diff_test_feat = build_similarity_diffusion(
+            embeddings[train_idx],
+            embeddings[test_idx],
+            y_train,
+            eff_train,
+        )
+        emb_train_norm = embeddings[train_idx] / (
+            np.linalg.norm(embeddings[train_idx], axis=1, keepdims=True) + 1e-8
+        )
+        emb_test_norm = embeddings[test_idx] / (
+            np.linalg.norm(embeddings[test_idx], axis=1, keepdims=True) + 1e-8
+        )
+        graph_train_feat, graph_test_feat = build_graph_proxy_features(
+            X_train_df,
+            X_test_df,
+            pdb_graph.iloc[train_idx],
+            pdb_graph.iloc[test_idx],
+            structure_cols,
+            topology_cols,
         )
 
         X_train_aug = np.hstack([X_train_scaled, train_comp, comp_train_feat, embed_train_feat])
@@ -405,6 +610,14 @@ def run_search():
             embed_train_feat[:, 9],
             embed_test_feat[:, 9],
         )
+        diffusion_branch[test_idx] = rankpct_by_train(diff_train_feat, diff_test_feat)
+        n_pls = int(min(8, emb_train_norm.shape[0] - 1, emb_train_norm.shape[1]))
+        if n_pls >= 2:
+            pls = PLSRegression(n_components=n_pls, scale=True)
+            pls.fit(emb_train_norm, eff_train_norm)
+            adapter_train = pls.predict(emb_train_norm).ravel()
+            adapter_test = pls.predict(emb_test_norm).ravel()
+            adapter_branch[test_idx] = rankpct_by_train(adapter_train, adapter_test)
 
         if structure_cols:
             struct_imputer = SimpleImputer(strategy="median")
@@ -448,6 +661,7 @@ def run_search():
             [
                 reg_train,
                 clf_train,
+                diff_train_feat,
                 embed_train_feat[:, 0],
                 embed_train_feat[:, 3],
                 embed_train_feat[:, 4],
@@ -455,12 +669,16 @@ def run_search():
                 embed_train_feat[:, 6],
                 embed_train_feat[:, 7],
                 embed_train_feat[:, 8],
+                embed_train_feat[:, 9],
+                comp_train_feat[:, 2],
+                comp_train_feat[:, 3],
             ]
         )
         rank_test_feat = np.column_stack(
             [
                 reg_test,
                 clf_test,
+                diff_test_feat,
                 embed_test_feat[:, 0],
                 embed_test_feat[:, 3],
                 embed_test_feat[:, 4],
@@ -468,9 +686,12 @@ def run_search():
                 embed_test_feat[:, 6],
                 embed_test_feat[:, 7],
                 embed_test_feat[:, 8],
+                embed_test_feat[:, 9],
+                comp_test_feat[:, 2],
+                comp_test_feat[:, 3],
             ]
         )
-        rank_train_scores, rank_test_scores = fit_weighted_rank_head(
+        rank_train_scores, rank_test_scores, rank_mask = fit_weighted_rank_head(
             rank_train_feat,
             eff_train,
             y_train,
@@ -478,6 +699,27 @@ def run_search():
             rank_test_feat,
         )
         rank_branch[test_idx] = rankpct_by_train(rank_train_scores, rank_test_scores)
+        list_train_scores, list_test_scores, _ = fit_listwise_rank_head(
+            rank_train_feat,
+            eff_train,
+            y_train,
+            eff_train + 0.01,
+            rank_test_feat,
+        )
+        listwise_branch[test_idx] = rankpct_by_train(list_train_scores, list_test_scores)
+
+        if graph_train_feat.shape[1] > 0:
+            graph_model = Ridge(alpha=1.0, random_state=42)
+            graph_targets = rankdata(eff_train, method="average").astype(float)
+            graph_targets = graph_targets / (graph_targets.max() + 1e-8)
+            graph_model.fit(
+                graph_train_feat,
+                graph_targets,
+                sample_weight=eff_train + 0.01,
+            )
+            graph_train_scores = graph_model.predict(graph_train_feat)
+            graph_test_scores = graph_model.predict(graph_test_feat)
+            graph_branch[test_idx] = rankpct_by_train(graph_train_scores, graph_test_scores)
 
     components = {
         "base": minmax(base_oof),
@@ -488,6 +730,10 @@ def run_search():
         "rank": minmax(rank_branch),
         "effproj": minmax(effproj_branch),
         "margin": minmax(margin_branch),
+        "diffusion": minmax(diffusion_branch),
+        "graph": minmax(graph_branch),
+        "listwise": minmax(listwise_branch),
+        "adapter": minmax(adapter_branch),
     }
 
     y_true = y.to_numpy(dtype=float)
@@ -533,6 +779,10 @@ def run_search():
             "rank": components["rank"],
             "effproj": components["effproj"],
             "margin": components["margin"],
+            "diffusion": components["diffusion"],
+            "graph": components["graph"],
+            "listwise": components["listwise"],
+            "adapter": components["adapter"],
         }
     )
     return prediction_df, component_df, final_metric, best_weights
