@@ -14,6 +14,7 @@ from sklearn.preprocessing import StandardScaler
 
 
 ROOT = Path(__file__).resolve().parent.parent
+AA_ORDER = list("ACDEFGHIKLMNPQRSTVWY")
 
 import sys
 
@@ -45,6 +46,22 @@ def rankpct_by_train(train_scores, test_scores):
 def minmax(values):
     values = np.asarray(values, dtype=float)
     return (values - values.min()) / (values.max() - values.min() + 1e-8)
+
+
+def build_sequence_features(seq_series):
+    rows = []
+    for seq in seq_series.astype(str):
+        length = max(len(seq), 1)
+        counts = {aa: seq.count(aa) for aa in AA_ORDER}
+        row = {f"aa_{aa}": counts[aa] / length for aa in AA_ORDER}
+        pos = counts["R"] + counts["K"]
+        neg = counts["D"] + counts["E"]
+        row["positive_fraction"] = pos / length
+        row["negative_fraction"] = neg / length
+        row["net_charge_density"] = (pos - neg) / length
+        row["charge_ratio"] = (pos - neg) / (pos + neg + 1e-8)
+        rows.append(row)
+    return pd.DataFrame(rows, index=seq_series.index)
 
 
 def load_embeddings(rt_names):
@@ -217,10 +234,64 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
     return train_out, test_out
 
 
+def build_composition_projection(train_comp, test_comp, y_train, eff_train):
+    y_train = np.asarray(y_train, dtype=int)
+    eff_train = np.asarray(eff_train, dtype=float)
+    weights = eff_train + 0.01
+    active_mask = y_train == 1
+    inactive_mask = ~active_mask
+
+    active_center = np.average(
+        train_comp[active_mask],
+        axis=0,
+        weights=weights[active_mask],
+    )
+    inactive_center = np.average(train_comp[inactive_mask], axis=0)
+    eff_center = np.average(train_comp, axis=0, weights=weights)
+
+    train_active_proj = train_comp @ active_center
+    test_active_proj = test_comp @ active_center
+    train_inactive_proj = train_comp @ inactive_center
+    test_inactive_proj = test_comp @ inactive_center
+    train_eff_proj = train_comp @ eff_center
+    test_eff_proj = test_comp @ eff_center
+
+    train_margin = train_active_proj - train_inactive_proj
+    test_margin = test_active_proj - test_inactive_proj
+
+    return (
+        np.column_stack(
+            [
+                train_active_proj,
+                train_inactive_proj,
+                train_eff_proj,
+                train_margin,
+            ]
+        ),
+        np.column_stack(
+            [
+                test_active_proj,
+                test_inactive_proj,
+                test_eff_proj,
+                test_margin,
+            ]
+        ),
+    )
+
+
 def fit_weighted_rank_head(train_features, eff_train, y_train, sample_weight, test_features):
     active_mask = np.asarray(y_train, dtype=int) == 1
     if active_mask.sum() < 3:
         active_mask = np.ones_like(active_mask, dtype=bool)
+
+    active_eff = eff_train[active_mask]
+    if active_eff.size >= 6:
+        lo = np.quantile(active_eff, 0.30)
+        hi = np.quantile(active_eff, 0.70)
+        extreme_mask = active_mask.copy()
+        extreme_mask[active_mask] = (active_eff <= lo) | (active_eff >= hi)
+        if extreme_mask.sum() >= 4:
+            active_mask = extreme_mask
 
     rank_targets = rankdata(eff_train[active_mask], method="average").astype(float)
     model = Ridge(alpha=1.5, random_state=42)
@@ -238,6 +309,7 @@ def run_search():
     X, y, groups = engineer_features()
     seq = pd.read_csv(ROOT / "data" / "rt_sequences.csv").set_index("rt_name")
     seq = seq.loc[X.index]
+    seq_comp = build_sequence_features(seq["sequence"])
     embeddings = load_embeddings(X.index.tolist())
     base_pred = pd.read_csv(ROOT / "results" / "calibrated_predictions_selected_features.csv")
     base_map = base_pred.set_index("rt_name")["predicted_score"]
@@ -275,6 +347,10 @@ def run_search():
             X_test_imp,
         )
 
+        comp_scaler = StandardScaler()
+        train_comp = comp_scaler.fit_transform(seq_comp.iloc[train_idx].to_numpy(dtype=float))
+        test_comp = comp_scaler.transform(seq_comp.iloc[test_idx].to_numpy(dtype=float))
+
         embed_train_feat, embed_test_feat = build_embedding_features(
             embeddings[train_idx],
             embeddings[test_idx],
@@ -282,9 +358,15 @@ def run_search():
             groups_train,
             eff_train,
         )
+        comp_train_feat, comp_test_feat = build_composition_projection(
+            train_comp,
+            test_comp,
+            y_train,
+            eff_train,
+        )
 
-        X_train_aug = np.hstack([X_train_scaled, embed_train_feat])
-        X_test_aug = np.hstack([X_test_scaled, embed_test_feat])
+        X_train_aug = np.hstack([X_train_scaled, train_comp, comp_train_feat, embed_train_feat])
+        X_test_aug = np.hstack([X_test_scaled, test_comp, comp_test_feat, embed_test_feat])
 
         reg = RandomForestRegressor(
             n_estimators=1000,
