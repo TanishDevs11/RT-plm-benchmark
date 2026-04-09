@@ -4,9 +4,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from scipy.optimize import differential_evolution
+from scipy.stats import rankdata
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestRegressor
+from sklearn.decomposition import PCA
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression, Ridge
+from sklearn.linear_model import Ridge
 from sklearn.model_selection import LeaveOneGroupOut
 from sklearn.preprocessing import StandardScaler
 
@@ -93,8 +95,10 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
         train_centered[active_mask], axis=0, weights=weights[active_mask]
     )
     inactive_center = train_centered[inactive_mask].mean(axis=0)
+    eff_center = np.average(train_centered, axis=0, weights=weights)
     active_center /= np.linalg.norm(active_center) + 1e-8
     inactive_center /= np.linalg.norm(inactive_center) + 1e-8
+    eff_center /= np.linalg.norm(eff_center) + 1e-8
 
     family_centers = {}
     family_strengths = {}
@@ -138,9 +142,34 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
     test_active_sim = test_centered @ active_center
     train_inactive_sim = train_centered @ inactive_center
     test_inactive_sim = test_centered @ inactive_center
+    train_eff_sim = train_centered @ eff_center
+    test_eff_sim = test_centered @ eff_center
 
     train_margin = train_crossfam - train_inactive_sim
     test_margin = test_crossfam - test_inactive_sim
+    train_curvature = np.sum((train_centered - active_center) ** 2, axis=1) - np.sum(
+        (train_centered - inactive_center) ** 2, axis=1
+    )
+    test_curvature = np.sum((test_centered - active_center) ** 2, axis=1) - np.sum(
+        (test_centered - inactive_center) ** 2, axis=1
+    )
+
+    # Whiten the fold embedding space, then extract the dominant
+    # efficiency direction from training families only.
+    n_white = int(min(16, train_centered.shape[0] - 1, train_centered.shape[1]))
+    if n_white >= 2:
+        pca_white = PCA(n_components=n_white, whiten=True, random_state=42)
+        train_white = pca_white.fit_transform(train_centered)
+        test_white = pca_white.transform(test_centered)
+    else:
+        train_white = train_centered
+        test_white = test_centered
+
+    weighted_train = train_white * np.sqrt(weights)[:, None]
+    _, _, vt = np.linalg.svd(weighted_train, full_matrices=False)
+    eff_vec = vt[0]
+    eff_projection_train = train_white @ eff_vec
+    eff_projection_test = test_white @ eff_vec
 
     sim_train = train_centered @ train_centered.T
     np.fill_diagonal(sim_train, -np.inf)
@@ -149,19 +178,26 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
     train_knn = []
     for row in range(sim_train.shape[0]):
         idx = np.argsort(sim_train[row])[::-1][:k]
-        train_knn.append(float(eff_train[idx].mean()))
+        neigh_sim = np.maximum(sim_train[row, idx], 0.0) + 1e-8
+        train_knn.append(float(np.average(eff_train[idx], weights=neigh_sim)))
     test_knn = []
     for row in range(sim_test.shape[0]):
         idx = np.argsort(sim_test[row])[::-1][:k]
-        test_knn.append(float(eff_train[idx].mean()))
+        neigh_sim = np.maximum(sim_test[row, idx], 0.0) + 1e-8
+        test_knn.append(float(np.average(eff_train[idx], weights=neigh_sim)))
 
     train_out = np.column_stack(
         [
             train_crossfam,
             train_active_sim,
             train_inactive_sim,
+            train_eff_sim,
             train_margin,
             np.asarray(train_knn, dtype=float),
+            train_curvature,
+            train_curvature**2,
+            train_curvature**3,
+            eff_projection_train,
         ]
     )
     test_out = np.column_stack(
@@ -169,48 +205,33 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
             test_crossfam,
             test_active_sim,
             test_inactive_sim,
+            test_eff_sim,
             test_margin,
             np.asarray(test_knn, dtype=float),
+            test_curvature,
+            test_curvature**2,
+            test_curvature**3,
+            eff_projection_test,
         ]
     )
     return train_out, test_out
 
 
-def fit_pairwise_head(train_features, eff_train, sample_weight):
-    n = train_features.shape[0]
-    pair_X = []
-    pair_y = []
-    pair_w = []
-    for i in range(n):
-        for j in range(i + 1, n):
-            if eff_train[i] == eff_train[j]:
-                continue
-            diff = train_features[i] - train_features[j]
-            label = 1 if eff_train[i] > eff_train[j] else 0
-            weight = abs(eff_train[i] - eff_train[j]) + 0.05
-            pair_X.append(diff)
-            pair_y.append(label)
-            pair_w.append(weight)
-            pair_X.append(-diff)
-            pair_y.append(1 - label)
-            pair_w.append(weight)
+def fit_weighted_rank_head(train_features, eff_train, y_train, sample_weight, test_features):
+    active_mask = np.asarray(y_train, dtype=int) == 1
+    if active_mask.sum() < 3:
+        active_mask = np.ones_like(active_mask, dtype=bool)
 
-    pair_X = np.asarray(pair_X, dtype=float)
-    pair_y = np.asarray(pair_y, dtype=int)
-    pair_w = np.asarray(pair_w, dtype=float)
-    model = LogisticRegression(
-        C=0.5,
-        max_iter=5000,
-        random_state=42,
+    rank_targets = rankdata(eff_train[active_mask], method="average").astype(float)
+    model = Ridge(alpha=1.5, random_state=42)
+    model.fit(
+        train_features[active_mask],
+        rank_targets,
+        sample_weight=sample_weight[active_mask],
     )
-    model.fit(pair_X, pair_y, sample_weight=pair_w)
-
-    train_scores = []
-    for row in train_features:
-        probs = model.predict_proba(row[None, :] - train_features)[:, 1]
-        train_scores.append(float(np.average(probs, weights=sample_weight)))
-
-    return model, np.asarray(train_scores, dtype=float)
+    train_scores = model.predict(train_features[active_mask])
+    test_scores = model.predict(test_features)
+    return train_scores, test_scores
 
 
 def run_search():
@@ -227,12 +248,15 @@ def run_search():
         for col in ["n_atoms", "n_residues", "radius_gyration", "avg_ca_distance"]
         if col in X.columns
     ]
+    topology_cols = [col for col in X.columns if str(col).startswith("top_")]
 
     logo = LeaveOneGroupOut()
     reg_branch = np.zeros(len(X), dtype=float)
     clf_branch = np.zeros(len(X), dtype=float)
     struct_branch = np.zeros(len(X), dtype=float)
-    pair_branch = np.zeros(len(X), dtype=float)
+    topo_branch = np.zeros(len(X), dtype=float)
+    rank_branch = np.zeros(len(X), dtype=float)
+    effproj_branch = np.zeros(len(X), dtype=float)
     margin_branch = np.zeros(len(X), dtype=float)
 
     for train_idx, test_idx in logo.split(X, y, groups):
@@ -292,8 +316,12 @@ def run_search():
         reg_branch[test_idx] = rankpct_by_train(reg_train, reg_test)
         clf_branch[test_idx] = zsig_by_train(clf_train, clf_test)
         margin_branch[test_idx] = rankpct_by_train(
-            embed_train_feat[:, 3],
-            embed_test_feat[:, 3],
+            embed_train_feat[:, 4],
+            embed_test_feat[:, 4],
+        )
+        effproj_branch[test_idx] = rankpct_by_train(
+            embed_train_feat[:, 9],
+            embed_test_feat[:, 9],
         )
 
         if structure_cols:
@@ -315,41 +343,68 @@ def run_search():
             struct_test = struct_model.predict(X_test_struct)
             struct_branch[test_idx] = zsig_by_train(struct_train, struct_test)
 
-        pair_train_feat = np.column_stack(
+        if topology_cols:
+            topo_imputer = SimpleImputer(strategy="median")
+            X_train_topo_imp = topo_imputer.fit_transform(X_train_df[topology_cols])
+            X_test_topo_imp = topo_imputer.transform(X_test_df[topology_cols])
+            X_train_topo, X_test_topo = group_exclusion_scale(
+                X_train_topo_imp,
+                groups_train,
+                X_test_topo_imp,
+            )
+            topo_model = Ridge(alpha=1.2, random_state=42)
+            topo_model.fit(
+                X_train_topo,
+                eff_train_norm - reg_train,
+                sample_weight=eff_train + 0.01,
+            )
+            topo_train = topo_model.predict(X_train_topo)
+            topo_test = topo_model.predict(X_test_topo)
+            topo_branch[test_idx] = zsig_by_train(topo_train, topo_test)
+
+        rank_train_feat = np.column_stack(
             [
                 reg_train,
                 clf_train,
                 embed_train_feat[:, 0],
                 embed_train_feat[:, 3],
                 embed_train_feat[:, 4],
+                embed_train_feat[:, 5],
+                embed_train_feat[:, 6],
+                embed_train_feat[:, 7],
+                embed_train_feat[:, 8],
             ]
         )
-        pair_test_feat = np.column_stack(
+        rank_test_feat = np.column_stack(
             [
                 reg_test,
                 clf_test,
                 embed_test_feat[:, 0],
                 embed_test_feat[:, 3],
                 embed_test_feat[:, 4],
+                embed_test_feat[:, 5],
+                embed_test_feat[:, 6],
+                embed_test_feat[:, 7],
+                embed_test_feat[:, 8],
             ]
         )
-        pair_model, pair_train_scores = fit_pairwise_head(
-            pair_train_feat,
+        rank_train_scores, rank_test_scores = fit_weighted_rank_head(
+            rank_train_feat,
             eff_train,
+            y_train,
             eff_train + 0.01,
+            rank_test_feat,
         )
-        pair_test_scores = []
-        for row in pair_test_feat:
-            probs = pair_model.predict_proba(row[None, :] - pair_train_feat)[:, 1]
-            pair_test_scores.append(float(np.average(probs, weights=eff_train + 0.01)))
-        pair_branch[test_idx] = zsig_by_train(pair_train_scores, pair_test_scores)
+        rank_branch[test_idx] = rankpct_by_train(rank_train_scores, rank_test_scores)
 
     components = {
         "base": minmax(base_oof),
         "reg": minmax(reg_branch),
         "clf": minmax(clf_branch),
         "struct": minmax(struct_branch),
-        "pair": minmax(pair_branch),
+        "topo": minmax(topo_branch),
+        "rank": minmax(rank_branch),
+        "effproj": minmax(effproj_branch),
         "margin": minmax(margin_branch),
     }
 
@@ -392,7 +447,9 @@ def run_search():
             "reg": components["reg"],
             "clf": components["clf"],
             "struct": components["struct"],
-            "pair": components["pair"],
+            "topo": components["topo"],
+            "rank": components["rank"],
+            "effproj": components["effproj"],
             "margin": components["margin"],
         }
     )
