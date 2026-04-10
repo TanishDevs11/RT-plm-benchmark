@@ -3,6 +3,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.linalg import expm
 from scipy.optimize import differential_evolution, minimize
 from scipy.special import logsumexp
 from scipy.stats import rankdata
@@ -311,6 +312,54 @@ def build_similarity_diffusion(train_emb, test_emb, y_train, eff_train, alpha=0.
     return train_prop, test_prop
 
 
+def build_quantum_features(train_emb, test_emb, y_train, eff_train, beta=0.35):
+    train_emb = np.asarray(train_emb, dtype=float)
+    test_emb = np.asarray(test_emb, dtype=float)
+    y_train = np.asarray(y_train, dtype=int)
+    eff_train = np.asarray(eff_train, dtype=float)
+
+    train_norm = train_emb / (np.linalg.norm(train_emb, axis=1, keepdims=True) + 1e-8)
+    test_norm = test_emb / (np.linalg.norm(test_emb, axis=1, keepdims=True) + 1e-8)
+
+    sim_train = np.clip(train_norm @ train_norm.T, -1.0, 1.0)
+    sim_test = np.clip(test_norm @ train_norm.T, -1.0, 1.0)
+    qk_train = np.cos(sim_train) ** 2
+    qk_test = np.cos(sim_test) ** 2
+    np.fill_diagonal(qk_train, 0.0)
+
+    active_mask = y_train == 1
+    inactive_mask = ~active_mask
+    weights = eff_train + 0.01
+    active_center = np.average(train_norm[active_mask], axis=0, weights=weights[active_mask])
+    inactive_center = train_norm[inactive_mask].mean(axis=0)
+    active_center /= np.linalg.norm(active_center) + 1e-8
+    inactive_center /= np.linalg.norm(inactive_center) + 1e-8
+
+    train_q_active = np.arccos(np.clip(train_norm @ active_center, -1.0, 1.0))
+    test_q_active = np.arccos(np.clip(test_norm @ active_center, -1.0, 1.0))
+    train_q_inactive = np.arccos(np.clip(train_norm @ inactive_center, -1.0, 1.0))
+    test_q_inactive = np.arccos(np.clip(test_norm @ inactive_center, -1.0, 1.0))
+    train_q_margin = train_q_inactive - train_q_active
+    test_q_margin = test_q_inactive - test_q_active
+
+    deg = np.diag(qk_train.sum(axis=1))
+    lap = deg - qk_train
+    seed = 0.7 * minmax(eff_train) + 0.3 * y_train.astype(float)
+    walk = expm(-beta * lap) @ seed
+    qtest_weights = qk_test / (qk_test.sum(axis=1, keepdims=True) + 1e-8)
+    qtest_walk = qtest_weights @ walk
+
+    eigvals, eigvecs = np.linalg.eigh(qk_train + 1e-6 * np.eye(qk_train.shape[0]))
+    lead = eigvecs[:, -1] / np.sqrt(max(eigvals[-1], 1e-8))
+    train_qpca = qk_train @ lead
+    test_qpca = qk_test @ lead
+
+    return (
+        np.column_stack([train_q_margin, walk, train_qpca]),
+        np.column_stack([test_q_margin, qtest_walk, test_qpca]),
+    )
+
+
 def load_pdb_graph_features(rt_names, threshold=10.0):
     rows = []
     struct_dir = ROOT / "data" / "structures"
@@ -515,6 +564,9 @@ def run_search():
     graph_branch = np.zeros(len(X), dtype=float)
     listwise_branch = np.zeros(len(X), dtype=float)
     adapter_branch = np.zeros(len(X), dtype=float)
+    qmargin_branch = np.zeros(len(X), dtype=float)
+    qdiff_branch = np.zeros(len(X), dtype=float)
+    qpca_branch = np.zeros(len(X), dtype=float)
 
     for train_idx, test_idx in logo.split(X, y, groups):
         X_train_df = X.iloc[train_idx]
@@ -550,6 +602,12 @@ def run_search():
             eff_train,
         )
         diff_train_feat, diff_test_feat = build_similarity_diffusion(
+            embeddings[train_idx],
+            embeddings[test_idx],
+            y_train,
+            eff_train,
+        )
+        quantum_train_feat, quantum_test_feat = build_quantum_features(
             embeddings[train_idx],
             embeddings[test_idx],
             y_train,
@@ -611,6 +669,18 @@ def run_search():
             embed_test_feat[:, 9],
         )
         diffusion_branch[test_idx] = rankpct_by_train(diff_train_feat, diff_test_feat)
+        qmargin_branch[test_idx] = rankpct_by_train(
+            quantum_train_feat[:, 0],
+            quantum_test_feat[:, 0],
+        )
+        qdiff_branch[test_idx] = rankpct_by_train(
+            quantum_train_feat[:, 1],
+            quantum_test_feat[:, 1],
+        )
+        qpca_branch[test_idx] = rankpct_by_train(
+            quantum_train_feat[:, 2],
+            quantum_test_feat[:, 2],
+        )
         n_pls = int(min(8, emb_train_norm.shape[0] - 1, emb_train_norm.shape[1]))
         if n_pls >= 2:
             pls = PLSRegression(n_components=n_pls, scale=True)
@@ -734,6 +804,9 @@ def run_search():
         "graph": minmax(graph_branch),
         "listwise": minmax(listwise_branch),
         "adapter": minmax(adapter_branch),
+        "qmargin": minmax(qmargin_branch),
+        "qdiff": minmax(qdiff_branch),
+        "qpca": minmax(qpca_branch),
     }
 
     y_true = y.to_numpy(dtype=float)
@@ -783,6 +856,9 @@ def run_search():
             "graph": components["graph"],
             "listwise": components["listwise"],
             "adapter": components["adapter"],
+            "qmargin": components["qmargin"],
+            "qdiff": components["qdiff"],
+            "qpca": components["qpca"],
         }
     )
     return prediction_df, component_df, final_metric, best_weights
