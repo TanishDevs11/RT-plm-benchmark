@@ -1,0 +1,71 @@
+{
+  "pr_auc": 0.9510327680734412,
+  "w_spearman": 0.90430314965859,
+  "cls": 0.9270794785761857,
+  "configs": [
+    {
+      "mode": "add_anchor",
+      "alpha": 0.0
+    },
+    {
+      "mode": "add_anchor",
+      "alpha": 0.0
+    },
+    {
+      "mode": "gated_add",
+      "alpha": -0.02
+    },
+    {
+      "mode": "add_anchor",
+      "alpha": 0.0
+    },
+    {
+      "mode": "rank_anchor",
+      "alpha": 0.08
+    },
+    {
+      "mode": "add_anchor",
+      "alpha": 0.0
+    },
+    {
+      "mode": "add_anchor",
+      "alpha": 0.0
+    }
+  ],
+  "feature_count": 33,
+  "features": [
+    "triad_distance_ratio",
+    "triad_mean_dist",
+    "triad_diff_dist",
+    "triad_geom_mean",
+    "triad_compactness",
+    "triad_angle_proxy",
+    "triad_best_rmsd",
+    "cleft_triangle_area",
+    "cleft_sasa_mean",
+    "cleft_open_score",
+    "cleft_curvature_proxy",
+    "cleft_thumb_asymmetry",
+    "cleft_tunnel_curvature_score",
+    "sasa_avg",
+    "sasa_high_pct",
+    "sasa_low_pct",
+    "helix",
+    "sheet",
+    "turn",
+    "helix_sheet_ratio",
+    "radius_gyration",
+    "avg_ca_distance",
+    "gravy",
+    "isoelectric_point",
+    "native_net_charge",
+    "arginine_r_charge",
+    "lysine_k_charge",
+    "aspartate_d_charge",
+    "glutamate_e_charge",
+    "thumb_surface_net_charge",
+    "thumb_charge_ratio",
+    "top_contact_entropy",
+    "top_entropy_degree"
+  ]
+}

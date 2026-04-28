@@ -206,6 +206,61 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
         neigh_sim = np.maximum(sim_test[row, idx], 0.0) + 1e-8
         test_knn.append(float(np.average(eff_train[idx], weights=neigh_sim)))
 
+    # Local manifold residual: distance from a sample to the local embedding plane
+    # spanned by its nearest neighbors. This captures unusual RTs relative to
+    # their structural neighborhood, which is useful once global centroid signals
+    # are saturated.
+    train_manifold = []
+    for row in range(train_centered.shape[0]):
+        idx = np.argsort(sim_train[row])[::-1][: max(3, min(8, train_centered.shape[0] - 1))]
+        neigh = train_centered[idx]
+        if neigh.shape[0] >= 3:
+            local_mean = neigh.mean(axis=0, keepdims=True)
+            local_rank = int(min(3, neigh.shape[0] - 1, neigh.shape[1]))
+            if local_rank >= 1:
+                pca = PCA(n_components=local_rank, random_state=42)
+                pca.fit(neigh - local_mean)
+                recon = pca.inverse_transform(pca.transform(train_centered[row : row + 1] - local_mean)) + local_mean
+                resid = float(np.linalg.norm(train_centered[row] - recon.ravel()))
+            else:
+                resid = float(np.linalg.norm(train_centered[row] - local_mean.ravel()))
+        else:
+            resid = 0.0
+        train_manifold.append(resid)
+
+    test_manifold = []
+    for row in range(test_centered.shape[0]):
+        idx = np.argsort(sim_test[row])[::-1][: max(3, min(8, train_centered.shape[0]))]
+        neigh = train_centered[idx]
+        if neigh.shape[0] >= 3:
+            local_mean = neigh.mean(axis=0, keepdims=True)
+            local_rank = int(min(3, neigh.shape[0] - 1, neigh.shape[1]))
+            if local_rank >= 1:
+                pca = PCA(n_components=local_rank, random_state=42)
+                pca.fit(neigh - local_mean)
+                recon = pca.inverse_transform(pca.transform(test_centered[row : row + 1] - local_mean)) + local_mean
+                resid = float(np.linalg.norm(test_centered[row] - recon.ravel()))
+            else:
+                resid = float(np.linalg.norm(test_centered[row] - local_mean.ravel()))
+        else:
+            resid = 0.0
+        test_manifold.append(resid)
+
+    # Family-relative efficiency projection. Training rows are centered against
+    # other-family reference means; held-out family rows use the training-family
+    # mean of the fold as the neutral baseline.
+    fam_eff_means = {}
+    for fam in np.unique(groups_train):
+        fam_mask = groups_train == fam
+        fam_eff_means[fam] = float(np.mean(train_eff_sim[fam_mask]))
+    global_eff_mean = float(np.mean(list(fam_eff_means.values())))
+    train_eff_rel = np.zeros_like(train_eff_sim)
+    for idx, fam in enumerate(groups_train):
+        other = [v for kfam, v in fam_eff_means.items() if kfam != fam]
+        ref = float(np.mean(other)) if other else global_eff_mean
+        train_eff_rel[idx] = train_eff_sim[idx] - ref
+    test_eff_rel = test_eff_sim - global_eff_mean
+
     train_out = np.column_stack(
         [
             train_crossfam,
@@ -218,6 +273,8 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
             train_curvature**2,
             train_curvature**3,
             eff_projection_train,
+            np.asarray(train_manifold, dtype=float),
+            train_eff_rel,
         ]
     )
     test_out = np.column_stack(
@@ -232,6 +289,8 @@ def build_embedding_features(train_emb, test_emb, y_train, groups_train, eff_tra
             test_curvature**2,
             test_curvature**3,
             eff_projection_test,
+            np.asarray(test_manifold, dtype=float),
+            test_eff_rel,
         ]
     )
     return train_out, test_out
@@ -312,6 +371,31 @@ def build_similarity_diffusion(train_emb, test_emb, y_train, eff_train, alpha=0.
     return train_prop, test_prop
 
 
+def build_similarity_diffusion_adaptive(train_emb, test_emb, y_train, eff_train):
+    train_emb = np.asarray(train_emb, dtype=float)
+    test_emb = np.asarray(test_emb, dtype=float)
+    y_train = np.asarray(y_train, dtype=int)
+    eff_train = np.asarray(eff_train, dtype=float)
+
+    train_norm = train_emb / (np.linalg.norm(train_emb, axis=1, keepdims=True) + 1e-8)
+    test_norm = test_emb / (np.linalg.norm(test_emb, axis=1, keepdims=True) + 1e-8)
+
+    sim_train = np.maximum(train_norm @ train_norm.T, 0.0)
+    np.fill_diagonal(sim_train, 0.0)
+    density = sim_train.mean(axis=1)
+    median_density = np.median(density) + 1e-8
+    row_alpha = 0.45 + 0.35 * np.clip(median_density / (density + 1e-8), 0.5, 1.5)
+    trans = sim_train / (sim_train.sum(axis=1, keepdims=True) + 1e-8)
+    weighted_trans = trans * row_alpha[:, None]
+    seed = 0.65 * minmax(eff_train) + 0.35 * y_train.astype(float)
+    propagated = np.linalg.solve(np.eye(len(train_emb)) - weighted_trans, (1.0 - row_alpha) * seed)
+
+    sim_test = np.maximum(test_norm @ train_norm.T, 0.0)
+    test_w = sim_test / (sim_test.sum(axis=1, keepdims=True) + 1e-8)
+    test_prop = test_w @ propagated
+    return propagated, test_prop
+
+
 def build_quantum_features(train_emb, test_emb, y_train, eff_train, beta=0.35):
     train_emb = np.asarray(train_emb, dtype=float)
     test_emb = np.asarray(test_emb, dtype=float)
@@ -357,6 +441,160 @@ def build_quantum_features(train_emb, test_emb, y_train, eff_train, beta=0.35):
     return (
         np.column_stack([train_q_margin, walk, train_qpca]),
         np.column_stack([test_q_margin, qtest_walk, test_qpca]),
+    )
+
+
+def build_cleft_family_features(train_df, test_df, groups_train):
+    cleft_score_col = "cleft_open_score"
+    if cleft_score_col not in train_df.columns:
+        return np.zeros((len(train_df), 2)), np.zeros((len(test_df), 2))
+
+    train_score = train_df[cleft_score_col].to_numpy(dtype=float)
+    test_score = test_df[cleft_score_col].to_numpy(dtype=float)
+    train_fill = float(np.nanmean(train_score)) if np.isfinite(np.nanmean(train_score)) else 0.0
+    test_fill = train_fill
+    train_score = np.nan_to_num(train_score, nan=train_fill)
+    test_score = np.nan_to_num(test_score, nan=test_fill)
+    groups_train = np.asarray(groups_train)
+    family_means = {}
+    unique_fams = np.unique(groups_train)
+    for fam in unique_fams:
+        fam_mask = groups_train == fam
+        family_means[fam] = float(np.nanmean(train_score[fam_mask]))
+
+    all_family_vals = np.array(list(family_means.values()), dtype=float)
+    global_mean = float(np.nanmean(all_family_vals))
+    global_std = float(np.nanstd(all_family_vals) + 1e-8)
+
+    train_z = np.zeros(len(train_df), dtype=float)
+    for idx, fam in enumerate(groups_train):
+        other_vals = [v for k, v in family_means.items() if k != fam]
+        if other_vals:
+            ref_mean = float(np.nanmean(other_vals))
+            ref_std = float(np.nanstd(other_vals) + 1e-8)
+        else:
+            ref_mean = global_mean
+            ref_std = global_std
+        train_z[idx] = (train_score[idx] - ref_mean) / ref_std
+
+    test_z = (test_score - global_mean) / global_std
+    return (
+        np.column_stack([train_score, train_z]),
+        np.column_stack([test_score, test_z]),
+    )
+
+
+def build_cleft_residual_features(
+    train_df,
+    test_df,
+    train_emb,
+    test_emb,
+    y_train,
+    eff_train,
+    groups_train,
+):
+    cleft_cols = [
+        col
+        for col in [
+            "cleft_triangle_area",
+            "cleft_sasa_mean",
+            "cleft_local_density",
+            "thumb_palm_distance_proxy",
+            "cleft_open_score",
+            "cleft_curvature_proxy",
+            "cleft_thumb_asymmetry",
+            "cleft_tunnel_curvature_score",
+        ]
+        if col in train_df.columns
+    ]
+    if not cleft_cols:
+        return np.zeros((len(train_df), 5)), np.zeros((len(test_df), 5))
+
+    imp = SimpleImputer(strategy="median")
+    cleft_train = imp.fit_transform(train_df[cleft_cols])
+    cleft_test = imp.transform(test_df[cleft_cols])
+
+    emb_train = np.asarray(train_emb, dtype=float)
+    emb_test = np.asarray(test_emb, dtype=float)
+    emb_scaler = StandardScaler()
+    emb_train_s = emb_scaler.fit_transform(emb_train)
+    emb_test_s = emb_scaler.transform(emb_test)
+
+    n_comp = int(min(8, emb_train_s.shape[0] - 1, emb_train_s.shape[1], cleft_train.shape[1]))
+    if n_comp >= 2:
+        pls = PLSRegression(n_components=n_comp, scale=True)
+        pls.fit(emb_train_s, cleft_train)
+        pred_train = pls.predict(emb_train_s)
+        pred_test = pls.predict(emb_test_s)
+    else:
+        pred_train = np.tile(np.nanmean(cleft_train, axis=0, keepdims=True), (len(train_df), 1))
+        pred_test = np.tile(np.nanmean(cleft_train, axis=0, keepdims=True), (len(test_df), 1))
+
+    resid_train = cleft_train - pred_train
+    resid_test = cleft_test - pred_test
+
+    weights = np.asarray(eff_train, dtype=float) + 0.01
+    active_mask = np.asarray(y_train, dtype=int) == 1
+    inactive_mask = ~active_mask
+
+    emb_center = emb_train_s - emb_train_s.mean(axis=0, keepdims=True)
+    eff_center = np.average(emb_center, axis=0, weights=weights)
+    inactive_center = emb_center[inactive_mask].mean(axis=0)
+    axis = eff_center - inactive_center
+    axis /= np.linalg.norm(axis) + 1e-8
+
+    projection_train = emb_center @ axis
+    projection_test = (emb_test_s - emb_train_s.mean(axis=0, keepdims=True)) @ axis
+
+    cleft_open_idx = cleft_cols.index("cleft_open_score") if "cleft_open_score" in cleft_cols else 0
+    cleft_asym_idx = cleft_cols.index("cleft_thumb_asymmetry") if "cleft_thumb_asymmetry" in cleft_cols else 0
+    cleft_curve_idx = cleft_cols.index("cleft_tunnel_curvature_score") if "cleft_tunnel_curvature_score" in cleft_cols else 0
+
+    open_resid_train = resid_train[:, cleft_open_idx]
+    open_resid_test = resid_test[:, cleft_open_idx]
+    asym_train = cleft_train[:, cleft_asym_idx]
+    asym_test = cleft_test[:, cleft_asym_idx]
+    curve_train = cleft_train[:, cleft_curve_idx]
+    curve_test = cleft_test[:, cleft_curve_idx]
+
+    align_train = open_resid_train * projection_train
+    align_test = open_resid_test * projection_test
+
+    groups_train = np.asarray(groups_train)
+    family_active_means = {}
+    for fam in np.unique(groups_train):
+        fam_mask = (groups_train == fam) & active_mask
+        if fam_mask.sum() > 0:
+            family_active_means[fam] = float(np.mean(open_resid_train[fam_mask]))
+    global_family_mean = float(np.mean(list(family_active_means.values()))) if family_active_means else 0.0
+    global_family_std = float(np.std(list(family_active_means.values())) + 1e-8) if family_active_means else 1.0
+    train_family_resid = np.zeros(len(train_df), dtype=float)
+    for idx, fam in enumerate(groups_train):
+        other = [v for k, v in family_active_means.items() if k != fam]
+        ref_mean = float(np.mean(other)) if other else global_family_mean
+        ref_std = float(np.std(other) + 1e-8) if other else global_family_std
+        train_family_resid[idx] = (open_resid_train[idx] - ref_mean) / ref_std
+    test_family_resid = (open_resid_test - global_family_mean) / global_family_std
+
+    return (
+        np.column_stack(
+            [
+                open_resid_train,
+                align_train,
+                asym_train,
+                curve_train,
+                train_family_resid,
+            ]
+        ),
+        np.column_stack(
+            [
+                open_resid_test,
+                align_test,
+                asym_test,
+                curve_test,
+                test_family_resid,
+            ]
+        ),
     )
 
 
@@ -534,6 +772,69 @@ def fit_listwise_rank_head(train_features, eff_train, y_train, sample_weight, te
     return train_scores, test_scores, mask
 
 
+def fit_pairwise_rank_head(train_features, eff_train, y_train, sample_weight, test_features):
+    mask = np.asarray(y_train, dtype=int) == 1
+    if mask.sum() < 4:
+        mask = np.ones_like(mask, dtype=bool)
+
+    x_train = np.asarray(train_features[mask], dtype=float)
+    x_test = np.asarray(test_features, dtype=float)
+    eff = np.asarray(eff_train[mask], dtype=float)
+    w = np.asarray(sample_weight[mask], dtype=float)
+
+    scaler = StandardScaler()
+    x_train = scaler.fit_transform(x_train)
+    x_test = scaler.transform(x_test)
+
+    pairs = []
+    pair_weights = []
+    n = x_train.shape[0]
+    for i in range(n):
+        for j in range(i + 1, n):
+            if eff[i] == eff[j]:
+                continue
+            if eff[i] > eff[j]:
+                diff = x_train[i] - x_train[j]
+                pw = w[i] * w[j]
+            else:
+                diff = x_train[j] - x_train[i]
+                pw = w[i] * w[j]
+            pairs.append(diff)
+            pair_weights.append(pw)
+
+    if len(pairs) < 3:
+        ridge = Ridge(alpha=1.0, random_state=42)
+        rank_targets = rankdata(eff, method="average").astype(float)
+        rank_targets = rank_targets / (rank_targets.max() + 1e-8)
+        ridge.fit(x_train, rank_targets, sample_weight=w)
+        return ridge.predict(x_train), ridge.predict(x_test), mask
+
+    pair_x = np.asarray(pairs, dtype=float)
+    pair_w = np.asarray(pair_weights, dtype=float)
+    pair_w = pair_w / (pair_w.mean() + 1e-8)
+
+    def objective(theta):
+        beta = theta[:-1]
+        bias = theta[-1]
+        margins = pair_x @ beta + bias
+        loss = np.sum(pair_w * np.log1p(np.exp(-margins)))
+        reg = 1e-3 * np.sum(beta**2)
+        return float(loss + reg)
+
+    theta0 = np.zeros(x_train.shape[1] + 1, dtype=float)
+    res = minimize(objective, theta0, method="L-BFGS-B")
+    if not res.success:
+        ridge = Ridge(alpha=1.0, random_state=42)
+        rank_targets = rankdata(eff, method="average").astype(float)
+        rank_targets = rank_targets / (rank_targets.max() + 1e-8)
+        ridge.fit(x_train, rank_targets, sample_weight=w)
+        return ridge.predict(x_train), ridge.predict(x_test), mask
+
+    beta = res.x[:-1]
+    bias = res.x[-1]
+    return x_train @ beta + bias, x_test @ beta + bias, mask
+
+
 def run_search():
     X, y, groups = engineer_features()
     seq = pd.read_csv(ROOT / "data" / "rt_sequences.csv").set_index("rt_name")
@@ -551,6 +852,58 @@ def run_search():
         if col in X.columns
     ]
     topology_cols = [col for col in X.columns if str(col).startswith("top_")]
+    kinetic_cols = [
+        col
+        for col in X.columns
+        if any(
+            key in str(col).lower()
+            for key in [
+                "perplexity",
+                "likelihood",
+                "instability",
+                "isoelectric",
+                "helix",
+                "turn",
+                "sheet",
+                "gravy",
+                "charge",
+                "t40",
+                "t45",
+                "t50",
+                "t55",
+                "t60",
+                "t65",
+                "t70",
+                "t75",
+                "t80",
+                "thermo",
+                "triad",
+                "motif",
+                "camsol",
+                "sasa",
+                "thumb",
+                "surface",
+                "entropy",
+                "contact",
+                "degree",
+                "clustering",
+                "radius_gyration",
+                "avg_ca_distance",
+            ]
+        )
+    ]
+    cleft_cols = [
+        col
+        for col in [
+            "cleft_triangle_area",
+            "cleft_sasa_mean",
+            "cleft_local_density",
+            "thumb_palm_distance_proxy",
+            "cleft_open_score",
+            "cleft_curvature_proxy",
+        ]
+        if col in X.columns
+    ]
 
     logo = LeaveOneGroupOut()
     reg_branch = np.zeros(len(X), dtype=float)
@@ -558,15 +911,19 @@ def run_search():
     struct_branch = np.zeros(len(X), dtype=float)
     topo_branch = np.zeros(len(X), dtype=float)
     rank_branch = np.zeros(len(X), dtype=float)
+    pairwise_branch = np.zeros(len(X), dtype=float)
     effproj_branch = np.zeros(len(X), dtype=float)
     margin_branch = np.zeros(len(X), dtype=float)
     diffusion_branch = np.zeros(len(X), dtype=float)
+    diffusion_adapt_branch = np.zeros(len(X), dtype=float)
     graph_branch = np.zeros(len(X), dtype=float)
     listwise_branch = np.zeros(len(X), dtype=float)
     adapter_branch = np.zeros(len(X), dtype=float)
     qmargin_branch = np.zeros(len(X), dtype=float)
     qdiff_branch = np.zeros(len(X), dtype=float)
     qpca_branch = np.zeros(len(X), dtype=float)
+    kinetic_branch = np.zeros(len(X), dtype=float)
+    cleft_branch = np.zeros(len(X), dtype=float)
 
     for train_idx, test_idx in logo.split(X, y, groups):
         X_train_df = X.iloc[train_idx]
@@ -607,6 +964,12 @@ def run_search():
             y_train,
             eff_train,
         )
+        diffa_train_feat, diffa_test_feat = build_similarity_diffusion_adaptive(
+            embeddings[train_idx],
+            embeddings[test_idx],
+            y_train,
+            eff_train,
+        )
         quantum_train_feat, quantum_test_feat = build_quantum_features(
             embeddings[train_idx],
             embeddings[test_idx],
@@ -626,6 +989,20 @@ def run_search():
             pdb_graph.iloc[test_idx],
             structure_cols,
             topology_cols,
+        )
+        cleft_train_family, cleft_test_family = build_cleft_family_features(
+            X_train_df,
+            X_test_df,
+            groups_train,
+        )
+        cleft_resid_train, cleft_resid_test = build_cleft_residual_features(
+            X_train_df,
+            X_test_df,
+            embeddings[train_idx],
+            embeddings[test_idx],
+            y_train,
+            eff_train,
+            groups_train,
         )
 
         X_train_aug = np.hstack([X_train_scaled, train_comp, comp_train_feat, embed_train_feat])
@@ -668,7 +1045,13 @@ def run_search():
             embed_train_feat[:, 9],
             embed_test_feat[:, 9],
         )
+        # New manifold residual and family-relative efficiency projection signals.
+        manifold_train = embed_train_feat[:, 10]
+        manifold_test = embed_test_feat[:, 10]
+        familyrel_train = embed_train_feat[:, 11]
+        familyrel_test = embed_test_feat[:, 11]
         diffusion_branch[test_idx] = rankpct_by_train(diff_train_feat, diff_test_feat)
+        diffusion_adapt_branch[test_idx] = rankpct_by_train(diffa_train_feat, diffa_test_feat)
         qmargin_branch[test_idx] = rankpct_by_train(
             quantum_train_feat[:, 0],
             quantum_test_feat[:, 0],
@@ -740,6 +1123,8 @@ def run_search():
                 embed_train_feat[:, 7],
                 embed_train_feat[:, 8],
                 embed_train_feat[:, 9],
+                manifold_train,
+                familyrel_train,
                 comp_train_feat[:, 2],
                 comp_train_feat[:, 3],
             ]
@@ -757,6 +1142,8 @@ def run_search():
                 embed_test_feat[:, 7],
                 embed_test_feat[:, 8],
                 embed_test_feat[:, 9],
+                manifold_test,
+                familyrel_test,
                 comp_test_feat[:, 2],
                 comp_test_feat[:, 3],
             ]
@@ -777,6 +1164,14 @@ def run_search():
             rank_test_feat,
         )
         listwise_branch[test_idx] = rankpct_by_train(list_train_scores, list_test_scores)
+        pair_train_scores, pair_test_scores, _ = fit_pairwise_rank_head(
+            rank_train_feat,
+            eff_train,
+            y_train,
+            eff_train + 0.01,
+            rank_test_feat,
+        )
+        pairwise_branch[test_idx] = rankpct_by_train(pair_train_scores, pair_test_scores)
 
         if graph_train_feat.shape[1] > 0:
             graph_model = Ridge(alpha=1.0, random_state=42)
@@ -791,6 +1186,86 @@ def run_search():
             graph_test_scores = graph_model.predict(graph_test_feat)
             graph_branch[test_idx] = rankpct_by_train(graph_train_scores, graph_test_scores)
 
+        if kinetic_cols:
+            kin_imp = SimpleImputer(strategy="median")
+            kin_train_imp = kin_imp.fit_transform(X_train_df[kinetic_cols])
+            kin_test_imp = kin_imp.transform(X_test_df[kinetic_cols])
+            kin_train, kin_test = group_exclusion_scale(
+                kin_train_imp,
+                groups_train,
+                kin_test_imp,
+            )
+            kin_reg = RandomForestRegressor(
+                n_estimators=600,
+                max_depth=7,
+                min_samples_leaf=2,
+                max_features="sqrt",
+                random_state=42,
+                n_jobs=1,
+            )
+            kin_reg.fit(kin_train, eff_train_norm)
+            kin_train_reg = kin_reg.predict(kin_train)
+            kin_test_reg = kin_reg.predict(kin_test)
+
+            kin_rank_train_feat = np.column_stack(
+                [
+                    kin_train_reg,
+                    kin_train[:, : min(12, kin_train.shape[1])],
+                ]
+            )
+            kin_rank_test_feat = np.column_stack(
+                [
+                    kin_test_reg,
+                    kin_test[:, : min(12, kin_test.shape[1])],
+                ]
+            )
+            kin_rank_train, kin_rank_test, _ = fit_weighted_rank_head(
+                kin_rank_train_feat,
+                eff_train,
+                y_train,
+                eff_train + 0.01,
+                kin_rank_test_feat,
+            )
+            kin_reg_score = rankpct_by_train(kin_train_reg, kin_test_reg)
+            kin_rank_score = rankpct_by_train(kin_rank_train, kin_rank_test)
+            kinetic_branch[test_idx] = 0.55 * kin_reg_score + 0.45 * kin_rank_score
+
+        if cleft_cols:
+            cleft_imp = SimpleImputer(strategy="median")
+            cleft_train_imp = cleft_imp.fit_transform(X_train_df[cleft_cols])
+            cleft_test_imp = cleft_imp.transform(X_test_df[cleft_cols])
+            cleft_train_scaled, cleft_test_scaled = group_exclusion_scale(
+                cleft_train_imp,
+                groups_train,
+                cleft_test_imp,
+            )
+            cleft_train_feat = np.hstack(
+                [cleft_train_scaled, cleft_train_family, cleft_resid_train]
+            )
+            cleft_test_feat = np.hstack(
+                [cleft_test_scaled, cleft_test_family, cleft_resid_test]
+            )
+            cleft_reg = Ridge(alpha=1.5, random_state=42)
+            cleft_reg.fit(
+                cleft_train_feat,
+                eff_train_norm,
+                sample_weight=eff_train + 0.01,
+            )
+            cleft_train_reg = cleft_reg.predict(cleft_train_feat)
+            cleft_test_reg = cleft_reg.predict(cleft_test_feat)
+            cleft_rank_train, cleft_rank_test, _ = fit_weighted_rank_head(
+                cleft_train_feat,
+                eff_train,
+                y_train,
+                eff_train + 0.01,
+                cleft_test_feat,
+            )
+            cleft_reg_score = rankpct_by_train(cleft_train_reg, cleft_test_reg)
+            cleft_rank_score = rankpct_by_train(cleft_rank_train, cleft_rank_test)
+            active_frac = float(y_train.mean())
+            cleft_mix = 0.35 * cleft_reg_score + 0.65 * cleft_rank_score
+            cleft_branch[test_idx] = cleft_mix * (0.75 + 0.25 * active_frac)
+
     components = {
         "base": minmax(base_oof),
         "reg": minmax(reg_branch),
@@ -798,15 +1273,19 @@ def run_search():
         "struct": minmax(struct_branch),
         "topo": minmax(topo_branch),
         "rank": minmax(rank_branch),
+        "pairwise": minmax(pairwise_branch),
         "effproj": minmax(effproj_branch),
         "margin": minmax(margin_branch),
         "diffusion": minmax(diffusion_branch),
+        "diffusion_adapt": minmax(diffusion_adapt_branch),
         "graph": minmax(graph_branch),
         "listwise": minmax(listwise_branch),
         "adapter": minmax(adapter_branch),
         "qmargin": minmax(qmargin_branch),
         "qdiff": minmax(qdiff_branch),
         "qpca": minmax(qpca_branch),
+        "kinetic": minmax(kinetic_branch),
+        "cleft": minmax(cleft_branch),
     }
 
     y_true = y.to_numpy(dtype=float)
@@ -850,15 +1329,19 @@ def run_search():
             "struct": components["struct"],
             "topo": components["topo"],
             "rank": components["rank"],
+            "pairwise": components["pairwise"],
             "effproj": components["effproj"],
             "margin": components["margin"],
             "diffusion": components["diffusion"],
+            "diffusion_adapt": components["diffusion_adapt"],
             "graph": components["graph"],
             "listwise": components["listwise"],
             "adapter": components["adapter"],
             "qmargin": components["qmargin"],
             "qdiff": components["qdiff"],
             "qpca": components["qpca"],
+            "kinetic": components["kinetic"],
+            "cleft": components["cleft"],
         }
     )
     return prediction_df, component_df, final_metric, best_weights

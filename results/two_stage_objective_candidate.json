@@ -1,0 +1,14 @@
+{
+  "pr_auc": 0.477430871151031,
+  "w_spearman": 0.02301571066692942,
+  "cls": 0.04391442041208414,
+  "configs": [
+    "list70_diff30",
+    "list70_diff30",
+    "list70_diff30",
+    "geom_avg_diff",
+    "list70_diff30",
+    "pair70_diff30",
+    "pair70_diff30"
+  ]
+}

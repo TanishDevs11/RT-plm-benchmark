@@ -1,0 +1,89 @@
+{
+  "pr_auc": 0.9857142857142858,
+  "w_spearman": 0.9652440322514035,
+  "cls": 0.9753717678425584,
+  "configs": [
+    {
+      "mode": "add",
+      "lambda_weight": 0.0,
+      "n_iter": 50,
+      "learning_rate": 0.03,
+      "alpha": 0.5
+    },
+    {
+      "mode": "add",
+      "lambda_weight": 0.0,
+      "n_iter": 50,
+      "learning_rate": 0.03,
+      "alpha": 0.5
+    },
+    {
+      "mode": "add",
+      "lambda_weight": 0.0,
+      "n_iter": 50,
+      "learning_rate": 0.03,
+      "alpha": 0.5
+    },
+    {
+      "mode": "add",
+      "lambda_weight": 0.0,
+      "n_iter": 50,
+      "learning_rate": 0.03,
+      "alpha": 0.5
+    },
+    {
+      "mode": "add",
+      "lambda_weight": 0.0,
+      "n_iter": 50,
+      "learning_rate": 0.03,
+      "alpha": 0.5
+    },
+    {
+      "mode": "add",
+      "lambda_weight": 0.0,
+      "n_iter": 50,
+      "learning_rate": 0.03,
+      "alpha": 0.5
+    },
+    {
+      "mode": "add",
+      "lambda_weight": 0.0,
+      "n_iter": 50,
+      "learning_rate": 0.03,
+      "alpha": 0.5
+    }
+  ],
+  "feature_count": 30,
+  "features": [
+    "triad_distance_ratio",
+    "triad_mean_dist",
+    "triad_diff_dist",
+    "triad_geom_mean",
+    "triad_compactness",
+    "triad_angle_proxy",
+    "triad_best_rmsd",
+    "cleft_triangle_area",
+    "cleft_sasa_mean",
+    "cleft_curvature_proxy",
+    "sasa_avg",
+    "sasa_high_pct",
+    "sasa_low_pct",
+    "helix",
+    "sheet",
+    "turn",
+    "helix_sheet_ratio",
+    "radius_gyration",
+    "avg_ca_distance",
+    "gravy",
+    "isoelectric_point",
+    "native_net_charge",
+    "arginine_r_charge",
+    "lysine_k_charge",
+    "aspartate_d_charge",
+    "glutamate_e_charge",
+    "thumb_surface_net_charge",
+    "thumb_charge_ratio",
+    "top_contact_entropy",
+    "top_entropy_degree"
+  ]
+}

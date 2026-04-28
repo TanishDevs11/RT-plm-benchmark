@@ -1,0 +1,86 @@
+{
+  "pr_auc": 0.9857142857142858,
+  "w_spearman": 0.9623697979616141,
+  "cls": 0.9739021697674881,
+  "configs": [
+    {
+      "mode": "add",
+      "alpha": 0.04,
+      "beta": 1.0,
+      "gamma": 0.5,
+      "proj_dim": 4,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.03,
+      "beta": 1.0,
+      "gamma": 0.3,
+      "proj_dim": 6,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "beta": 0.7,
+      "gamma": 0.15,
+      "proj_dim": 4,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.04,
+      "beta": 1.0,
+      "gamma": 0.5,
+      "proj_dim": 4,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "beta": 0.7,
+      "gamma": 0.15,
+      "proj_dim": 4,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.03,
+      "beta": 0.7,
+      "gamma": 0.3,
+      "proj_dim": 4,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.04,
+      "beta": 1.0,
+      "gamma": 0.5,
+      "proj_dim": 4,
+      "threshold": 0.6
+    }
+  ],
+  "feature_count": 20,
+  "features": [
+    "triad_distance_ratio",
+    "triad_mean_dist",
+    "triad_diff_dist",
+    "triad_geom_mean",
+    "triad_compactness",
+    "triad_angle_proxy",
+    "triad_best_rmsd",
+    "cleft_triangle_area",
+    "cleft_sasa_mean",
+    "cleft_open_score",
+    "cleft_curvature_proxy",
+    "sasa_avg",
+    "helix_sheet_ratio",
+    "radius_gyration",
+    "gravy",
+    "isoelectric_point",
+    "native_net_charge",
+    "thumb_charge_ratio",
+    "top_contact_entropy",
+    "top_entropy_degree"
+  ]
+}

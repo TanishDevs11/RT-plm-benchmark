@@ -1,0 +1,72 @@
+{
+  "pr_auc": 0.9857142857142858,
+  "w_spearman": 0.960977040805986,
+  "cls": 0.9731884911195616,
+  "configs": [
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "gamma": 0.15,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.03,
+      "gamma": 0.8,
+      "threshold": 0.7
+    },
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "gamma": 0.15,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "gamma": 0.15,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "gamma": 0.15,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "gamma": 0.15,
+      "threshold": 0.55
+    },
+    {
+      "mode": "add",
+      "alpha": 0.0,
+      "gamma": 0.15,
+      "threshold": 0.55
+    }
+  ],
+  "feature_count": 20,
+  "features": [
+    "triad_distance_ratio",
+    "triad_mean_dist",
+    "triad_diff_dist",
+    "triad_geom_mean",
+    "triad_compactness",
+    "triad_angle_proxy",
+    "triad_best_rmsd",
+    "cleft_triangle_area",
+    "cleft_sasa_mean",
+    "cleft_open_score",
+    "cleft_curvature_proxy",
+    "sasa_avg",
+    "helix_sheet_ratio",
+    "radius_gyration",
+    "gravy",
+    "isoelectric_point",
+    "native_net_charge",
+    "thumb_charge_ratio",
+    "top_contact_entropy",
+    "top_entropy_degree"
+  ]
+}
