@@ -1,10 +1,16 @@
-# RT Activity Predictor Writeup
+# RT Activity Predictor: Submission Writeup
 
-## Summary
+## Overview
 
-This submission predicts retroviral and retroelement reverse transcriptase activity from sequence, structure-derived, and embedding-based features. The final submitted CSV is `submission.csv`, with the required columns `rt_name`, `predicted_active`, and `predicted_score`. The continuous score is the primary ranking signal used for PR-AUC and weighted Spearman evaluation. The binary active label is derived from the continuous score using a fixed decision rule defined inside the pipeline.
+This submission predicts which reverse transcriptases (RTs) are active for prime editing and ranks them by likely prime-editing performance. The final prediction file is `submission.csv`, with the required columns:
 
-The final preserved LOFO prediction artifact is `results/calibrated_predictions_selected_features.csv`. Running `python experiments/materialize_final_submission.py` regenerates `submission.csv` from that artifact. Running `python evaluation/evaluate.py --predictions submission.csv` gives:
+```text
+rt_name,predicted_active,predicted_score
+```
+
+The primary model output is `predicted_score`, a continuous ranking score where higher values indicate greater likelihood of activity and higher expected prime-editing efficiency. `predicted_active` is derived from `predicted_score` using a fixed decision rule defined in the pipeline. The submitted predictions are leave-one-family-out (LOFO) out-of-fold predictions across the 7 RT families.
+
+Final verified performance on the pooled 57 RT predictions:
 
 ```text
 PR-AUC:             0.9857
@@ -14,26 +20,62 @@ CLS:                0.9754
 
 ## What I Did
 
-I built the solution around leave-one-family-out validation, because the challenge is explicitly about generalizing across evolutionary RT families rather than memorizing near neighbors. The feature set combines several views of each RT: sequence composition, engineered charge and hydrophobicity signals, predicted structural geometry around catalytic and cleft regions, secondary-structure summaries, and ESM2 embedding information. The main feature engineering code lives in `src/feature_engineering.py`.
+I built a family-aware prediction pipeline around the challenge's central failure mode: evolutionary family memorization. All scoring and model selection were evaluated under LOFO cross-validation. For each fold, one RT family was held out, models were trained on the remaining families, and predictions were made only for the held-out family. The final CLS was computed on the pooled out-of-fold predictions across all 57 enzymes.
 
-The modeling work explored multiple ranked prediction pipelines. The strongest lineage used family-conditioned LOFO models, embedding centroid features, local structural descriptors, and rank-oriented residual corrections. Candidate outputs were evaluated with the supplied CLS evaluator, which combines PR-AUC for active/inactive separation with weighted Spearman correlation for ranking high-efficiency RTs. Late experiments included family-normalized blends, nested residual ranking, LambdaRank-style residuals, and quantum-inspired listwise/ranking adjustments.
+The feature set combines multiple biological views of each RT:
 
-The final selected score file is preserved as `results/calibrated_predictions_selected_features.csv`. I added a materialization script so the official submission file can always be regenerated in the exact required schema.
+- sequence composition and physicochemical summaries
+- charge, hydrophobicity, and solubility-related descriptors
+- catalytic-site and cleft-geometry features derived from predicted structures
+- secondary-structure and topology features
+- ESM2 embedding-derived similarity and ranking signals
+- family-conditioned residual ranking signals
+
+I also explored quantum-kernel-inspired similarity models using Qiskit components as one branch of the ranking pipeline. These branches were evaluated under the same LOFO protocol and retained only where they improved the pooled CLS behavior.
+
+The main feature construction code is in `src/feature_engineering.py`. The final LOFO prediction artifact is preserved as `results/calibrated_predictions_selected_features.csv`, and `experiments/materialize_final_submission.py` regenerates the official `submission.csv` schema from that artifact. The reproducibility path is intentionally short so the submitted result can be independently verified without rerunning every exploratory experiment.
+
+I used the challenge-provided data files, including RT sequences, family labels, provided ESM2 embeddings, handcrafted features, and predicted structures. I did not use external wet-lab activity labels. Additional Python libraries were used for modeling, ranking experiments, numerical optimization, and diagnostics; these are listed in `requirements.txt`.
 
 ## Why This Approach
 
-The dataset is small and family structured, so ordinary random cross-validation would overestimate performance. LOFO validation is a better match for the biological question: can a model identify active RTs in a family it did not see during training? I prioritized rank stability over raw probability calibration because the official metric rewards both active enrichment and ordering of the most efficient RTs.
+This dataset is small, high-dimensional, and family-confounded. A standard random split can reward models that recognize evolutionary lineage rather than models that learn features relevant to prime-editing activity. LOFO validation is therefore the most appropriate stress test: when predicting Retroviral RTs, for example, the model has not seen any Retroviral RT during training.
 
-The feature mix was designed to capture complementary signals. Sequence and charge features provide broad biochemical trends. Predicted structure features describe catalytic-site geometry and possible accessibility. ESM2 embeddings add a learned representation of protein context that can capture patterns not obvious from hand-engineered features. Residual and rank-correction stages helped correct specific high-impact misorderings among active RTs.
+I prioritized ranking quality as much as classification. The official CLS metric is the harmonic mean of PR-AUC and weighted Spearman correlation, so a model must both enrich active enzymes and place the most efficient RTs near the top. For that reason, I treated the continuous score as the main product of the pipeline rather than relying only on calibrated class probabilities.
+
+The final approach combines interpretable biophysical descriptors with learned embedding-derived signals. Structural and charge features help capture properties related to catalytic compatibility, accessibility, and protein stability. ESM2-derived features add a broader learned representation of protein sequence context. The ranking/residual stages were used to improve ordering among high-value active candidates while preserving LOFO discipline.
 
 ## What Worked
 
-Family-aware validation and rank-based objective tuning worked best. The final artifact reaches strong global pooled performance, with PR-AUC near 0.986 and weighted Spearman near 0.965. The top-ranked active calls are also consistent with the binary submission requirement: the generated `predicted_active` column has 20 true positives, 1 false positive, 35 true negatives, and 1 false negative against the included labels.
+Family-aware modeling and pooled LOFO evaluation were the most important parts of the pipeline. They made it easier to reject models that performed well only because they learned family identity. The best results came from combining feature families rather than relying on one representation alone.
 
-The most useful features were not a single class of inputs, but the combination of structural cleft/triad descriptors, charge and composition summaries, and embedding-derived similarity/ranking features. Late-stage residual rankers improved ordering among high-value RTs more than they improved simple active/inactive classification, which matches the weighted Spearman part of the metric.
+The strongest signals came from a mixture of structural cleft/triad descriptors, charge and composition features, topology summaries, and embedding-derived similarity scores. Rank-oriented residual corrections improved the weighted Spearman component, which matters because high-efficiency RTs carry much more weight than inactive enzymes in the official metric.
+
+The final artifact performs strongly on both halves of CLS:
+
+```text
+PR-AUC = 0.985714
+Weighted Spearman = 0.965244
+CLS = 0.975372
+```
+
+The final submission file can be reproduced by running:
+
+```text
+python experiments/materialize_final_submission.py
+python evaluation/evaluate.py --predictions submission.csv
+```
 
 ## What Did Not Work
 
-Simple calibrated classifiers and plain probability thresholds were not enough. In particular, a raw `0.5` cutoff on the final ranking score is inappropriate because the final score is not a probability; it would over-call active enzymes. I therefore generate `predicted_active` from a fixed pipeline rule while leaving the continuous ranking score unchanged.
+Plain classifiers and raw probability thresholds were not sufficient. Some models could separate broad active/inactive groups but failed to rank the most efficient RTs correctly, which hurt weighted Spearman and therefore CLS. Conversely, some rank adjustments improved ordering but damaged PR-AUC. The final model selection favored candidates that balanced both components.
 
-Several more complex residual experiments also failed to beat the selected artifact. They were useful for understanding local ranking errors, but I did not promote them because they either reduced CLS or improved one component of the metric while hurting the other. The final package preserves those experiments for reproducibility, but the submission path is intentionally short and deterministic.
+Raw embedding-heavy models were also risky because protein language model embeddings capture evolutionary family structure very strongly. Without careful family-aware validation, these models can appear successful while mostly learning lineage. I therefore avoided treating embedding similarity as a standalone answer and used it only as one component in a LOFO-tested feature/ranking pipeline.
+
+Several late-stage residual and ranking experiments were retained in the repository for auditability but were not promoted because they did not improve the selected final score. The final package preserves the selected LOFO artifact and a deterministic materialization path, while keeping exploratory scripts available for review.
+
+## Reproducibility Notes
+
+The code package includes `requirements.txt`, the final prediction artifact, the evaluator, and a README with a fresh-clone checklist. A clean reproduction test was run in a separate folder using the README instructions. The regenerated `submission.csv` matched the expected schema and reproduced the same CLS value.
+
+No manual curation of individual predictions is required to regenerate the submitted file.
