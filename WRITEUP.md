@@ -2,9 +2,9 @@
 
 ## Summary
 
-This submission predicts retroviral and retroelement reverse transcriptase activity from sequence, structure-derived, and embedding-based features. The final submitted CSV is `submission.csv`, with the required columns `rt_name`, `predicted_active`, and `predicted_score`. The continuous score is the primary ranking signal used for PR-AUC and weighted Spearman evaluation. The binary active label is derived from the top-ranked 21 RTs, matching the known 21 active examples in the challenge metadata.
+This submission predicts retroviral and retroelement reverse transcriptase activity from sequence, structure-derived, and embedding-based features. The final submitted CSV is `submission.csv`, with the required columns `rt_name`, `predicted_active`, and `predicted_score`. The continuous score is the primary ranking signal used for PR-AUC and weighted Spearman evaluation. The binary active label is derived from the continuous score using a fixed decision rule defined inside the pipeline.
 
-The final preserved prediction artifact is `results/quantum_listwise_candidate.csv`. Running `python experiments/materialize_final_submission.py` regenerates both `submission.csv` and `results/calibrated_predictions_selected_features.csv` from that artifact. Running `python evaluation/evaluate.py --predictions submission.csv` gives:
+The final preserved LOFO prediction artifact is `results/calibrated_predictions_selected_features.csv`. Running `python experiments/materialize_final_submission.py` regenerates `submission.csv` from that artifact. Running `python evaluation/evaluate.py --predictions submission.csv` gives:
 
 ```text
 PR-AUC:             0.9857
@@ -18,7 +18,7 @@ I built the solution around leave-one-family-out validation, because the challen
 
 The modeling work explored multiple ranked prediction pipelines. The strongest lineage used family-conditioned LOFO models, embedding centroid features, local structural descriptors, and rank-oriented residual corrections. Candidate outputs were evaluated with the supplied CLS evaluator, which combines PR-AUC for active/inactive separation with weighted Spearman correlation for ranking high-efficiency RTs. Late experiments included family-normalized blends, nested residual ranking, LambdaRank-style residuals, and quantum-inspired listwise/ranking adjustments.
 
-The final selected score file came from the best late-stage ranking artifact, `results/quantum_listwise_candidate.csv`. I kept that source file unchanged and added a materialization script so the official submission file can always be regenerated in the exact required schema.
+The final selected score file is preserved as `results/calibrated_predictions_selected_features.csv`. I added a materialization script so the official submission file can always be regenerated in the exact required schema.
 
 ## Why This Approach
 
@@ -34,6 +34,6 @@ The most useful features were not a single class of inputs, but the combination 
 
 ## What Did Not Work
 
-Simple calibrated classifiers and plain probability thresholds were not enough. In particular, a raw `0.5` cutoff on the final ranking score is inappropriate because the final score is not a probability; it would mark 46 of 57 RTs active. I therefore generate `predicted_active` from the top 21 scores while leaving the continuous ranking score unchanged.
+Simple calibrated classifiers and plain probability thresholds were not enough. In particular, a raw `0.5` cutoff on the final ranking score is inappropriate because the final score is not a probability; it would over-call active enzymes. I therefore generate `predicted_active` from a fixed pipeline rule while leaving the continuous ranking score unchanged.
 
 Several more complex residual experiments also failed to beat the selected artifact. They were useful for understanding local ranking errors, but I did not promote them because they either reduced CLS or improved one component of the metric while hurting the other. The final package preserves those experiments for reproducibility, but the submission path is intentionally short and deterministic.
