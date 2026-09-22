@@ -4,6 +4,8 @@ Reproducible submission repository for the Mandrake Bio Retroviral Wall Challeng
 
 The repository is packaged so a reviewer can reproduce the submitted CSV and verify the reported score with two commands after environment setup.
 
+<video src="brag-output/brag.mp4" controls poster="brag-output/brag.jpg" width="100%"></video>
+
 ## Submission Snapshot
 
 Primary submission files:
