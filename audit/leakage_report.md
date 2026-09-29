@@ -42,15 +42,15 @@ Totals: EVAL_ONLY 10, SELECTION_LEAK 3, UNCLEAR 10
 
 | Artifact | Status | Free parameters | Note |
 | --- | --- | --- | --- |
-| `fast_opt.py` | present | n_components + 1 | bounds vector: one weight per component plus one power exponent |
-| `results/cls_search_log.json` | present | 44 | list entries |
-| `results/best_weights.json` | present | 11 | loose scalar fields |
-| `results/de_best_weights.json` | present | 62 | 61 weights plus 1 scalar(s): power |
-| `results/component_weight_search_best.json` | absent | n/a |  |
-| `results/blend_search_best.json` | absent | n/a |  |
-| `temp_artifacts/results_scratch/component_weight_search_best.json` | absent | n/a |  |
-| `temp_artifacts/results_scratch/blend_search_best.json` | absent | n/a |  |
-| `legacy_leaky/fast_opt.py` | present | n_components + 1 | bounds vector: one weight per component plus one power exponent |
+| `fast_opt.py` | legacy_leaky/fast_opt.py | n_components + 1 | bounds vector: one weight per component plus one power exponent |
+| `results/cls_search_log.json` | legacy_leaky/results/cls_search_log.json | 44 | list entries |
+| `results/best_weights.json` | legacy_leaky/results/best_weights.json | 11 | loose scalar fields |
+| `results/de_best_weights.json` | legacy_leaky/results/de_best_weights.json | 62 | 61 weights plus 1 scalar(s): power |
+| `results/component_weight_search_best.json` | not found | n/a |  |
+| `results/blend_search_best.json` | not found | n/a |  |
+| `temp_artifacts/results_scratch/component_weight_search_best.json` | recovered from history | 30 | 29 weights plus 1 scalar(s): power |
+| `temp_artifacts/results_scratch/blend_search_best.json` | recovered from history | 3 | loose scalar fields |
+| `legacy_leaky/fast_opt.py` | legacy_leaky/fast_opt.py | n_components + 1 | bounds vector: one weight per component plus one power exponent |
 
 ## 3. Commit ladder
 

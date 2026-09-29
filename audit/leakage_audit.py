@@ -162,6 +162,32 @@ def _resolve(rel):
     return None
 
 
+def _read_artifact(rel):
+    """Read an inherited artifact, falling back to the provenance tag.
+
+    Some inherited scratch artifacts were deleted during quarantine. They remain
+    reachable in the preserved history, so the audit reads them from the
+    `provenance` tag rather than reporting them as absent. Evidence that was
+    deliberately removed from the working tree is still evidence.
+    """
+    path = _resolve(rel)
+    if path is not None:
+        return path.read_text(encoding="utf-8", errors="replace"), str(
+            path.relative_to(ROOT)
+        ).replace("\\", "/")
+    try:
+        out = subprocess.run(
+            ["git", "show", f"provenance:{rel}"],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+        return out, f"provenance:{rel}"
+    except (subprocess.CalledProcessError, OSError):
+        return None, None
+
+
 def count_free_parameters():
     """Count free parameters fitted against the 57 labels, per artifact."""
     targets = [
@@ -177,28 +203,30 @@ def count_free_parameters():
     ]
     rows = []
     for rel in targets:
-        path = _resolve(rel)
-        if path is None:
-            rows.append({"artifact": rel, "status": "absent", "n_params": None, "note": ""})
+        text, location = _read_artifact(rel)
+        if text is None:
+            rows.append(
+                {"artifact": rel, "status": "not found", "n_params": None, "note": ""}
+            )
             continue
-        if path.suffix == ".json":
+        status = "recovered from history" if location.startswith("provenance:") else location
+        if rel.endswith(".json"):
             try:
-                obj = json.loads(path.read_text(encoding="utf-8", errors="replace"))
-            except (json.JSONDecodeError, OSError) as exc:
+                obj = json.loads(text)
+            except json.JSONDecodeError as exc:
                 rows.append(
-                    {"artifact": rel, "status": "unreadable", "n_params": None, "note": type(exc).__name__}
+                    {"artifact": rel, "status": status, "n_params": None, "note": type(exc).__name__}
                 )
                 continue
             n, note = count_json_params(obj)
-            rows.append({"artifact": rel, "status": "present", "n_params": n, "note": note})
+            rows.append({"artifact": rel, "status": status, "n_params": n, "note": note})
         else:
-            text = path.read_text(encoding="utf-8", errors="replace")
             m = re.search(r"bounds\s*=\s*\[\(.*?\)\s*for .*?\]\s*\+\s*\[\(", text, re.S)
             note = "bounds vector: one weight per component plus one power exponent"
             n = None
             if "branch_names" in text and m:
                 n = "n_components + 1"
-            rows.append({"artifact": rel, "status": "present", "n_params": n, "note": note})
+            rows.append({"artifact": rel, "status": status, "n_params": n, "note": note})
     return rows
 
 
