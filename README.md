@@ -1,264 +1,116 @@
-# RT-Activity-Predictor
+# RT-plm-benchmark
 
-Reproducible submission repository for the Mandrake Bio Retroviral Wall Challenge. The project predicts reverse transcriptase (RT) activity from sequence, protein-family, embedding, and structure-derived features under leave-one-family-out (LOFO) validation.
+This repository is a methodological rebuild of
+[TanishDevs11/RT-Activity-Predictor](https://github.com/TanishDevs11/RT-Activity-Predictor).
+The original holds the submitted competition artifact and is **not modified by this
+work**: no push, no branch, no tag, no pull request. It was cloned once at commit
+`c1620706685d1a29e874031abd62d88a763d241e`, tagged here as `provenance`.
 
-The repository is packaged so a reviewer can reproduce the submitted CSV and verify the reported score with two commands after environment setup.
+## Headline result
 
-<video src="brag-output/brag.mp4" controls poster="brag-output/brag.jpg" width="100%"></video>
+**No method tested beats using `protein_length_aa` as the score with no training at
+all, and no method clears the score its own selection procedure reaches on pure
+noise.**
 
-## Submission Snapshot
+| | CLS |
+| --- | --- |
+| 3-mer cosine to nearest training active, zero training | **0.4576** |
+| `protein_length_aa`, zero training | **0.4416** |
+| Best trained model (handcrafted + RandomForest) | 0.4284 |
+| Best protein language model representation (ESM-2 150M) | 0.3052 |
+| Minimum difference this benchmark can resolve at 80 percent power | **0.3419** |
 
-Primary submission files:
+The previously reported 0.9754 does not appear in this table. The reasons are in
+[WRITEUP.md](WRITEUP.md), in the section titled "Why the previously reported 0.975
+is not a result", and are summarised next.
 
-- `submission.csv`
-- `results/calibrated_predictions_selected_features.csv`
-- `WRITEUP.md`
-- `requirements.txt`
+## Why the previously reported 0.975 is not a result
 
-Required prediction schema:
+I optimized the competition metric directly against the labels it was scored on.
+`fast_opt.py` maximizes `compute_cls` over all 57 rows with 29 blend weights plus a
+power exponent, and reseeds itself from its own previously fitted constants, so
+each run resumes the prior hill climb. The commit history records 20 messages
+quoting a CLS, climbing 0.4380 to 0.9754.
 
-```text
-rt_name,predicted_active,predicted_score
-```
+Running that same search on **pure Gaussian noise**:
 
-Final verified metrics on `submission.csv`:
+| Free parameters | CLS on noise (p95) |
+| --- | --- |
+| 29 | 0.9340 |
+| 50 | **0.9727** |
 
-```text
-PR-AUC:             0.9857
-Weighted Spearman:  0.9652
-CLS:                0.9754
-```
+The stored search artifacts contain up to **62** fitted parameters, against a Kish
+effective sample size of **11.34**. The submission scored 0.9754. Its margin over
+what the procedure manufactures from nothing is about 0.025, inside the 0.079
+bootstrap interval width. The reported score sits within its own noise floor.
 
-The exact full-precision values recorded for the submitted artifact are:
+## The instrument
 
-```text
-PR-AUC = 0.985714
-Weighted Spearman = 0.965244
-CLS = 0.975372
-```
+The contribution here is the **search-capacity null**: run a selection procedure,
+unchanged, on K vectors of pure noise and record the score it reaches. That is how
+much of a reported score the procedure can manufacture from nothing on this dataset
+with this metric. Every score in this repository carries one, plus a bootstrap
+interval. A score that does not clear its null has reported nothing.
 
-## Quick Reproduction
+![capacity curve](bench/figures/search_null_capacity.png)
 
-From the repository root:
+## Three verified findings about protein language model embeddings
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+- ESM-2 embeddings classify RT **family** at **0.8000** five-fold accuracy against a
+  **0.3214** majority baseline.
+- Embedding **PC1 tracks sequence length** at Spearman **-0.7681**.
+- Raw ESM-2 embeddings score **0.0000** out of family, far **below** the length-only
+  baseline of 0.4416.
 
-python experiments\materialize_final_submission.py
-python evaluation\evaluate.py --predictions submission.csv
-```
+The representation knows what an enzyme is related to. It does not know what it
+does. Length residualization, family residualization, catalytic-core pooling and
+attention-weighted pooling all failed to fix this, and the two core-focused
+variants became the **most** lineage-predictive of all at 0.818 family accuracy.
 
-Expected output:
+## Layout
 
-```text
-PR-AUC:             0.9857
-Weighted Spearman:  0.9652
-CLS:                0.9754
-```
+| Path | Contents |
+| --- | --- |
+| `audit/` | Leakage audit and metric properties of the inherited tree |
+| `bench/protocol.py` | The nested LOFO harness every experiment calls |
+| `bench/search_null.py` | Search-capacity null, the central instrument |
+| `bench/baselines.py` | Baseline ladder |
+| `bench/representations.py` | Representation benchmark |
+| `bench/names.py` | Repairs an inherited RT-name join defect, fails loudly |
+| `bench/results/` | All measured results |
+| `legacy_leaky/` | Quarantined inherited code. Not usable in any results table |
+| `legacy_submission/` | The submitted artifact, as the object of study |
+| `PROGRESS.md` | Dated execution record |
 
-On macOS/Linux, use:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-
-python experiments/materialize_final_submission.py
-python evaluation/evaluate.py --predictions submission.csv
-```
-
-## Reproducibility Contract
-
-The final submission is reconstructed from LOFO out-of-fold predictions generated by the family-conditioned pipeline:
-
-```text
-results/calibrated_predictions_selected_features.csv
-```
-
-`experiments/materialize_final_submission.py` reconstructs the final LOFO out-of-fold prediction vector from the preserved experiment outputs generated by the family-conditioned LOFO pipeline, applies the fixed binary decision rule, and writes:
-
-```text
-submission.csv
-results/calibrated_predictions_selected_features.csv
-```
-
-`predicted_score` is not changed during materialization. `predicted_score` is the primary ranking output used for CLS evaluation. `predicted_active` is derived from `predicted_score` using a fixed decision rule defined inside the pipeline.
-
-Artifact hashes after materialization:
-
-```text
-SHA256 submission.csv
-B9CFADF6BF3AFED5BEA1E5D848D5E8F4EF510E322DB61373316A3D9EDC6CA84E
-
-SHA256 results/calibrated_predictions_selected_features.csv
-B9CFADF6BF3AFED5BEA1E5D848D5E8F4EF510E322DB61373316A3D9EDC6CA84E
+## Reproducing
 
 ```
-
-## Validation Commands
-
-Check the submitted score:
-
-```powershell
-python evaluation\evaluate.py --predictions submission.csv
+make reproduce
 ```
 
-Check the CSV schema:
+Retrains everything from `data/` to predictions and reads no stored result. Seed 42
+throughout; every script prints its seed and library versions.
 
-```powershell
-python -c "import pandas as pd; p=pd.read_csv('submission.csv'); print(list(p.columns)); print(len(p)); print(sorted(map(int, p.predicted_active.unique()))); print(int(p.isna().sum().sum()))"
-```
+Other targets: `make audit`, `make test`, `make null`, `make bench`, `make scale`.
 
-Expected schema check:
+Environment for every number reported: Python 3.14.2 on Windows 11, numpy 2.4.2,
+scipy 1.17.1, pandas 3.0.1, scikit-learn 1.8.0, matplotlib 3.10.8, torch
+2.11.0+cpu with zero CUDA devices, fair-esm 2.0.0.
 
-```text
-['rt_name', 'predicted_active', 'predicted_score']
-57
-[0, 1]
-0
-```
+## Protocol integrity
 
-Generate a confusion matrix against the included labels:
+`bench/test_protocol.py` corrupts every held-out label and requires the selected
+configuration to be byte-identical, and includes a deliberate **peeking positive
+control** that the check must reject. The control is the load-bearing test: a green
+suite in which peeking also passed would mean the check is inert. Continuous
+integration runs it on every push, alongside a self-check on the null instrument.
 
-```powershell
-python experiments\confusion_matrix_eval.py
-```
+## Blocked experiments
 
-Expected classification counts:
+ProtT5-XL-U50, inverse-folding likelihoods, and zero-shot ESM-1v masked marginals
+are marked **NOT RUN** with their exact blockers recorded in
+[WRITEUP.md](WRITEUP.md). None was given an estimated or literature-quoted score.
 
-```text
-TP: 20
-FP: 1
-TN: 35
-FN: 1
-```
+## Licence
 
-Run the shuffle-label leakage sanity check:
-
-```powershell
-python experiments\shuffle_labels_test.py
-```
-
-## Validation Strategy
-
-All predictions were generated using strict leave-one-family-out cross-validation across the 7 RT families.
-
-Each family was excluded from training before prediction, and CLS was computed on pooled out-of-fold predictions across all 57 enzymes.
-
-## Method Summary
-
-The modeling objective was to predict RT activity while respecting evolutionary family boundaries. The strongest candidate was selected using LOFO-style evaluation, where each RT family is held out from training before predicting that family. This prevents inflated performance from close family-level similarity.
-
-The feature set combines:
-
-- sequence composition and charge features
-- structural descriptors from predicted RT structures
-- catalytic-site and cleft-geometry features
-- secondary-structure summaries
-- ESM2 embedding-derived similarity and ranking signals
-- family-conditioned and residual rank-correction signals
-
-The final artifact was selected for the best balance between active/inactive separation and efficiency-aware ranking under the official CLS metric:
-
-```text
-CLS = harmonic_mean(PR-AUC, Weighted Spearman)
-```
-
-## Repository Layout
-
-```text
-data/
-  rt_sequences.csv                         Challenge labels, families, sequences, efficiency values
-  family_splits.csv                        Family-level sample counts
-  handcrafted_features.csv                 Precomputed sequence/biophysical features
-  structure_features.csv                   Predicted-structure feature table
-  topology_features.csv                    Structural/topological feature table
-  esm2_embeddings.npz                      Precomputed ESM2 embeddings
-  structures/                              Predicted protein structures
-
-evaluation/
-  evaluate.py                              Official-style CLS evaluator
-
-experiments/
-  materialize_final_submission.py          Rebuilds final submission CSVs
-  family_conditioned_lofo_search.py        Main family-conditioned LOFO search lineage
-  quantum_residual_ranker.py               Quantum-inspired residual ranking experiment
-  lambdarank_residual_ranker.py            Active-subset LambdaRank-style residual experiment
-  nested_residual_ranker.py                Strict nested-LOFO residual correction experiment
-  confusion_matrix_eval.py                 Binary-label sanity report
-  shuffle_labels_test.py                   Leakage sanity check
-
-src/
-  data_loader.py                           Data loading helpers
-  feature_engineering.py                   Main feature construction pipeline
-  structure_features.py                    Structure feature extraction utilities
-  train_*.py                               Earlier model training scripts
-
-results/
-  calibrated_predictions_selected_features.csv
-                                           Final LOFO prediction artifact
-  *.csv, *.json, *.png                     Candidate outputs, diagnostics, and plots
-```
-
-## Main Pipeline Lineage
-
-The shortest reproducible path is:
-
-```text
-results/calibrated_predictions_selected_features.csv
-  -> experiments/materialize_final_submission.py
-  -> submission.csv
-  -> evaluation/evaluate.py
-```
-
-The main research/development scripts are:
-
-- `experiments/family_conditioned_lofo_search.py`: strongest family-conditioned hybrid LOFO search.
-- `experiments/quantum_residual_ranker.py`: local quantum-inspired residual ranking.
-- `experiments/lambdarank_residual_ranker.py`: active-subset rank residual experiment.
-- `experiments/nested_residual_ranker.py`: strict nested residual correction.
-- `src/feature_engineering.py`: central construction of sequence, structure, and topology features.
-
-Several late-stage scripts are retained for auditability. They are deterministic given the included data and fixed seeds, but they are exploratory and are not required to regenerate the submitted CSV.
-
-## Requirements
-
-Install all declared dependencies with:
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-The final artifact reproduction path requires only the core scientific Python stack: `numpy`, `pandas`, `scipy`, and `scikit-learn`. The full `requirements.txt` also includes packages used by exploratory scripts, plots, structure utilities, ESM/embedding experiments, XGBoost baselines, and quantum-inspired ranking experiments.
-
-Recommended interpreter:
-
-```text
-Python 3.10-3.12 for broad package compatibility.
-```
-
-The final CSV materialization and evaluator were also verified in this workspace on:
-
-```text
-Python 3.14.2
-```
-
-## Fresh-Clone Checklist
-
-1. Install dependencies from `requirements.txt`.
-2. Run `python experiments\materialize_final_submission.py`.
-3. Confirm `submission.csv` has exactly 57 rows and columns `rt_name,predicted_active,predicted_score`.
-4. Run `python evaluation\evaluate.py --predictions submission.csv`.
-5. Confirm the evaluator reports `CLS: 0.9754`.
-6. Submit `submission.csv`, `WRITEUP.md`, and this repository as the runnable code package.
-
-## Notes
-
-- No external data download is required for the final reproduction path; all required inputs are included under `data/` and `results/`.
-- The submitted `predicted_score` values are continuous rank scores. Higher means more likely active and/or higher-efficiency.
-- `predicted_active` is derived from `predicted_score` using a fixed pipeline rule and is included to satisfy the submission schema. The official ranking metrics use `predicted_score`.
-- The deadline text in the challenge instructions should be checked against the active submission form before upload.
+MIT. See [LICENSE](LICENSE) and [CITATION.cff](CITATION.cff).
