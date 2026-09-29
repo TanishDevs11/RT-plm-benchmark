@@ -1,0 +1,27 @@
+57 sequences, lengths 226 to 824
+YXDD motif: found in 50/57
+  motif NOT found in 7: FuRT-Cas1-RT, ROSE-CRISPR-RT, CHLRE, Line1-RT, Ngaro-RT, Ty1B-RT, Ec48-RT
+  multiple hits in 1: Abi-RT
+esm2_8M: extracting
+    esm2_8M: 1/57
+    esm2_8M: 11/57
+    esm2_8M: 21/57
+    esm2_8M: 31/57
+    esm2_8M: 41/57
+    esm2_8M: 51/57
+  esm2_8M: (57, 320) in 8.6s
+esm2_35M: extracting
+Downloading: "https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t12_35M_UR50D.pt" to F:\colabfold_cache\torch\hub\checkpoints\esm2_t12_35M_UR50D.pt
+Downloading: "https://dl.fbaipublicfiles.com/fair-esm/regression/esm2_t12_35M_UR50D-contact-regression.pt" to F:\colabfold_cache\torch\hub\checkpoints\esm2_t12_35M_UR50D-contact-regression.pt
+    esm2_35M: 1/57
+    esm2_35M: 11/57
+    esm2_35M: 21/57
+    esm2_35M: 31/57
+    esm2_35M: 41/57
+    esm2_35M: 51/57
+  esm2_35M: (57, 480) in 30.2s
+esm2_150M: extracting
+Downloading: "https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t30_150M_UR50D.pt" to F:\colabfold_cache\torch\hub\checkpoints\esm2_t30_150M_UR50D.pt
+Downloading: "https://dl.fbaipublicfiles.com/fair-esm/regression/esm2_t30_150M_UR50D-contact-regression.pt" to F:\colabfold_cache\torch\hub\checkpoints\esm2_t30_150M_UR50D-contact-regression.pt
+    esm2_150M: 1/57
+    esm2_150M: 11/57

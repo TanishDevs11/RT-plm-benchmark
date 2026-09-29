@@ -1,0 +1,301 @@
+{
+  "seed": 42,
+  "length_baseline_cls": 0.44162236873080807,
+  "rows": [
+    {
+      "method": "1. protein_length_aa, no training",
+      "cls": 0.44162236873080807,
+      "pr_auc": 0.5102487305876892,
+      "w_spearman": 0.3892674879004233,
+      "ci_low": 0.0,
+      "ci_high": 0.6555385061415884,
+      "ci_width": 0.6555385061415884,
+      "n_candidates": 1,
+      "seconds": 3.8250176906585693,
+      "kind": "zero-parameter",
+      "null_cls_mean": 0.1075926574441938,
+      "null_cls_p95": 0.3961116667465686,
+      "signal_margin": 0.045510701984239454,
+      "selected": {
+        "CRISPR-associated": {},
+        "Group_II_Intron": {},
+        "LTR_Retrotransposon": {},
+        "Other": {},
+        "Retron": {},
+        "Retroviral": {},
+        "Unclassified": {}
+      },
+      "beats_length_baseline": false
+    },
+    {
+      "method": "2. negative protein_length_aa, no training",
+      "cls": 0.0,
+      "pr_auc": 0.3127768650657806,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.13720026162760054,
+      "ci_width": 0.13720026162760054,
+      "n_candidates": 1,
+      "seconds": 3.8072826862335205,
+      "kind": "zero-parameter",
+      "null_cls_mean": 0.1075926574441938,
+      "null_cls_p95": 0.3961116667465686,
+      "signal_margin": -0.3961116667465686,
+      "selected": {
+        "CRISPR-associated": {},
+        "Group_II_Intron": {},
+        "LTR_Retrotransposon": {},
+        "Other": {},
+        "Retron": {},
+        "Retroviral": {},
+        "Unclassified": {}
+      },
+      "beats_length_baseline": false
+    },
+    {
+      "method": "3. amino acid composition PC1, no training",
+      "cls": 0.0,
+      "pr_auc": 0.4595092892545057,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.5282437802586307,
+      "ci_width": 0.5282437802586307,
+      "n_candidates": 1,
+      "seconds": 3.8470983505249023,
+      "kind": "zero-parameter",
+      "null_cls_mean": 0.1075926574441938,
+      "null_cls_p95": 0.3961116667465686,
+      "signal_margin": -0.3961116667465686,
+      "selected": {
+        "CRISPR-associated": {},
+        "Group_II_Intron": {},
+        "LTR_Retrotransposon": {},
+        "Other": {},
+        "Retron": {},
+        "Retroviral": {},
+        "Unclassified": {}
+      },
+      "beats_length_baseline": false
+    },
+    {
+      "method": "4. 3-mer cosine to nearest training active, no training",
+      "cls": 0.45763924290575325,
+      "pr_auc": 0.5309155089116118,
+      "w_spearman": 0.4021368407049582,
+      "ci_low": 0.0,
+      "ci_high": 0.6810231268709991,
+      "ci_width": 0.6810231268709991,
+      "n_candidates": 1,
+      "seconds": 3.7605059146881104,
+      "kind": "zero-parameter",
+      "null_cls_mean": 0.1075926574441938,
+      "null_cls_p95": 0.3961116667465686,
+      "signal_margin": 0.06152757615918464,
+      "selected": {
+        "CRISPR-associated": {},
+        "Group_II_Intron": {},
+        "LTR_Retrotransposon": {},
+        "Other": {},
+        "Retron": {},
+        "Retroviral": {},
+        "Unclassified": {}
+      },
+      "beats_length_baseline": true
+    },
+    {
+      "method": "5. family prior by nearest training family, no training",
+      "cls": 0.416004752011312,
+      "pr_auc": 0.4304151182554086,
+      "w_spearman": 0.40252804924885077,
+      "ci_low": 0.0,
+      "ci_high": 0.5782760938529483,
+      "ci_width": 0.5782760938529483,
+      "n_candidates": 1,
+      "seconds": 3.7975046634674072,
+      "kind": "zero-parameter",
+      "null_cls_mean": 0.1075926574441938,
+      "null_cls_p95": 0.3961116667465686,
+      "signal_margin": 0.01989308526474337,
+      "selected": {
+        "CRISPR-associated": {},
+        "Group_II_Intron": {},
+        "LTR_Retrotransposon": {},
+        "Other": {},
+        "Retron": {},
+        "Retroviral": {},
+        "Unclassified": {}
+      },
+      "beats_length_baseline": false
+    },
+    {
+      "method": "8a. handcrafted + ExtraTrees",
+      "cls": 0.15215233960403218,
+      "pr_auc": 0.6830127348540994,
+      "w_spearman": 0.08561190046152667,
+      "ci_low": 0.0,
+      "ci_high": 0.6026076123796223,
+      "ci_width": 0.6026076123796223,
+      "n_candidates": 6,
+      "seconds": 51.94882011413574,
+      "kind": "trained",
+      "null_cls_mean": 0.3305412044746056,
+      "null_cls_p95": 0.4753534044624549,
+      "signal_margin": -0.3232010648584227,
+      "selected": {
+        "CRISPR-associated": {
+          "max_depth": 6,
+          "n_estimators": 200
+        },
+        "Group_II_Intron": {
+          "max_depth": null,
+          "n_estimators": 200
+        },
+        "LTR_Retrotransposon": {
+          "max_depth": 3,
+          "n_estimators": 200
+        },
+        "Other": {
+          "max_depth": 6,
+          "n_estimators": 200
+        },
+        "Retron": {
+          "max_depth": null,
+          "n_estimators": 200
+        },
+        "Retroviral": {
+          "max_depth": 6,
+          "n_estimators": 500
+        },
+        "Unclassified": {
+          "max_depth": null,
+          "n_estimators": 500
+        }
+      },
+      "beats_length_baseline": false
+    },
+    {
+      "method": "8b. handcrafted + RandomForest",
+      "cls": 0.5071601063693851,
+      "pr_auc": 0.7809651566490474,
+      "w_spearman": 0.37550773553815836,
+      "ci_low": 0.0,
+      "ci_high": 0.7110385073195031,
+      "ci_width": 0.7110385073195031,
+      "n_candidates": 6,
+      "seconds": 70.09524750709534,
+      "kind": "trained",
+      "null_cls_mean": 0.3305412044746056,
+      "null_cls_p95": 0.4753534044624549,
+      "signal_margin": 0.031806701906930246,
+      "selected": {
+        "CRISPR-associated": {
+          "max_depth": null,
+          "n_estimators": 500
+        },
+        "Group_II_Intron": {
+          "max_depth": null,
+          "n_estimators": 200
+        },
+        "LTR_Retrotransposon": {
+          "max_depth": 6,
+          "n_estimators": 200
+        },
+        "Other": {
+          "max_depth": 6,
+          "n_estimators": 500
+        },
+        "Retron": {
+          "max_depth": 3,
+          "n_estimators": 500
+        },
+        "Retroviral": {
+          "max_depth": 6,
+          "n_estimators": 200
+        },
+        "Unclassified": {
+          "max_depth": 6,
+          "n_estimators": 500
+        }
+      },
+      "beats_length_baseline": true
+    },
+    {
+      "method": "9. handcrafted + logistic regression",
+      "cls": 0.0,
+      "pr_auc": 0.6427109568275855,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.4361508043141586,
+      "ci_width": 0.4361508043141586,
+      "n_candidates": 4,
+      "seconds": 4.9963579177856445,
+      "kind": "trained",
+      "null_cls_mean": 0.28594064233097777,
+      "null_cls_p95": 0.457007415430673,
+      "signal_margin": -0.457007415430673,
+      "selected": {
+        "CRISPR-associated": {
+          "C": 0.01
+        },
+        "Group_II_Intron": {
+          "C": 1.0
+        },
+        "LTR_Retrotransposon": {
+          "C": 0.01
+        },
+        "Other": {
+          "C": 0.01
+        },
+        "Retron": {
+          "C": 1.0
+        },
+        "Retroviral": {
+          "C": 0.01
+        },
+        "Unclassified": {
+          "C": 0.01
+        }
+      },
+      "beats_length_baseline": false
+    },
+    {
+      "method": "10. raw ESM-2 mean-pooled + logistic regression",
+      "cls": 0.0,
+      "pr_auc": 0.2877264667537462,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.32483290236631845,
+      "ci_width": 0.32483290236631845,
+      "n_candidates": 4,
+      "seconds": 6.2921977043151855,
+      "kind": "trained",
+      "null_cls_mean": 0.28594064233097777,
+      "null_cls_p95": 0.457007415430673,
+      "signal_margin": -0.457007415430673,
+      "selected": {
+        "CRISPR-associated": {
+          "C": 0.01
+        },
+        "Group_II_Intron": {
+          "C": 0.01
+        },
+        "LTR_Retrotransposon": {
+          "C": 0.01
+        },
+        "Other": {
+          "C": 0.01
+        },
+        "Retron": {
+          "C": 0.01
+        },
+        "Retroviral": {
+          "C": 10.0
+        },
+        "Unclassified": {
+          "C": 0.01
+        }
+      },
+      "beats_length_baseline": false
+    }
+  ]
+}
