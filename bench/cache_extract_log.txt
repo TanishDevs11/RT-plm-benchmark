@@ -25,3 +25,10 @@ Downloading: "https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t30_150M_UR50D
 Downloading: "https://dl.fbaipublicfiles.com/fair-esm/regression/esm2_t30_150M_UR50D-contact-regression.pt" to F:\colabfold_cache\torch\hub\checkpoints\esm2_t30_150M_UR50D-contact-regression.pt
     esm2_150M: 1/57
     esm2_150M: 11/57
+    esm2_150M: 21/57
+    esm2_150M: 31/57
+    esm2_150M: 41/57
+    esm2_150M: 51/57
+  esm2_150M: (57, 640) in 123.8s
+esm2_650M: extracting
+Downloading: "https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t33_650M_UR50D.pt" to F:\colabfold_cache\torch\hub\checkpoints\esm2_t33_650M_UR50D.pt

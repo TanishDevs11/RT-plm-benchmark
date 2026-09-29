@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: "RT-plm-benchmark: an honest benchmark for out-of-family reverse transcriptase activity prediction"
+message: "If you use this benchmark or the search-capacity null, please cite it."
+type: software
+authors:
+  - family-names: "Tanish"
+    alias: "TanishDevs11"
+repository-code: "https://github.com/TanishDevs11/RT-plm-benchmark"
+abstract: >
+  A methodological rebuild of an RT activity prediction submission, replacing a
+  metric value that was directly optimized against its own test labels with a
+  nested leave-one-family-out protocol, bootstrap intervals, and a
+  search-capacity null that measures how much of any reported score a selection
+  procedure can manufacture from pure noise at this sample size.
+keywords:
+  - protein language models
+  - reverse transcriptase
+  - benchmark
+  - data leakage
+  - small sample inference
+license: MIT

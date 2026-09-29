@@ -302,5 +302,38 @@ def plot_capacity(k_rows, b_rows, path):
     plt.close(fig)
 
 
+def quick_self_check():
+    """Fast instrument check for continuous integration.
+
+    Verifies the three properties that make the null trustworthy as an
+    instrument: it is deterministic at a fixed seed, it produces a score well
+    above zero from pure noise (so it is actually searching), and its capacity
+    grows with the number of free parameters. It deliberately does not assert a
+    specific published value, for the reason recorded in the results report.
+    """
+    y, pe = load_labels()
+    budget = 20
+
+    a = de_blend_null(y, pe, 5, maxiter=budget, seed=SEED, noise_seed=SEED)
+    b = de_blend_null(y, pe, 5, maxiter=budget, seed=SEED, noise_seed=SEED)
+    assert a == b, f"null is not deterministic at a fixed seed: {a} vs {b}"
+    print(f"PASS  deterministic at seed {SEED}: {a:.4f}")
+
+    assert a > 0.2, f"null of {a:.4f} is implausibly low; the optimizer may not be running"
+    print(f"PASS  noise search reaches {a:.4f}, well above zero")
+
+    small = de_blend_null(y, pe, 2, maxiter=budget, seed=SEED, noise_seed=SEED)
+    large = de_blend_null(y, pe, 20, maxiter=budget, seed=SEED, noise_seed=SEED)
+    assert large >= small, (
+        f"capacity did not grow with free parameters: K=2 gave {small:.4f}, "
+        f"K=20 gave {large:.4f}"
+    )
+    print(f"PASS  capacity grows with K: K=2 {small:.4f} <= K=20 {large:.4f}")
+    print("search-null self-check passed")
+    return 0
+
+
 if __name__ == "__main__":
+    if "--self-check" in sys.argv:
+        raise SystemExit(quick_self_check())
     raise SystemExit(main())
