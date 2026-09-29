@@ -28,6 +28,7 @@ from sklearn.preprocessing import StandardScaler
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "bench"))
 
+from names import align_to_reference, assert_full_coverage  # noqa: E402
 from protocol import SEED, Method, load_dataset, run_nested_lofo  # noqa: E402
 from search_null import selection_null, signal_margin  # noqa: E402
 
@@ -38,16 +39,23 @@ AMINO_ACIDS = "ACDEFGHIKLMNPQRSTVWY"
 
 
 def handcrafted_table():
-    seq = pd.read_csv(ROOT / "data" / "rt_sequences.csv")[["rt_name", "protein_length_aa"]]
-    hand = pd.read_csv(ROOT / "data" / "handcrafted_features.csv")
-    struct = pd.read_csv(ROOT / "data" / "structure_features.csv")
-    topo = pd.read_csv(ROOT / "data" / "topology_features.csv").drop(
-        columns=["pdb_filename"], errors="ignore"
-    )
-    out = seq.merge(hand, on="rt_name", how="left")
-    out = out.merge(struct, on="rt_name", how="left")
-    out = out.merge(topo, on="rt_name", how="left")
-    return out.set_index("rt_name").select_dtypes(include=[np.number])
+    """Sequence, physicochemical, structure and topology descriptors.
+
+    Every source is aligned through `bench.names`, because the inherited files use
+    three different naming conventions and a plain merge on `rt_name` silently
+    yields all-missing topology columns rather than an error.
+    """
+    seq = pd.read_csv(ROOT / "data" / "rt_sequences.csv")
+    ref = seq["rt_name"].tolist()
+    parts = [seq[["rt_name", "protein_length_aa"]]]
+    for fname in ("handcrafted_features.csv", "structure_features.csv", "topology_features.csv"):
+        t = pd.read_csv(ROOT / "data" / fname).drop(columns=["pdb_filename"], errors="ignore")
+        parts.append(t)
+    frames = [align_to_reference(p, ref).select_dtypes(include=[np.number]) for p in parts]
+    out = pd.concat(frames, axis=1)
+    out = out.loc[:, ~out.columns.duplicated()]
+    assert_full_coverage(out, ref, "handcrafted_table", allow_missing=())
+    return out
 
 
 def embedding_table():

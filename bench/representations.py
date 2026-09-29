@@ -39,6 +39,12 @@ from sklearn.preprocessing import StandardScaler
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "bench"))
 
+from names import (  # noqa: E402
+    DUPLICATE_PDB_STEMS,
+    NO_STRUCTURE,
+    align_to_reference,
+    assert_full_coverage,
+)
 from protocol import SEED, Method, load_dataset, run_nested_lofo  # noqa: E402
 from search_null import selection_null, signal_margin  # noqa: E402
 from baselines import handcrafted_table  # noqa: E402
@@ -156,25 +162,42 @@ def attention_pooled_table(key):
 
 
 def structure_table():
-    """AlphaFold pLDDT summaries plus the cleft and topology descriptors."""
-    struct = pd.read_csv(ROOT / "data" / "structure_features.csv")
-    topo = pd.read_csv(ROOT / "data" / "topology_features.csv").drop(
-        columns=["pdb_filename"], errors="ignore"
-    )
-    out = struct.merge(topo, on="rt_name", how="outer")
+    """AlphaFold pLDDT summaries plus the cleft and topology descriptors.
+
+    Aligned through `bench.names`. Line1-RT has no predicted structure in the
+    inherited data, so its structure features stay missing and are imputed inside
+    each training fold rather than globally.
+    """
+    ref = load_dataset()["rt_name"].tolist()
+    parts = [
+        pd.read_csv(ROOT / "data" / "structure_features.csv"),
+        pd.read_csv(ROOT / "data" / "topology_features.csv").drop(
+            columns=["pdb_filename"], errors="ignore"
+        ),
+    ]
     plddt = plddt_summaries()
     if plddt is not None:
-        out = out.merge(plddt, on="rt_name", how="left")
-    return out.set_index("rt_name").select_dtypes(include=[np.number])
+        parts.append(plddt)
+    frames = [align_to_reference(p, ref).select_dtypes(include=[np.number]) for p in parts]
+    out = pd.concat(frames, axis=1)
+    out = out.loc[:, ~out.columns.duplicated()]
+    assert_full_coverage(out, ref, "structure_table", allow_missing=NO_STRUCTURE)
+    return out
 
 
 def plddt_summaries():
-    """Per-structure pLDDT statistics, read from PDB B-factor columns."""
+    """Per-structure pLDDT statistics, read from PDB B-factor columns.
+
+    Skips the duplicate PDB stems recorded in `bench.names`, so an RT that has two
+    structure files contributes one row rather than two.
+    """
     sdir = ROOT / "data" / "structures"
     if not sdir.exists():
         return None
     rows = []
     for pdb in sorted(sdir.glob("*.pdb")):
+        if pdb.stem in DUPLICATE_PDB_STEMS:
+            continue
         vals = []
         for line in pdb.read_text(errors="replace").splitlines():
             if line.startswith("ATOM") and line[12:16].strip() == "CA":

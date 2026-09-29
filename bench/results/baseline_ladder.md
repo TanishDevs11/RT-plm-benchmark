@@ -11,9 +11,9 @@ Seed: 42. Every row runs through the nested protocol in `bench/protocol.py`.
 | 3. amino acid composition PC1, no training | zero-parameter | 0.0000 | 0.4595 | 0.0000 | [0.000, 0.528] | 1 | 0.3961 | -0.3961 | NO |
 | 4. 3-mer cosine to nearest training active, no training | zero-parameter | 0.4576 | 0.5309 | 0.4021 | [0.000, 0.681] | 1 | 0.3961 | +0.0615 | yes |
 | 5. family prior by nearest training family, no training | zero-parameter | 0.4160 | 0.4304 | 0.4025 | [0.000, 0.578] | 1 | 0.3961 | +0.0199 | NO |
-| 8a. handcrafted + ExtraTrees | trained | 0.1522 | 0.6830 | 0.0856 | [0.000, 0.603] | 6 | 0.4754 | -0.3232 | NO |
-| 8b. handcrafted + RandomForest | trained | 0.5072 | 0.7810 | 0.3755 | [0.000, 0.711] | 6 | 0.4754 | +0.0318 | yes |
-| 9. handcrafted + logistic regression | trained | 0.0000 | 0.6427 | 0.0000 | [0.000, 0.436] | 4 | 0.4570 | -0.4570 | NO |
+| 8a. handcrafted + ExtraTrees | trained | 0.1802 | 0.6948 | 0.1036 | [0.000, 0.624] | 6 | 0.4754 | -0.2951 | NO |
+| 8b. handcrafted + RandomForest | trained | 0.4284 | 0.8288 | 0.2888 | [0.000, 0.739] | 6 | 0.4754 | -0.0470 | NO |
+| 9. handcrafted + logistic regression | trained | 0.0000 | 0.6533 | 0.0000 | [0.000, 0.461] | 4 | 0.4570 | -0.4570 | NO |
 | 10. raw ESM-2 mean-pooled + logistic regression | trained | 0.0000 | 0.2877 | 0.0000 | [0.000, 0.325] | 4 | 0.4570 | -0.4570 | NO |
 
 ## Not run

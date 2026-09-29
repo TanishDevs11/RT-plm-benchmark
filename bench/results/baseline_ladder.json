@@ -11,7 +11,7 @@
       "ci_high": 0.6555385061415884,
       "ci_width": 0.6555385061415884,
       "n_candidates": 1,
-      "seconds": 3.8250176906585693,
+      "seconds": 3.4319374561309814,
       "kind": "zero-parameter",
       "null_cls_mean": 0.1075926574441938,
       "null_cls_p95": 0.3961116667465686,
@@ -36,7 +36,7 @@
       "ci_high": 0.13720026162760054,
       "ci_width": 0.13720026162760054,
       "n_candidates": 1,
-      "seconds": 3.8072826862335205,
+      "seconds": 3.3316338062286377,
       "kind": "zero-parameter",
       "null_cls_mean": 0.1075926574441938,
       "null_cls_p95": 0.3961116667465686,
@@ -61,7 +61,7 @@
       "ci_high": 0.5282437802586307,
       "ci_width": 0.5282437802586307,
       "n_candidates": 1,
-      "seconds": 3.8470983505249023,
+      "seconds": 3.435372829437256,
       "kind": "zero-parameter",
       "null_cls_mean": 0.1075926574441938,
       "null_cls_p95": 0.3961116667465686,
@@ -86,7 +86,7 @@
       "ci_high": 0.6810231268709991,
       "ci_width": 0.6810231268709991,
       "n_candidates": 1,
-      "seconds": 3.7605059146881104,
+      "seconds": 3.418941020965576,
       "kind": "zero-parameter",
       "null_cls_mean": 0.1075926574441938,
       "null_cls_p95": 0.3961116667465686,
@@ -111,7 +111,7 @@
       "ci_high": 0.5782760938529483,
       "ci_width": 0.5782760938529483,
       "n_candidates": 1,
-      "seconds": 3.7975046634674072,
+      "seconds": 3.5652027130126953,
       "kind": "zero-parameter",
       "null_cls_mean": 0.1075926574441938,
       "null_cls_p95": 0.3961116667465686,
@@ -129,26 +129,26 @@
     },
     {
       "method": "8a. handcrafted + ExtraTrees",
-      "cls": 0.15215233960403218,
-      "pr_auc": 0.6830127348540994,
-      "w_spearman": 0.08561190046152667,
+      "cls": 0.18024370830006167,
+      "pr_auc": 0.6947906594234463,
+      "w_spearman": 0.10355391567628551,
       "ci_low": 0.0,
-      "ci_high": 0.6026076123796223,
-      "ci_width": 0.6026076123796223,
+      "ci_high": 0.6241308426784988,
+      "ci_width": 0.6241308426784988,
       "n_candidates": 6,
-      "seconds": 51.94882011413574,
+      "seconds": 45.839436292648315,
       "kind": "trained",
       "null_cls_mean": 0.3305412044746056,
       "null_cls_p95": 0.4753534044624549,
-      "signal_margin": -0.3232010648584227,
+      "signal_margin": -0.29510969616239324,
       "selected": {
         "CRISPR-associated": {
           "max_depth": 6,
-          "n_estimators": 200
+          "n_estimators": 500
         },
         "Group_II_Intron": {
           "max_depth": null,
-          "n_estimators": 200
+          "n_estimators": 500
         },
         "LTR_Retrotransposon": {
           "max_depth": 3,
@@ -159,76 +159,76 @@
           "n_estimators": 200
         },
         "Retron": {
-          "max_depth": null,
+          "max_depth": 3,
           "n_estimators": 200
         },
         "Retroviral": {
           "max_depth": 6,
-          "n_estimators": 500
+          "n_estimators": 200
         },
         "Unclassified": {
-          "max_depth": null,
-          "n_estimators": 500
+          "max_depth": 6,
+          "n_estimators": 200
         }
       },
       "beats_length_baseline": false
     },
     {
       "method": "8b. handcrafted + RandomForest",
-      "cls": 0.5071601063693851,
-      "pr_auc": 0.7809651566490474,
-      "w_spearman": 0.37550773553815836,
+      "cls": 0.4283575737997753,
+      "pr_auc": 0.8287517122457848,
+      "w_spearman": 0.2888201367967925,
       "ci_low": 0.0,
-      "ci_high": 0.7110385073195031,
-      "ci_width": 0.7110385073195031,
+      "ci_high": 0.7389909139425679,
+      "ci_width": 0.7389909139425679,
       "n_candidates": 6,
-      "seconds": 70.09524750709534,
+      "seconds": 60.905275106430054,
       "kind": "trained",
       "null_cls_mean": 0.3305412044746056,
       "null_cls_p95": 0.4753534044624549,
-      "signal_margin": 0.031806701906930246,
+      "signal_margin": -0.046995830662679594,
       "selected": {
         "CRISPR-associated": {
-          "max_depth": null,
-          "n_estimators": 500
+          "max_depth": 6,
+          "n_estimators": 200
         },
         "Group_II_Intron": {
-          "max_depth": null,
-          "n_estimators": 200
+          "max_depth": 6,
+          "n_estimators": 500
         },
         "LTR_Retrotransposon": {
           "max_depth": 6,
-          "n_estimators": 200
+          "n_estimators": 500
         },
         "Other": {
           "max_depth": 6,
-          "n_estimators": 500
+          "n_estimators": 200
         },
         "Retron": {
-          "max_depth": 3,
+          "max_depth": 6,
           "n_estimators": 500
         },
         "Retroviral": {
-          "max_depth": 6,
+          "max_depth": 3,
           "n_estimators": 200
         },
         "Unclassified": {
           "max_depth": 6,
-          "n_estimators": 500
+          "n_estimators": 200
         }
       },
-      "beats_length_baseline": true
+      "beats_length_baseline": false
     },
     {
       "method": "9. handcrafted + logistic regression",
       "cls": 0.0,
-      "pr_auc": 0.6427109568275855,
+      "pr_auc": 0.6533053116591787,
       "w_spearman": 0.0,
       "ci_low": 0.0,
-      "ci_high": 0.4361508043141586,
-      "ci_width": 0.4361508043141586,
+      "ci_high": 0.46097599107702786,
+      "ci_width": 0.46097599107702786,
       "n_candidates": 4,
-      "seconds": 4.9963579177856445,
+      "seconds": 4.0445029735565186,
       "kind": "trained",
       "null_cls_mean": 0.28594064233097777,
       "null_cls_p95": 0.457007415430673,
@@ -267,7 +267,7 @@
       "ci_high": 0.32483290236631845,
       "ci_width": 0.32483290236631845,
       "n_candidates": 4,
-      "seconds": 6.2921977043151855,
+      "seconds": 5.307948589324951,
       "kind": "trained",
       "null_cls_mean": 0.28594064233097777,
       "null_cls_p95": 0.457007415430673,
