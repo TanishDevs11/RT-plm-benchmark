@@ -1,0 +1,564 @@
+{
+  "seed": 42,
+  "rows": [
+    {
+      "method": "handcrafted: sequence and physicochemical",
+      "cls": 0.0,
+      "pr_auc": 0.6435771297826647,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.4584985435379262,
+      "ci_width": 0.4584985435379262,
+      "n_candidates": 8,
+      "seconds": 15.48988389968872,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.49136060380940677,
+      "family_accuracy": 0.7121212121212122,
+      "family_majority": 0.32142857142857145,
+      "n_features": 112,
+      "transform_info": {}
+    },
+    {
+      "method": "structure: pLDDT, cleft and topology",
+      "cls": 0.0,
+      "pr_auc": 0.3391111355133072,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.3516143947241751,
+      "ci_width": 0.3516143947241751,
+      "n_candidates": 8,
+      "seconds": 11.967753887176514,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.49136060380940677,
+      "family_accuracy": 0.6590909090909091,
+      "family_majority": 0.32142857142857145,
+      "n_features": 18,
+      "transform_info": {}
+    },
+    {
+      "method": "ESM-2 8M mean-pooled",
+      "cls": 0.0074088455218469,
+      "pr_auc": 0.32416335447724337,
+      "w_spearman": 0.003747244934479828,
+      "ci_low": 0.0,
+      "ci_high": 0.4545193731674223,
+      "ci_width": 0.4545193731674223,
+      "n_candidates": 8,
+      "seconds": 30.344346523284912,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.4839517582875599,
+      "family_accuracy": 0.7454545454545454,
+      "family_majority": 0.32142857142857145,
+      "n_features": 320,
+      "transform_info": {}
+    },
+    {
+      "method": "ESM-2 35M mean-pooled",
+      "cls": 0.13939206552780828,
+      "pr_auc": 0.2985275798734214,
+      "w_spearman": 0.0909235996985559,
+      "ci_low": 0.0,
+      "ci_high": 0.43436210524807783,
+      "ci_width": 0.43436210524807783,
+      "n_candidates": 8,
+      "seconds": 38.625420808792114,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.35196853828159846,
+      "family_accuracy": 0.7818181818181819,
+      "family_majority": 0.32142857142857145,
+      "n_features": 480,
+      "transform_info": {}
+    },
+    {
+      "method": "ESM-2 150M mean-pooled",
+      "cls": 0.30521351362937343,
+      "pr_auc": 0.3665743799346668,
+      "w_spearman": 0.26144949613155044,
+      "ci_low": 0.0,
+      "ci_high": 0.5293768962222903,
+      "ci_width": 0.5293768962222903,
+      "n_candidates": 8,
+      "seconds": 45.129945039749146,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.18614709018003334,
+      "family_accuracy": 0.8015151515151515,
+      "family_majority": 0.32142857142857145,
+      "n_features": 640,
+      "transform_info": {}
+    },
+    {
+      "method": "ESM-2 650M mean-pooled",
+      "cls": 0.0,
+      "pr_auc": 0.28695823030296125,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.3529310048086284,
+      "ci_width": 0.3529310048086284,
+      "n_candidates": 8,
+      "seconds": 69.14862370491028,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.49136060380940677,
+      "family_accuracy": 0.8000000000000002,
+      "family_majority": 0.32142857142857145,
+      "n_features": 1280,
+      "transform_info": {}
+    },
+    {
+      "method": "ESM-2 650M, length-residualized",
+      "cls": 0.0,
+      "pr_auc": 0.32045933255902936,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.290381991227735,
+      "ci_width": 0.290381991227735,
+      "n_candidates": 8,
+      "seconds": 68.18941164016724,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.49136060380940677,
+      "family_accuracy": 0.8000000000000002,
+      "family_majority": 0.32142857142857145,
+      "n_features": 1280,
+      "transform_info": {}
+    },
+    {
+      "method": "ESM-2 650M, family-residualized",
+      "cls": 0.0,
+      "pr_auc": 0.4016208503603462,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.12086136024723568,
+      "ci_width": 0.12086136024723568,
+      "n_candidates": 8,
+      "seconds": 18.656466007232666,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.49136060380940677,
+      "family_accuracy": 0.8000000000000002,
+      "family_majority": 0.32142857142857145,
+      "n_features": 1280,
+      "transform_info": {
+        "components_removed": 6,
+        "variance_removed": 0.6432917233589784
+      }
+    },
+    {
+      "method": "ESM-2 650M, catalytic-core pooled",
+      "cls": 0.0,
+      "pr_auc": 0.278130018561282,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.2991221581029897,
+      "ci_width": 0.2991221581029897,
+      "n_candidates": 8,
+      "seconds": 68.47824621200562,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.49136060380940677,
+      "family_accuracy": 0.8181818181818183,
+      "family_majority": 0.32142857142857145,
+      "n_features": 1280,
+      "transform_info": {}
+    },
+    {
+      "method": "ESM-2, attention-weighted core pooling",
+      "cls": 0.0,
+      "pr_auc": 0.2808469955628046,
+      "w_spearman": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.286910310148233,
+      "ci_width": 0.286910310148233,
+      "n_candidates": 8,
+      "seconds": 69.61222410202026,
+      "null_cls_p95": 0.49136060380940677,
+      "signal_margin": -0.49136060380940677,
+      "family_accuracy": 0.8181818181818183,
+      "family_majority": 0.32142857142857145,
+      "n_features": 1280,
+      "transform_info": {}
+    }
+  ],
+  "blocked": [
+    {
+      "representation": "ESM-1v mean-pooled",
+      "blocker": "embedding cache bench/cache/pooled_esm1v.npz not produced"
+    },
+    {
+      "representation": "ProtT5-XL-U50 mean-pooled",
+      "blocker": "transformers and sentencepiece are not installed and could not be installed in this environment"
+    },
+    {
+      "representation": "inverse-folding likelihood, ESM-IF or ProteinMPNN",
+      "blocker": "neither package is installed; ESM-IF needs a geometric deep learning stack with no Python 3.14 wheels on this platform"
+    }
+  ],
+  "comparisons": [
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "ESM-2 35M mean-pooled",
+      "p_a_beats_b": 0.9424,
+      "mean_diff": 0.2158716173715846,
+      "sd_diff": 0.13733388603843136,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "ESM-2 8M mean-pooled",
+      "p_a_beats_b": 0.9395,
+      "mean_diff": 0.23865664184172292,
+      "sd_diff": 0.14205391655163238,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "handcrafted: sequence and physicochemical",
+      "p_a_beats_b": 0.9271,
+      "mean_diff": 0.2823400146860721,
+      "sd_diff": 0.15397479054673197,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "structure: pLDDT, cleft and topology",
+      "p_a_beats_b": 0.9301,
+      "mean_diff": 0.2868356598568237,
+      "sd_diff": 0.16335483846079926,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "ESM-2 650M mean-pooled",
+      "p_a_beats_b": 0.9627,
+      "mean_diff": 0.28344879754191504,
+      "sd_diff": 0.1292660882403668,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "ESM-2 650M, length-residualized",
+      "p_a_beats_b": 0.9661,
+      "mean_diff": 0.3207641467717842,
+      "sd_diff": 0.1240839736954742,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "ESM-2 650M, family-residualized",
+      "p_a_beats_b": 0.9586,
+      "mean_diff": 0.3467269571390284,
+      "sd_diff": 0.1342468148995399,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.967,
+      "mean_diff": 0.3157380661768187,
+      "sd_diff": 0.12239063202125805,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 150M mean-pooled",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.9675,
+      "mean_diff": 0.3206192123063737,
+      "sd_diff": 0.12205427973644417,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "ESM-2 8M mean-pooled",
+      "p_a_beats_b": 0.3756,
+      "mean_diff": 0.022785024470138332,
+      "sd_diff": 0.07497002605038976,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "handcrafted: sequence and physicochemical",
+      "p_a_beats_b": 0.4642,
+      "mean_diff": 0.06646839731448749,
+      "sd_diff": 0.12383467517549034,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "structure: pLDDT, cleft and topology",
+      "p_a_beats_b": 0.5085,
+      "mean_diff": 0.07096404248523909,
+      "sd_diff": 0.21283094506230452,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "ESM-2 650M mean-pooled",
+      "p_a_beats_b": 0.5248,
+      "mean_diff": 0.0675771801703304,
+      "sd_diff": 0.09564022834569387,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "ESM-2 650M, length-residualized",
+      "p_a_beats_b": 0.5522,
+      "mean_diff": 0.1048925294001996,
+      "sd_diff": 0.12228248487466087,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "ESM-2 650M, family-residualized",
+      "p_a_beats_b": 0.5577,
+      "mean_diff": 0.13085533976744382,
+      "sd_diff": 0.15978002155909415,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.5558,
+      "mean_diff": 0.09986644880523408,
+      "sd_diff": 0.11348062678267516,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 35M mean-pooled",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.5566,
+      "mean_diff": 0.10474759493478909,
+      "sd_diff": 0.11768868803759935,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 8M mean-pooled",
+      "b": "handcrafted: sequence and physicochemical",
+      "p_a_beats_b": 0.3536,
+      "mean_diff": 0.043683372844349165,
+      "sd_diff": 0.11695273750296664,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 8M mean-pooled",
+      "b": "structure: pLDDT, cleft and topology",
+      "p_a_beats_b": 0.4109,
+      "mean_diff": 0.04817901801510077,
+      "sd_diff": 0.20805020823442105,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 8M mean-pooled",
+      "b": "ESM-2 650M mean-pooled",
+      "p_a_beats_b": 0.3928,
+      "mean_diff": 0.04479215570019207,
+      "sd_diff": 0.09713099387798141,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 8M mean-pooled",
+      "b": "ESM-2 650M, length-residualized",
+      "p_a_beats_b": 0.438,
+      "mean_diff": 0.08210750493006128,
+      "sd_diff": 0.12271923331441474,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 8M mean-pooled",
+      "b": "ESM-2 650M, family-residualized",
+      "p_a_beats_b": 0.4539,
+      "mean_diff": 0.10807031529730547,
+      "sd_diff": 0.16183968510105468,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 8M mean-pooled",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.4451,
+      "mean_diff": 0.07708142433509574,
+      "sd_diff": 0.10881984262197004,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 8M mean-pooled",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.4461,
+      "mean_diff": 0.08196257046465075,
+      "sd_diff": 0.11439903803534092,
+      "n_used": 10000
+    },
+    {
+      "a": "handcrafted: sequence and physicochemical",
+      "b": "structure: pLDDT, cleft and topology",
+      "p_a_beats_b": 0.2861,
+      "mean_diff": 0.004495645170751599,
+      "sd_diff": 0.1929225740150767,
+      "n_used": 10000
+    },
+    {
+      "a": "handcrafted: sequence and physicochemical",
+      "b": "ESM-2 650M mean-pooled",
+      "p_a_beats_b": 0.2045,
+      "mean_diff": 0.0011087828558429074,
+      "sd_diff": 0.0811881300089012,
+      "n_used": 10000
+    },
+    {
+      "a": "handcrafted: sequence and physicochemical",
+      "b": "ESM-2 650M, length-residualized",
+      "p_a_beats_b": 0.2812,
+      "mean_diff": 0.0384241320857121,
+      "sd_diff": 0.09065556327242034,
+      "n_used": 10000
+    },
+    {
+      "a": "handcrafted: sequence and physicochemical",
+      "b": "ESM-2 650M, family-residualized",
+      "p_a_beats_b": 0.3088,
+      "mean_diff": 0.0643869424529563,
+      "sd_diff": 0.14169966185011532,
+      "n_used": 10000
+    },
+    {
+      "a": "handcrafted: sequence and physicochemical",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.2763,
+      "mean_diff": 0.03339805149074657,
+      "sd_diff": 0.07910901604269277,
+      "n_used": 10000
+    },
+    {
+      "a": "handcrafted: sequence and physicochemical",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.2849,
+      "mean_diff": 0.03827919762030158,
+      "sd_diff": 0.08329569785647285,
+      "n_used": 10000
+    },
+    {
+      "a": "structure: pLDDT, cleft and topology",
+      "b": "ESM-2 650M mean-pooled",
+      "p_a_beats_b": 0.3207,
+      "mean_diff": -0.003386862314908692,
+      "sd_diff": 0.17856559844483602,
+      "n_used": 10000
+    },
+    {
+      "a": "structure: pLDDT, cleft and topology",
+      "b": "ESM-2 650M, length-residualized",
+      "p_a_beats_b": 0.3435,
+      "mean_diff": 0.033928486914960504,
+      "sd_diff": 0.1503302984833265,
+      "n_used": 10000
+    },
+    {
+      "a": "structure: pLDDT, cleft and topology",
+      "b": "ESM-2 650M, family-residualized",
+      "p_a_beats_b": 0.3444,
+      "mean_diff": 0.05989129728220471,
+      "sd_diff": 0.11567612817559125,
+      "n_used": 10000
+    },
+    {
+      "a": "structure: pLDDT, cleft and topology",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.3372,
+      "mean_diff": 0.028902406319994974,
+      "sd_diff": 0.1536545878240079,
+      "n_used": 10000
+    },
+    {
+      "a": "structure: pLDDT, cleft and topology",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.3401,
+      "mean_diff": 0.033783552449549975,
+      "sd_diff": 0.14938481768417064,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M mean-pooled",
+      "b": "ESM-2 650M, length-residualized",
+      "p_a_beats_b": 0.3599,
+      "mean_diff": 0.0373153492298692,
+      "sd_diff": 0.06341983759039535,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M mean-pooled",
+      "b": "ESM-2 650M, family-residualized",
+      "p_a_beats_b": 0.3655,
+      "mean_diff": 0.0632781595971134,
+      "sd_diff": 0.12239934951535494,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M mean-pooled",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.3584,
+      "mean_diff": 0.03228926863490367,
+      "sd_diff": 0.05568838344611972,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M mean-pooled",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.3596,
+      "mean_diff": 0.03717041476445867,
+      "sd_diff": 0.06326271128191087,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M, length-residualized",
+      "b": "ESM-2 650M, family-residualized",
+      "p_a_beats_b": 0.1911,
+      "mean_diff": 0.025962810367244207,
+      "sd_diff": 0.09110442559350965,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M, length-residualized",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.0954,
+      "mean_diff": -0.005026080594965523,
+      "sd_diff": 0.038970002508300086,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M, length-residualized",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.1162,
+      "mean_diff": -0.00014493446541052437,
+      "sd_diff": 0.036790165768893913,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M, family-residualized",
+      "b": "ESM-2 650M, catalytic-core pooled",
+      "p_a_beats_b": 0.0465,
+      "mean_diff": -0.03098889096220973,
+      "sd_diff": 0.09595538405040004,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M, family-residualized",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.0467,
+      "mean_diff": -0.026107744832654725,
+      "sd_diff": 0.09081779542777099,
+      "n_used": 10000
+    },
+    {
+      "a": "ESM-2 650M, catalytic-core pooled",
+      "b": "ESM-2, attention-weighted core pooling",
+      "p_a_beats_b": 0.1755,
+      "mean_diff": 0.004881146129554999,
+      "sd_diff": 0.017365031417539017,
+      "n_used": 10000
+    }
+  ],
+  "minimum_resolvable_difference": 0.3419454659170472,
+  "motif_missing": [
+    "FuRT-Cas1-RT",
+    "ROSE-CRISPR-RT",
+    "CHLRE",
+    "Line1-RT",
+    "Ngaro-RT",
+    "Ty1B-RT",
+    "Ec48-RT"
+  ]
+}
