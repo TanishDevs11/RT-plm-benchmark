@@ -259,8 +259,35 @@ comparable to the dishonest one.
 | ProtT5-XL-U50 | NOT RUN | `transformers` and `sentencepiece` unavailable in this environment |
 | Inverse folding, ESM-IF or ProteinMPNN | NOT RUN | not installed; ESM-IF needs a geometric stack with no Python 3.14 wheels |
 | Zero-shot ESM-1v masked marginals | NOT RUN | about 30000 forward passes of a 650M model on a CPU-only torch |
+| ESM-1v mean-pooled | NOT RUN | host memory. The first attempt was terminated mid-download by the host memory reaper. At the retry the machine had 2.1 GB of 16.9 GB available with no jobs of this project running, against roughly 2.6 GB resident for the model weights plus a 2.5 GB download. Rerunnable with `make embeddings` when memory frees; the cache is keyed by model so the other four are not recomputed. |
 
 No blocked row was given an estimated, interpolated, or literature-quoted score.
+ESM-1v is the one blocked row that is purely a resource constraint rather than a
+missing dependency, so it is the first thing to rerun on a machine with more
+memory or a GPU. Its absence costs one row of the scale series and does not bear
+on any conclusion, because ESM-2 at four scales already spans that question and
+every one of those rows has a negative margin.
+
+## Would more data help? Yes, measurably
+
+`bench/scale_projection.py` resamples the observed 57 RTs up to a target size and
+recomputes the two quantities that limit this benchmark. It assumes new enzymes
+resemble the current ones, which is optimistic, so these are best-case figures.
+
+| n | Kish ESS | Bootstrap CI width | Noise null mean | Noise null p95 |
+| --- | --- | --- | --- | --- |
+| 57 | 11.34 | 0.2017 | 0.8624 | 0.9061 |
+| 100 | 24.89 | 0.1269 | 0.7192 | 0.7621 |
+| 200 | 44.05 | 0.0915 | 0.5794 | 0.6216 |
+
+This is the clearest argument in the repository for collecting more data rather
+than building better models. Going from 57 to 200 enzymes roughly quadruples the
+effective sample size, more than halves the interval width, and drops what a
+30-parameter search can manufacture from noise from 0.86 to 0.58. The null falls
+faster than any modelling change moved the score. At n=200 the null is still 0.58,
+though, which is above every honest result measured here, so even a quadrupled
+panel would not rescue this metric on its own. Both the panel and the metric need
+work, and the metric is the cheaper of the two to fix.
 
 ## Conclusions
 
@@ -290,10 +317,13 @@ none of those.
 ## Reproducing
 
 ```
-make reproduce
+python reproduce.py
 ```
 
 Retrains everything from `data/` and reads no stored result. Seed 42 throughout.
+`make reproduce` runs the same sequence, but the Makefile is untested: `make` is
+not installed on the machine these results were produced on, so `reproduce.py` is
+the entry point that has actually been exercised.
 
 Environment used for every number in this document: Python 3.14.2 on Windows 11,
 numpy 2.4.2, scipy 1.17.1, pandas 3.0.1, scikit-learn 1.8.0, matplotlib 3.10.8,

@@ -1,8 +1,14 @@
 # Progress record
 
-**Date: 2026-09-29.** Snapshot of what has been measured, what is still running,
-and what is blocked. Every number here came from a script in this repository and
-can be regenerated. Nothing is estimated.
+**Started 2026-09-29, completed 2026-09-30.** Execution record of what was
+measured, what is blocked, and what changed along the way. Every number here came
+from a script in this repository and can be regenerated. Nothing is estimated.
+`WRITEUP.md` carries the authoritative results and their interpretation; this file
+is the log of how they were produced.
+
+All phases are complete. The baseline table below was corrected after the join
+defect described near the end of this document, and the trained rows differ from
+what an earlier snapshot of this file recorded.
 
 ## Phase status
 
@@ -13,9 +19,9 @@ can be regenerated. Nothing is estimated.
 | 2. Nested LOFO protocol | complete, 6 of 6 tests pass |
 | 3. Search-capacity null | complete, pushed |
 | 4. Baseline ladder | complete, rerun after the join defect fix |
-| 5. Representation benchmark | 10 of 10 representations measured; paired bootstrap still running |
-| 6. Scale projection and data expansion scoping | scoping written; projection script ready, not yet run |
-| 7. Write-up | scaffolding, licence, CI and Makefile pushed; final report pending |
+| 5. Representation benchmark | complete, 10 representations, 45 paired comparisons |
+| 6. Scale projection and data expansion scoping | complete |
+| 7. Write-up | complete |
 
 ## Leakage audit
 
@@ -70,18 +76,24 @@ baseline in this repository, and fifty reach the submitted score.
 | 1. protein_length_aa, no training | 0.4416 | 0.5102 | 0.3893 | reference |
 | 4. 3-mer cosine to nearest training active | 0.4576 | 0.5309 | 0.4021 | yes |
 | 5. family prior by nearest training family | 0.4160 | 0.4304 | 0.4025 | no |
-| 8b. handcrafted + RandomForest | 0.5072 | 0.7810 | 0.3755 | yes |
-| 8a. handcrafted + ExtraTrees | 0.1522 | 0.6830 | 0.0856 | no |
+| 8b. handcrafted + RandomForest | 0.4284 | 0.7810 | 0.3755 | no |
+| 8a. handcrafted + ExtraTrees | 0.1802 | 0.6830 | 0.0856 | no |
 | 2. negative protein_length_aa | 0.0000 | 0.3128 | 0.0000 | no |
 | 3. amino acid composition PC1 | 0.0000 | 0.4595 | 0.0000 | no |
 | 9. handcrafted + logistic regression | 0.0000 | 0.6427 | 0.0000 | no |
 | 10. raw ESM-2 mean-pooled + logistic regression | 0.0000 | 0.2877 | 0.0000 | no |
 
-Values above are from the pre-fix run for rows 1 to 5, which do not use the
-repaired features; the trained rows are being recomputed. Several rows score
-exactly zero because weighted Spearman floors at zero. Rows 8a and 9 separate
-actives well, at PR-AUC 0.68 and 0.64, yet score near zero because they misrank the
-high-efficiency enzymes. That is a real property of the metric, not a bug.
+All rows are from the post-fix run. Repairing the topology join moved
+RandomForest from 0.5072 down to 0.4284, below the length baseline, because the
+earlier higher score had been obtained while training on nine entirely missing
+columns. Several rows score exactly zero because weighted Spearman floors at zero.
+Rows 8a and 9 separate actives well, at PR-AUC 0.68 and 0.64, yet score near zero
+because they misrank the high-efficiency enzymes. That is a real property of the
+metric, not a bug.
+
+Rerunning the ladder changed only the `seconds` field in
+`baseline_ladder.json`; every CLS, PR-AUC, interval, null and margin reproduced
+exactly, which is the determinism guarantee working.
 
 ## Representation benchmark
 
@@ -124,7 +136,20 @@ further defects are recorded there: `Line1-RT` has no predicted structure, and
 | ProtT5-XL-U50 | NOT RUN | `transformers` and `sentencepiece` not installed |
 | Inverse folding, ESM-IF or ProteinMPNN | NOT RUN | not installed; no Python 3.14 geometric stack wheels |
 | Zero-shot ESM-1v masked marginals | NOT RUN | roughly 30000 forward passes of a 650M model on CPU only |
-| ESM-1v mean-pooled | pending | extraction interrupted by the host memory reaper; retry queued |
+| ESM-1v mean-pooled | NOT RUN | host memory. First attempt terminated mid-download by the memory reaper; at retry the machine had 2.1 GB of 16.9 GB available with none of this project's jobs running, against roughly 2.6 GB resident for the weights plus a 2.5 GB download. Rerunnable with `python reproduce.py` when memory frees. |
+
+## Execution notes
+
+The host terminates background work under memory pressure. This interrupted the
+null sweep once, the ESM-1v extraction twice, and the representation stage during a
+verification rerun (SIGTERM, exit 143). No interruption corrupted a result,
+because each script writes its outputs only at the end, so a killed run leaves the
+previous good outputs in place. The rule that emerged is to run one heavy stage at
+a time and never in parallel.
+
+`make` is not installed on this machine, so the Makefile could not be exercised
+here. `reproduce.py` is the entry point that has actually been run, and it drives
+the same sequence.
 
 ## Environment
 

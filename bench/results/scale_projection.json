@@ -1,0 +1,33 @@
+{
+  "seed": 42,
+  "note": "Projections resample the observed 57 RTs with replacement, so they assume new data is drawn from the same family and efficiency distribution. A genuinely broader panel would be more heterogeneous, so these are best-case figures.",
+  "rows": [
+    {
+      "n": 57,
+      "kish_ess": 11.337707274551516,
+      "ci_width": 0.20167168955975878,
+      "median_cls": 0.8257983937965381,
+      "null_mean": 0.8624113975922958,
+      "null_p95": 0.9061438622761867,
+      "null_repeats": 8
+    },
+    {
+      "n": 100,
+      "kish_ess": 24.890006906459515,
+      "ci_width": 0.1268855785038333,
+      "median_cls": 0.8558748602777142,
+      "null_mean": 0.719170546143725,
+      "null_p95": 0.7621284003731186,
+      "null_repeats": 8
+    },
+    {
+      "n": 200,
+      "kish_ess": 44.050560448002464,
+      "ci_width": 0.09148663090501474,
+      "median_cls": 0.8501029893513055,
+      "null_mean": 0.5793549230593119,
+      "null_p95": 0.6216007966296264,
+      "null_repeats": 8
+    }
+  ]
+}

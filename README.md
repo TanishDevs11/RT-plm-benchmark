@@ -85,13 +85,19 @@ variants became the **most** lineage-predictive of all at 0.818 family accuracy.
 ## Reproducing
 
 ```
-make reproduce
+python reproduce.py          # everything, several hours
+python reproduce.py --quick  # skips the null sweep and embedding extraction
 ```
 
 Retrains everything from `data/` to predictions and reads no stored result. Seed 42
 throughout; every script prints its seed and library versions.
 
-Other targets: `make audit`, `make test`, `make null`, `make bench`, `make scale`.
+`make reproduce` runs the same sequence and there are also `make audit`, `make
+test`, `make null`, `make bench` and `make scale` targets. The Makefile is provided
+untested: `make` is not installed on the machine these results were produced on, so
+`reproduce.py` is the entry point that has actually been exercised here. Run the
+heavy stages one at a time; extraction loads a 650M parameter model, and on a
+memory constrained machine parallel stages get terminated.
 
 Environment for every number reported: Python 3.14.2 on Windows 11, numpy 2.4.2,
 scipy 1.17.1, pandas 3.0.1, scikit-learn 1.8.0, matplotlib 3.10.8, torch
