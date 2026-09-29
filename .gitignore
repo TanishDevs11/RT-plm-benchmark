@@ -1,12 +1,21 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
 
 # Jupyter checkpoints
-# OS files
-# Python cache
-# Virtual environment
-*.pyc
-.DS_Store
 .ipynb_checkpoints/
-Thumbs.dbbench/cache/per_residue_*.npz
-__pycache__/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Regenerable bulk caches: rebuilt by `make embeddings`
+bench/cache/per_residue_*.npz
 bench/cache/attention_*.npz
-venv/
+
+# Run logs
+bench/results/*_log.txt
+bench/cache_extract_log.txt
