@@ -29,121 +29,6 @@
           "A_Ec48-RT"
         ]
       },
-      "checkpoint_file": "esm2_t6_8M_UR50D.pt",
-      "checkpoint_sha256": "46f002a9870c9bdecd0ea887acb1f9a38a6b561e8f8bf8a6990b679b9d31b928",
-      "files": [
-        {
-          "dtype": "float16",
-          "file": "embeddings/esm2_8M/taskA_mean_full_layer6.npz",
-          "ids_file": "embeddings/esm2_8M/taskA_mean_full_layer6_ids.txt",
-          "ids_sha256": "e29651d3ebc3d8b535bcff3c3f658d1e20de3a9e0fb90135ed210e2b7eca3dae",
-          "layer": 6,
-          "layer_role": "final",
-          "model": "esm2_t6_8M_UR50D",
-          "model_size": "8M",
-          "n_layers": 6,
-          "pooling": "mean_full",
-          "rows_excluded": 0,
-          "sha256": "0c2d66b72ef955815f30b1fc71b2ed9fd43284330cf23873b7118f4770a16083",
-          "shape": [
-            57,
-            320
-          ],
-          "task": "A"
-        },
-        {
-          "dtype": "float16",
-          "file": "embeddings/esm2_8M/taskA_catalytic_core_layer6.npz",
-          "ids_file": "embeddings/esm2_8M/taskA_catalytic_core_layer6_ids.txt",
-          "ids_sha256": "28618502c5351133d15c15782043cb49dfeeb8e4f8a5ed2a039773c25837e1e6",
-          "layer": 6,
-          "layer_role": "final",
-          "model": "esm2_t6_8M_UR50D",
-          "model_size": "8M",
-          "n_layers": 6,
-          "pooling": "catalytic_core",
-          "rows_excluded": 7,
-          "sha256": "09111504765aee9052c80ff988fe380f8e27c2cd9727126f33df0e629fff4675",
-          "shape": [
-            50,
-            320
-          ],
-          "task": "A"
-        },
-        {
-          "dtype": "float16",
-          "file": "embeddings/esm2_8M/taskA_mean_full_layer3.npz",
-          "ids_file": "embeddings/esm2_8M/taskA_mean_full_layer3_ids.txt",
-          "ids_sha256": "e29651d3ebc3d8b535bcff3c3f658d1e20de3a9e0fb90135ed210e2b7eca3dae",
-          "layer": 3,
-          "layer_role": "mid_depth",
-          "model": "esm2_t6_8M_UR50D",
-          "model_size": "8M",
-          "n_layers": 6,
-          "pooling": "mean_full",
-          "rows_excluded": 0,
-          "sha256": "8a4ffd18839e6eec4d0c4f6dc4125d185047c08364be0fa94af100f462a03f2e",
-          "shape": [
-            57,
-            320
-          ],
-          "task": "A"
-        },
-        {
-          "dtype": "float16",
-          "file": "embeddings/esm2_8M/taskA_catalytic_core_layer3.npz",
-          "ids_file": "embeddings/esm2_8M/taskA_catalytic_core_layer3_ids.txt",
-          "ids_sha256": "28618502c5351133d15c15782043cb49dfeeb8e4f8a5ed2a039773c25837e1e6",
-          "layer": 3,
-          "layer_role": "mid_depth",
-          "model": "esm2_t6_8M_UR50D",
-          "model_size": "8M",
-          "n_layers": 6,
-          "pooling": "catalytic_core",
-          "rows_excluded": 7,
-          "sha256": "aeccd4e7bcf8aefdbd0728d493c11b4d9c31166bd16e9fe0a170cb6373dcbc10",
-          "shape": [
-            50,
-            320
-          ],
-          "task": "A"
-        }
-      ],
-      "generated_utc": "2026-09-30T16:41:02+00:00",
-      "inference_seconds": 3.96,
-      "layers_used": {
-        "final": 6,
-        "mid_depth": 3
-      },
-      "load_seconds": 0.19,
-      "model": "esm2_t6_8M_UR50D",
-      "model_size": "8M",
-      "n_layers": 6,
-      "n_sequences": 57,
-      "n_sequences_with_motif": 50,
-      "peak_rss_mib": 490.6,
-      "seconds_per_sequence": 0.069,
-      "task": "A",
-      "windows_file": "embeddings/esm2_8M/taskA_catalytic_core_windows.json",
-      "zero_shot_files": [
-        "embeddings/esm2_8M/taskA_zeroshot_singlepass_loglik.csv"
-      ]
-    },
-    {
-      "catalytic_core_rule": {
-        "motif": "Y.DD",
-        "residues_after_motif": 140,
-        "residues_before_motif": 200,
-        "sequences_without_motif": [
-          "A_FuRT-Cas1-RT",
-          "A_ROSE-CRISPR-RT",
-          "A_CHLRE",
-          "A_Line1-RT",
-          "A_Ngaro-RT",
-          "A_Ty1B-RT",
-          "A_Ec48-RT"
-        ]
-      },
       "checkpoint_file": "esm2_t12_35M_UR50D.pt",
       "checkpoint_sha256": "7f21e80e61d16a71735163ef555d3009afb0c98da74c48e29df08606973cc55e",
       "files": [
@@ -472,6 +357,122 @@
       "windows_file": "embeddings/esm2_650M/taskA_catalytic_core_windows.json",
       "zero_shot_files": [
         "embeddings/esm2_650M/taskA_zeroshot_singlepass_loglik.csv"
+      ]
+    },
+    {
+      "catalytic_core_rule": {
+        "motif": "Y.DD",
+        "residues_after_motif": 140,
+        "residues_before_motif": 200,
+        "sequences_without_motif": [
+          "A_FuRT-Cas1-RT",
+          "A_ROSE-CRISPR-RT",
+          "A_CHLRE",
+          "A_Line1-RT",
+          "A_Ngaro-RT",
+          "A_Ty1B-RT",
+          "A_Ec48-RT"
+        ]
+      },
+      "checkpoint_file": "esm2_t6_8M_UR50D.pt",
+      "checkpoint_sha256": "46f002a9870c9bdecd0ea887acb1f9a38a6b561e8f8bf8a6990b679b9d31b928",
+      "files": [
+        {
+          "dtype": "float16",
+          "file": "embeddings/esm2_8M/taskA_mean_full_layer6.npz",
+          "ids_file": "embeddings/esm2_8M/taskA_mean_full_layer6_ids.txt",
+          "ids_sha256": "e29651d3ebc3d8b535bcff3c3f658d1e20de3a9e0fb90135ed210e2b7eca3dae",
+          "layer": 6,
+          "layer_role": "final",
+          "model": "esm2_t6_8M_UR50D",
+          "model_size": "8M",
+          "n_layers": 6,
+          "pooling": "mean_full",
+          "rows_excluded": 0,
+          "sha256": "0c2d66b72ef955815f30b1fc71b2ed9fd43284330cf23873b7118f4770a16083",
+          "shape": [
+            57,
+            320
+          ],
+          "task": "A"
+        },
+        {
+          "dtype": "float16",
+          "file": "embeddings/esm2_8M/taskA_catalytic_core_layer6.npz",
+          "ids_file": "embeddings/esm2_8M/taskA_catalytic_core_layer6_ids.txt",
+          "ids_sha256": "28618502c5351133d15c15782043cb49dfeeb8e4f8a5ed2a039773c25837e1e6",
+          "layer": 6,
+          "layer_role": "final",
+          "model": "esm2_t6_8M_UR50D",
+          "model_size": "8M",
+          "n_layers": 6,
+          "pooling": "catalytic_core",
+          "rows_excluded": 7,
+          "sha256": "09111504765aee9052c80ff988fe380f8e27c2cd9727126f33df0e629fff4675",
+          "shape": [
+            50,
+            320
+          ],
+          "task": "A"
+        },
+        {
+          "dtype": "float16",
+          "file": "embeddings/esm2_8M/taskA_mean_full_layer3.npz",
+          "ids_file": "embeddings/esm2_8M/taskA_mean_full_layer3_ids.txt",
+          "ids_sha256": "e29651d3ebc3d8b535bcff3c3f658d1e20de3a9e0fb90135ed210e2b7eca3dae",
+          "layer": 3,
+          "layer_role": "mid_depth",
+          "model": "esm2_t6_8M_UR50D",
+          "model_size": "8M",
+          "n_layers": 6,
+          "pooling": "mean_full",
+          "rows_excluded": 0,
+          "sha256": "8a4ffd18839e6eec4d0c4f6dc4125d185047c08364be0fa94af100f462a03f2e",
+          "shape": [
+            57,
+            320
+          ],
+          "task": "A"
+        },
+        {
+          "dtype": "float16",
+          "file": "embeddings/esm2_8M/taskA_catalytic_core_layer3.npz",
+          "ids_file": "embeddings/esm2_8M/taskA_catalytic_core_layer3_ids.txt",
+          "ids_sha256": "28618502c5351133d15c15782043cb49dfeeb8e4f8a5ed2a039773c25837e1e6",
+          "layer": 3,
+          "layer_role": "mid_depth",
+          "model": "esm2_t6_8M_UR50D",
+          "model_size": "8M",
+          "n_layers": 6,
+          "pooling": "catalytic_core",
+          "rows_excluded": 7,
+          "sha256": "aeccd4e7bcf8aefdbd0728d493c11b4d9c31166bd16e9fe0a170cb6373dcbc10",
+          "shape": [
+            50,
+            320
+          ],
+          "task": "A"
+        }
+      ],
+      "generated_utc": "2026-09-30T17:20:20+00:00",
+      "inference_seconds": 3.87,
+      "layers_used": {
+        "final": 6,
+        "mid_depth": 3
+      },
+      "load_seconds": 0.12,
+      "model": "esm2_t6_8M_UR50D",
+      "model_size": "8M",
+      "n_layers": 6,
+      "n_sequences": 57,
+      "n_sequences_with_motif": 50,
+      "peak_rss_mib": 491.5,
+      "seconds_per_sequence": 0.068,
+      "task": "A",
+      "windows_file": "embeddings/esm2_8M/taskA_catalytic_core_windows.json",
+      "zero_shot_files": [
+        "embeddings/esm2_8M/taskA_zeroshot_singlepass_loglik.csv",
+        "embeddings/esm2_8M/taskA_zeroshot_masked_marginal_pll.csv"
       ]
     }
   ],

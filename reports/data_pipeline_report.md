@@ -299,11 +299,35 @@ per-residue mean are recorded.
 
 These are named `singlepass` and not pseudo-log-likelihood, because that is what they are. The
 per-residue values improve monotonically with scale, at -0.4304, -0.3722, and -0.3125 for 8M,
-35M and 150M, but sit near -0.3, which corresponds to roughly 74 percent probability on the
-residue actually present. That is the signature of the model reading the token it is scoring
-rather than predicting it. A true masked-marginal pseudo-log-likelihood is being computed for the
-8M model so that the size of this inflation is measured rather than assumed; the 650M model is
-not viable for it on this CPU, needing roughly 25,000 forward passes.
+35M and 150M, which is the expected ordering for larger models being better language models. But
+they sit near -0.3 to -0.4, and that is the signature of the model reading the token it is
+scoring rather than predicting it.
+
+**The size of that inflation has now been measured rather than assumed.** The true
+masked-marginal pseudo-log-likelihood was computed for the 8M model, one forward pass per
+position, 57 sequences, in `taskA_zeroshot_masked_marginal_pll.csv`.
+
+| quantity, 8M model, per residue | mean | min | max | implied mean probability on the observed residue |
+| --- | --- | --- | --- | --- |
+| single-pass, unmasked | -0.4304 | -0.5055 | -0.3589 | 0.650 |
+| masked marginal | -2.4145 | -2.7500 | -1.9185 | 0.089 |
+
+The single-pass quantity is inflated by **1.98 nats per residue**, which is a factor of about
+7.3 in probability terms: 65 percent against 9 percent. More important than the level, the two
+quantities **do not rank the sequences the same way**: Spearman between them is 0.7538 and
+Pearson 0.7479. So a study that reported the single-pass number as an ESM pseudo-log-likelihood
+baseline would not merely be reporting an optimistic version of the same ordering, it would be
+reporting a different ordering.
+
+Both correlate negatively with sequence length, at -0.4507 for the masked marginal and -0.3863
+for the single pass, so longer reverse transcriptases are per residue harder for the model.
+
+Cost, which is why this was done for one model and not four: the masked-marginal run took 2082
+seconds of wall clock for the 8M model against 4.0 seconds for the single-pass pass over the
+same sequences. The 650M model is roughly 35 times slower per forward pass, which would put it
+near 20 hours on this CPU. So the masked-marginal quantity is reported for 8M only, and the
+correlation above is what licenses treating the single-pass numbers at the larger scales as a
+rough proxy while naming them accurately.
 
 ### Compute cost per representation
 
