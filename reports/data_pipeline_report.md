@@ -332,14 +332,22 @@ as an exact substring. Results are in `tasks/taskA_crossfamily/raw/accession_res
 
 | status | count |
 | --- | --- |
-| resolved, exactly one entry contains the sequence | 22 |
+| resolved, exactly one entry contains the sequence | 27 |
 | resolved but ambiguous, several entries contain it | 6 |
-| unresolved | 23 |
-| service error, retryable | 6 |
+| unresolved | 24 |
+| service error | 0, after two retry passes |
 
-So 28 of 57 rows now carry a verified accession plus version and the exact residue range of the
-excision, 17 of them from reviewed entries. Examples: `Tf1-RT` at `Q01910.1` residues 349 to 853;
-`Line1-RT` at `O00370.1` residues 238 to 1061; `BAEMV-RT` at `P10272.2` residues 660 to 1348.
+So **33 of 57 rows** now carry a verified accession plus version and the exact residue range of
+the excision, 18 of them from reviewed entries. Examples: `Tf1-RT` at `Q01910.1` residues 349 to
+853; `Line1-RT` at `O00370.1` residues 238 to 1061; `BAEMV-RT` at `P10272.2` residues 660 to
+1348; `CHLRE` at `P11660.1` residues 2 to 368.
+
+The resolver has a resume path, because a service error is a statement about the network rather
+than about the sequence: rows that failed that way are retried while settled verdicts are kept.
+Two passes cleared all of them, so the remaining 24 are genuine non-matches rather than
+infrastructure noise. Most are plausible: retron and metagenomic RTs are often absent from
+UniProtKB, and a sequence carrying an isolate difference or a hand edit will not match as an
+exact substring, which is the correct outcome rather than a failure.
 
 **An accession found this way is a verifiable provenance anchor, not proof of what the original
 authors used.** Supplementary Table S1 of Doman et al. remains the authority, and these values
@@ -382,8 +390,9 @@ Stated plainly, because the temptation to read an inventory as a result is real.
 2. **Task B reference substitution content.** Supplementary Sequence 1. Needed before any variant
    sequence is constructed, even though the frame is settled.
 3. **Task A provenance.** Supplementary Table S1 of Doman et al. 2023, for accessions and the
-   14-class assignment. 28 of 57 accessions are resolved independently; 29 remain, 6 of them
-   only because of retryable service errors.
+   14-class assignment. 33 of 57 accessions are resolved independently and verified by exact
+   substring containment; 24 remain, and after two retry passes none of those is a service
+   error, so they are genuine non-matches needing the source table or a human.
 4. **The Task A label's own definition.** The inherited table holds one scalar per enzyme. If
    Figure 1C or Table S1 reports efficiency at more than one locus, that scalar is an aggregate
    computed by an unknown rule. This is the most important unresolved fact about the Task A
