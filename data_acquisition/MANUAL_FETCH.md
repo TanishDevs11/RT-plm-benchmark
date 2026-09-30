@@ -24,6 +24,38 @@ what question each one answers. This file says only where to get it and where to
    `python schemas/task_schema.py --help` is not the tool for this; the Phase 2 parsers print
    each input's SHA256 on every run, and those hashes are what `PROVENANCE.md` records.
 
+## Priority 1 status, 2026-09-30: not publicly available
+
+**Do not spend time hunting for the bioRxiv supplementary bundle. It is not there.**
+
+Four independent routes were tried and agree:
+
+1. the supplementary-material page returns HTTP 200 and lists no files at all
+2. the full-text page offers downloads for Supplementary Figures 1 to 4 only, and those are
+   already pages 20 to 23 of the main PDF, which is committed to `raw/`
+3. Europe PMC, which systematically harvests preprint supplementary material, indexes the
+   preprint as `PPR1272147` with `hasSuppl = N`, and its `supplementaryFiles` endpoint 404s
+4. every legacy bioRxiv adjunct and highwire filestream path returns 404 or non-200
+
+Tables S1 to S7 and Supplementary Sequences 1 to 5 are referenced throughout the preprint but
+were not deposited with version 1. The preprint also carries no Data Availability statement of
+any kind, which is consistent with this.
+
+**The only remaining routes** are the corresponding author, a later version of the preprint, or
+the peer-reviewed publication when it appears. Task B therefore has no labels and is reported
+as blocked, which per the brief is a line in the report rather than something to work around.
+
+What a request to the authors needs to ask for, specifically:
+
+- Supplementary Sequence 1, the PE2dR construct protein sequence, to settle whether the parent
+  RT retains D200N, T306K, W313F, T330P
+- Tables S6 and S7, the per-variant normalized editing efficiencies for libraries L1 and L2
+- whether the scaling to the interval from -1 to 1 was computed within each library or across
+  both, which determines how the stretch-held-out result must be reported
+
+The original checklist for this source is kept below, in case a later version deposits the
+files.
+
 ## Priority 1: Task B, the saturated mutagenesis screen
 
 This is the priority source in the brief, and item 1 on the blocking list. The reference

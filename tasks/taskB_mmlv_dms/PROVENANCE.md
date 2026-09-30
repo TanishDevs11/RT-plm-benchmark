@@ -46,7 +46,10 @@ are referenced in the text but are not in this file.
 | attempted | legacy bioRxiv adjunct paths `content/biorxiv/early/2026/07/07/.../DC1/embed/media-1.{pdf,xlsx}` return HTTP 404 |
 | attempted | `highwire/filestream/5608071/field_highwire_adjunct_files/{0..4}/media-{1..5}.{pdf,xlsx,docx,zip}`, 20 combinations, all non-200 |
 | attempted | the `.full-text` view returned HTTP 429, at which point probing stopped rather than continuing to hammer the host |
-| outcome | **not obtainable by script.** A human must retrieve it, or it is unobtainable and Task B is reported as blocked |
+| attempted | Europe PMC, which systematically harvests preprint supplementary material, indexes the preprint as `PPR1272147` and reports `hasSuppl = N` and `isOpenAccess = N`; its `supplementaryFiles` endpoint returns HTTP 404 |
+| attempted | the `.full-text` view, retried after the rate limit cleared, returns HTTP 200 and offers downloads for Supplementary Figures 1 to 4 only, which are already pages 20 to 23 of the main PDF; it offers no table and no sequence file |
+| outcome | **not publicly deposited.** Four independent routes agree: the supplementary-material page lists nothing, the full-text page offers only the four supplementary figures, Europe PMC reports no supplementary material, and every legacy adjunct path returns 404. Tables S1 to S7 and Supplementary Sequences 1 to 5 are referenced by the preprint but were not deposited with version 1 |
+| only remaining route | the corresponding author, or a later version of the preprint, or the peer-reviewed publication when it appears |
 | note | the preprint has no Data Availability and no Code Availability statement; the strings "availability", "Data availability", and "Data Availability" do not appear anywhere in the PDF |
 
 ### B3, UniProt, obtained

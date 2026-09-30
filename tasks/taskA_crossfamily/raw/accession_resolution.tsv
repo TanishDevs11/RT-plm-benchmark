@@ -1,4 +1,58 @@
 rt_name	sequence_len	status	accession	sequence_version	reference_accession	parent_start	parent_end	reviewed	n_candidates	n_exact_matches	candidates_truncated	note
+A.platensis-Cas1-RT	278	unresolved							3	0	no	both probes matched 3 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+CRISPRRT2-RT	319	unresolved							0	0	no	no accession contains both probes; probe hit counts 0,0
+FuRT-Cas1-RT	240	unresolved							0	0	no	no accession contains both probes; probe hit counts 0,0
+Med-CasRT	311	resolved	F2K1V9	1	F2K1V9.1	287	597	no	1	1	no	
+ROSE-CRISPR-RT	446	resolved	A7NMI6	1	A7NMI6.1	2	447	no	1	1	no	
+Er-RT	426	service_error							0	0	no	peptide search did not return for at least one probe
+GroupII_CLA-RT	306	service_error							0	0	no	peptide search did not return for at least one probe
+Gs-RT	419	service_error							0	0	no	peptide search did not return for at least one probe
+LtrA-RT	598	service_error							0	0	no	peptide search did not return for at least one probe
+Tel4c-RT	561	service_error							0	0	no	peptide search did not return for at least one probe
+Bel-RT	464	service_error							0	0	no	peptide search did not return for at least one probe
+CHLRE	367	service_error							0	0	no	peptide search did not return for at least one probe
+FoxC-RT	526	service_error							0	0	no	peptide search did not return for at least one probe
+Gate-RT	523	resolved	O76925	1	O76925.1	685	1207	no	1	1	no	
+Gypsy-RT	469	unresolved							1	0	no	both probes matched 1 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+Line1-RT	824	resolved	O00370	1	O00370.1	238	1061	yes	6	1	no	
+Ngaro-RT	459	unresolved							0	0	no	no accession contains both probes; probe hit counts 0,0
 Tf1-RT	505	resolved	Q01910	1	Q01910.1	349	853	yes	1	1	no	
-Ec48-RT	407	unresolved							0	0	no	no accession contains both probes; probe hit counts 0,0
-MMLV-RT	677	service_error							0	0	no	peptide search did not return for at least one probe
+Ty1B-RT	653	resolved	P47098	3	P47098.3	1103	1755	yes	9	1	no	
+Ty3-RT	478	unresolved							2	0	no	both probes matched 2 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+Tyrosinerecomb-RT	607	unresolved							1	0	no	both probes matched 1 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+Abi-RT	315	unresolved							0	0	no	no accession contains both probes; probe hit counts 0,0
+CaMV-RT	682	unresolved							5	0	no	both probes matched 5 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+DRG2-RT	336	service_error							0	0	no	peptide search did not return for at least one probe
+Drg-RT	327	service_error							0	0	no	peptide search did not return for at least one probe
+TCDM_11122-RT	608	service_error							0	0	no	peptide search did not return for at least one probe
+Ec48-RT	407	service_error							0	0	no	peptide search did not return for at least one probe
+Ec67-RT	586	service_error							0	0	no	peptide search did not return for at least one probe
+Mx65-RT	426	service_error							0	0	no	peptide search did not return for at least one probe
+Ne144-RT	513	service_error							0	0	no	peptide search did not return for at least one probe
+Retron86-RT	319	resolved	P23070	1	P23070.1	2	320	yes	1	1	no	
+Rs-RT	292	resolved	E3I077	1	E3I077.1	2	293	no	1	1	no	
+SEN1-RT	310	resolved_ambiguous	A0A0F6B915	1	A0A0F6B915.1	2	311	no	4	3	no	3 entries contain this sequence exactly: A0A0F6B915,A0A0H3NHP7,Q9FDH6
+Sau1-RT	479	resolved_ambiguous	Q08Y90	1	Q08Y90.1	2	480	no	3	2	no	2 entries contain this sequence exactly: Q08Y90,Q53751
+Thr-RT	604	resolved	Q9MEH5	2	Q9MEH5.2	2	605	no	1	1	no	
+Vc95-RT	314	resolved_ambiguous	P0DV94	1	P0DV94.1	2	315	yes	2	2	no	2 entries contain this sequence exactly: P0DV94,Q9KPI3
+Vp96-RT	312	unresolved							0	0	no	no accession contains both probes; probe hit counts 0,0
+retronE,coli-RT	333	unresolved							1	0	no	both probes matched 1 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+ASLV-RT	572	unresolved							53	0	yes	both probes matched 53 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+AVIRE-RT	693	resolved	P03360	2	P03360.2	80	772	yes	2	1	no	
+BAEMV-RT	689	resolved	P10272	2	P10272.2	660	1348	yes	1	1	no	
+BLV-RT	584	resolved	P25059	2	P25059.2	546	1129	yes	30	1	no	
+FENV1-RT	667	resolved	P31792	1	P31792.1	1	667	yes	9	1	no	
+GALV-RT	678	resolved	P21414	2	P21414.2	642	1319	yes	2	1	no	
+HIVpol+MMLVRNaseH_RT	625	unresolved							88	0	yes	both probes matched 88 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+IPMA-RT	573	resolved	P11368	1	P11368.1	12	584	yes	1	1	no	
+KORV-RT	678	unresolved							4	0	no	both probes matched 4 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+MMLV-RT	677	unresolved							25	0	no	both probes matched 25 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+MMTV-RT	604	unresolved							2	0	no	both probes matched 2 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+MPMV-RT	641	unresolved							1	0	no	both probes matched 1 entries, but the full sequence is an exact substring of none of them; the inherited sequence may carry an isolate difference or a hand edit
+PERV-RT	667	resolved_ambiguous	F6KPU2	1	F6KPU2.1	71	737	no	13	4	no	4 entries contain this sequence exactly: F6KPU2,F8S324,O73505,Q9Q1X5
+POL11ERV-RT	571	resolved	Q9UQG0	2	Q9UQG0.2	16	586	yes	8	1	no	
+RSVSB-RT	626	service_error							0	0	no	peptide search did not return for at least one probe
+SRV2-RT	641	service_error							0	0	no	peptide search did not return for at least one probe
+WDSV-RT	684	service_error							0	0	no	peptide search did not return for at least one probe
+WMSV-RT	672	service_error							0	0	no	peptide search did not return for at least one probe
+AFY36037.1-RT	226	service_error							0	0	no	peptide search did not return for at least one probe
