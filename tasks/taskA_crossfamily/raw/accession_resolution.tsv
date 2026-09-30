@@ -1,0 +1,4 @@
+rt_name	sequence_len	status	accession	sequence_version	reference_accession	parent_start	parent_end	reviewed	n_candidates	n_exact_matches	candidates_truncated	note
+Tf1-RT	505	resolved	Q01910	1	Q01910.1	349	853	yes	1	1	no	
+Ec48-RT	407	unresolved							0	0	no	no accession contains both probes; probe hit counts 0,0
+MMLV-RT	677	service_error							0	0	no	peptide search did not return for at least one probe

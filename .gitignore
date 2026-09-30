@@ -19,3 +19,6 @@ bench/cache/attention_*.npz
 # Run logs
 bench/results/*_log.txt
 bench/cache_extract_log.txt
+
+# Local tool caches, not artifacts
+.uniprot_cache/
