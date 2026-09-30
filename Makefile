@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: all audit test null bench figures reproduce clean
+.PHONY: all audit test null bench figures reproduce clean \n	pipeline-test pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
 
 all: audit test null bench
 
@@ -45,3 +45,44 @@ reproduce: test selfcheck audit embeddings
 
 clean:
 	rm -rf bench/cache/per_residue_*.npz bench/cache/attention_*.npz
+
+# ---------------------------------------------------------------------------
+# Multi-task data and representation pipeline (Phases 0 to 6).
+# Separate from the targets above, which drive the earlier single-task benchmark.
+# ---------------------------------------------------------------------------
+
+## Every pipeline guard: schema, reference resolver, frozen splits, input preflight
+pipeline-test:
+	$(PYTHON) schemas/test_task_schema.py
+	$(PYTHON) data_acquisition/test_resolve_mmlv_reference.py
+	$(PYTHON) curation/test_splits.py
+	$(PYTHON) data_acquisition/check_inputs.py --allow-missing
+
+## Resolve the Task B reference frame against UniProt and assert every anchor
+pipeline-reference:
+	$(PYTHON) data_acquisition/resolve_mmlv_reference.py --fetch
+
+## Resolve Task A accessions from sequence; needs network, and is resumable
+pipeline-accessions:
+	$(PYTHON) data_acquisition/resolve_taskA_accessions.py
+
+## Identity clustering. Needs MMseqs2: set MMSEQS_BIN to its path.
+pipeline-clusters:
+	$(PYTHON) curation/cluster_redundancy.py --mmseqs $(MMSEQS_BIN)
+
+## Rewrite the frozen split definition files
+pipeline-splits:
+	$(PYTHON) curation/define_splits.py
+
+## Handcrafted feature matrices and missingness masks
+pipeline-features:
+	$(PYTHON) features/build_handcrafted.py
+
+## ESM-2 representations at four scales, then verify every manifest checksum
+pipeline-embeddings:
+	$(PYTHON) embeddings/build_embeddings.py
+	$(PYTHON) embeddings/verify_manifest.py
+
+## The whole pipeline, in dependency order. Stops early if a guard fails.
+pipeline: pipeline-test pipeline-reference pipeline-splits pipeline-features pipeline-embeddings
+	@echo "Pipeline complete. Reports in reports/. No model has been trained."

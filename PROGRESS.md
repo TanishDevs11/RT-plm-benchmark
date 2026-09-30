@@ -157,3 +157,16 @@ Python 3.14.2, Windows 11, torch 2.11.0+cpu with zero CUDA devices, 16.9 GB RAM.
 numpy 2.4.2, scipy 1.17.1, pandas 3.0.1, scikit-learn 1.8.0, fair-esm 2.0.0.
 Seed 42 throughout. Heavy jobs must run one at a time: the host terminates
 background work under memory pressure, which has already interrupted two runs.
+
+## Continuation, 2026-09-30: the multi-task rebuild
+
+From 2026-09-30 the work continues as a multi-task benchmark, and its dated execution
+record lives in [reports/progress_2026-09-30.md](reports/progress_2026-09-30.md) rather
+than here, so that this file stays the record of the single-task benchmark it describes.
+
+The state of the new pipeline, its sources, and everything it does not establish are in
+[reports/data_pipeline_report.md](reports/data_pipeline_report.md). The short version: the
+cross-family panel becomes Task A, a within-protein variant effect task becomes Task B,
+labels are never merged across assays, and no model has been trained in that pipeline.
+
+`make pipeline-test` runs its guards; `make pipeline` runs the whole chain.
