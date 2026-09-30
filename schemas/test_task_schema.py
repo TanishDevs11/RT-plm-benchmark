@@ -186,6 +186,41 @@ def test_rejects_assay_belonging_to_another_task() -> None:
     assert "label_assay.wrong_task" in rules(report), report.render()
 
 
+def test_evolved_cohort_rejects_the_cross_family_assay() -> None:
+    """The A2 ruling, enforced.
+
+    PE6-class editors were selected for activity and measured in their own scaffolds, so
+    their efficiency is not the survey's efficiency even though both are a percentage. If
+    the two shared an assay term they could be stacked, which is the merge the G1 ruling
+    decided against.
+    """
+    row = task_a_row("A2_pe6a", SEQ_ONE)
+    row["task"] = "A2"
+    row["editor_name"] = "PE6a"
+    row["derived_from_rt"] = "Ec48-RT"
+    report = validate_task_table(frame([row]), task="A2")
+    assert "label_assay.wrong_task" in rules(report), report.render()
+
+    row["label_assay"] = "prime_editing_pct_HEK293T_evolved_editor"
+    report = validate_task_table(frame([row]), task="A2")
+    assert report.ok, report.render()
+
+
+def test_evolved_cohort_cannot_be_stacked_onto_task_a() -> None:
+    task_a = frame([task_a_row("A_one", SEQ_ONE)])
+    evolved = task_a_row("A2_pe6a", SEQ_TWO)
+    evolved["task"] = "A2"
+    evolved["label_assay"] = "prime_editing_pct_HEK293T_evolved_editor"
+    evolved["editor_name"] = "PE6a"
+    evolved["derived_from_rt"] = "Ec48-RT"
+    raised = False
+    try:
+        safe_concat([task_a, frame([evolved])], ["taskA", "taskA2"])
+    except SchemaViolation:
+        raised = True
+    assert raised, "the evolved cohort was stacked onto Task A"
+
+
 def test_rejects_assay_outside_the_vocabulary() -> None:
     row = task_a_row("A_one", SEQ_ONE)
     row["label_assay"] = "editing_activity"

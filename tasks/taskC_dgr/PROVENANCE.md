@@ -2,44 +2,42 @@
 
 Task identifier: `C_dgr`
 Directory: `tasks/taskC_dgr/`
-Status: **NOT ACQUIRED**
+Status: **BLOCKED, NOT BUILT**
 
-This file is the per-task provenance record. It is written before any data is parsed and
-is filled in as acquisition proceeds, so that the gap between what was planned and what
-was obtained stays visible rather than being quietly closed.
+Blocked by the Gate G1 ruling of 2026-09-30. `raw/` is empty and stays empty. No
+`curated.csv` exists and none is planned.
 
-Nothing has been downloaded into `raw/` yet. The intended sources, their DOIs, the exact
-supplementary tables, the expected row counts, and the licence position are set out in
-`reports/acquisition_plan.md`, and the files a human must fetch by hand are listed in
-`data_acquisition/MANUAL_FETCH.md`. Acquisition is gated on human endorsement of that
-plan (Gate G1).
+## Why
 
-## Sources
+No cross-RT DGR activity panel is established to exist. The quantitative DGR literature
+concentrates on a single enzyme, the BPP-1 bRT, and reports properties of that one element,
+for example that roughly 30 percent of template adenines are converted during mutagenic
+homing. A property of one element is not a comparative activity measurement across enzymes.
 
-One block per source, to be completed at acquisition time. A source that was attempted
-and failed keeps its block, with the reason recorded, rather than being deleted.
+Two candidates were seen in search results but not opened, and are recorded here for a human
+who wants to check them:
 
-| field | value |
-| --- | --- |
-| citation | pending |
-| DOI | pending |
-| file as downloaded | pending |
-| SHA256 of that file | pending |
-| access date | pending |
-| sequences taken from | pending |
-| activity values taken from | pending |
-| label definition, verbatim | pending |
-| label units | pending |
-| reference accession plus version | pending |
-| full length or truncation | pending |
-| licence and redistribution status | pending |
-| committed to `raw/` or fetch script only | pending |
+1. A high-throughput analysis of a reconstituted DGR. From its title it varies the element
+   and its target rather than the reverse transcriptase, which would make it a within-element
+   variant-effect set, so Task-B-shaped rather than Task-C-shaped.
+2. A 2026 Nature Biotechnology paper on DGRs for programmable targeted hypermutagenesis.
 
-## Reconciliation
+If either turns out to carry a usable panel it gets its own task, in its own units.
 
-To be written by the parser run, not by hand: rows expected, rows parsed, rows dropped,
-and the reason for every drop.
+## What was done to establish this
 
-## Open questions
+Literature search in this session, recorded in `reports/acquisition_plan.md` with the network
+log. No primary source was opened, so the finding is that no suitable panel was *found*, which
+is a weaker claim than proving none exists. It is stated that way deliberately.
 
-Recorded here as they arise, and carried into `reports/data_pipeline_report.md`.
+## What would change this
+
+A single publication measuring a usable number of distinct reverse transcriptases under one
+assay, with the label definition stated in the paper's own units. If one is identified, this
+directory is opened as its own task, with its own split and its own reported metric, and it is
+never pooled with Task A, Task B, or another Task C set.
+
+## Status in the report
+
+This negative finding is carried into `reports/data_pipeline_report.md` as a gap, not as a
+workaround. Per the brief, negative results and gaps are preserved.

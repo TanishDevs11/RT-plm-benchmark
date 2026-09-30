@@ -7,10 +7,16 @@ path in this repository that produces one.
 | directory | task id | assay | label |
 | --- | --- | --- | --- |
 | `taskA_crossfamily/` | `A` | prime editing in HEK293T, percent precise edits | `pe_efficiency_pct` |
+| `taskA2_evolved/` | `A2` | prime editing in HEK293T, evolved editors in their own scaffolds | percent, evaluation only |
 | `taskB_mmlv_dms/` | `B` | prime editing, normalized so wild type is zero | normalized variant effect |
 | `taskC_retron/` | `C_retron` | msDNA production or recombineering efficiency | per source |
 | `taskC_dgr/` | `C_dgr` | mutagenic homing or adenine mutagenesis rate | per source |
 | `taskC_retroviral_invitro/` | `C_retroviral` | in vitro polymerase kinetics | per source |
+
+Status as of 2026-09-30: Task A is inherited but blocked on accessions; Task B has its
+reference frame resolved but is blocked on activity values; `taskA2_evolved/` was opened by
+the Gate G1 ruling and is not yet acquired; all three Task C directories are blocked, with
+the reason in each `PROVENANCE.md`.
 
 Each directory holds:
 

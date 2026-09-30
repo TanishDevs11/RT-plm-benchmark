@@ -65,12 +65,13 @@ CORE_COLUMNS: tuple[str, ...] = (
 # Every task identifier the schema recognises. A table declaring anything else is
 # rejected, because a new task needs a deliberate edit here and a note in its own
 # PROVENANCE.md, not an ad hoc string in a CSV.
-TASKS: tuple[str, ...] = ("A", "B", "C_retron", "C_dgr", "C_retroviral")
+TASKS: tuple[str, ...] = ("A", "A2", "B", "C_retron", "C_dgr", "C_retroviral")
 
 # Row identifiers carry their task, so that a stray row cannot be mistaken for one
 # belonging to another table once the file is out of its directory.
 ID_PREFIX: dict[str, str] = {
     "A": "A_",
+    "A2": "A2_",
     "B": "B_",
     "C_retron": "Cretron_",
     "C_dgr": "Cdgr_",
@@ -83,6 +84,12 @@ ASSAY_VOCABULARY: dict[str, str] = {
     "prime_editing_pct_HEK293T": (
         "Percent precise prime editing at a defined genomic locus in HEK293T, read out "
         "by amplicon sequencing."
+    ),
+    "prime_editing_pct_HEK293T_evolved_editor": (
+        "Percent precise prime editing in HEK293T for an evolved or engineered prime "
+        "editor, measured in that editor's own scaffold, guide format, and locus panel. "
+        "Kept distinct from prime_editing_pct_HEK293T because the enzymes carrying it were "
+        "selected for activity and were not measured in the cross-family survey's context."
     ),
     "prime_editing_normalized_wt_centred": (
         "Prime editing efficiency rescaled so that the wild-type parent is zero, in the "
@@ -107,6 +114,7 @@ ASSAY_VOCABULARY: dict[str, str] = {
 # in the prime editing task.
 ASSAY_BY_TASK: dict[str, frozenset[str]] = {
     "A": frozenset({"prime_editing_pct_HEK293T"}),
+    "A2": frozenset({"prime_editing_pct_HEK293T_evolved_editor"}),
     "B": frozenset({"prime_editing_normalized_wt_centred"}),
     "C_retron": frozenset({"retron_msdna_production", "retron_recombineering_efficiency"}),
     "C_dgr": frozenset({"dgr_mutagenic_homing", "dgr_adenine_mutagenesis_rate"}),
@@ -124,6 +132,12 @@ ASSAY_BY_TASK: dict[str, frozenset[str]] = {
 # matters enough to declare here.
 EXTRA_COLUMNS_BY_TASK: dict[str, tuple[str, ...]] = {
     "A": (),
+    # The evolved cohort records which published editor each row is, and which Task A
+    # enzyme it descends from. The descent is recorded as text rather than as parent_id,
+    # because parent_id must resolve inside its own table and a cross-task pointer would
+    # be the beginning of a merge. Phase 3 identity clustering is what surfaces the
+    # near-duplicate relationship between this cohort and Task A.
+    "A2": ("editor_name", "derived_from_rt"),
     # The two M-MLV RT sub-libraries were screened separately, so anything downstream
     # that handles batch structure or defines a stretch-held-out split needs this.
     "B": ("library_stretch",),

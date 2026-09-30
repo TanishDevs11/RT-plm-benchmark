@@ -407,3 +407,107 @@ its own task with the study's own units, and it is still never pooled.
 No activity value. No sequence. No performance number. No model. Nothing here has been
 downloaded, and the correct response to a source that turns out to be unobtainable is a line
 in `reports/data_pipeline_report.md`, not a workaround.
+
+---
+
+# Gate G1 outcome, 2026-09-30
+
+Endorsed by Tanish. Three rulings, all recorded here as decisions taken rather than
+defaults assumed.
+
+## Ruling 1: PE6 becomes its own cohort
+
+The recommendation was accepted. `tasks/taskA2_evolved/` is opened with task identifier
+`A2`, its own assay term `prime_editing_pct_HEK293T_evolved_editor`, and evaluation-only
+use. The existing Task A 7-fold leave-one-family-out definition is untouched, so the audit
+comparison holds. The schema now refuses to stack `A2` onto `A`, and
+`test_evolved_cohort_cannot_be_stacked_onto_task_a` proves it.
+
+## Ruling 2: all three Task C sets are blocked
+
+The recommendation was accepted. `tasks/taskC_retron/`, `tasks/taskC_dgr/`, and
+`tasks/taskC_retroviral_invitro/` each carry a `PROVENANCE.md` with status BLOCKED, NOT
+BUILT, the reason, and the condition that would change it. `raw/` stays empty in all three.
+The finding is stated as "no suitable panel was found", which is weaker than "none exists",
+because a literature search is not a proof of absence.
+
+The benchmark is therefore Task A, Task A2, and Task B. That is where the scientific
+contrast lives in any case: a cross-family transfer task against a within-protein variant
+effect task, which is the comparison the deliverable rests on.
+
+## Ruling 3: automated fetch attempted first
+
+Attempted, with a partial result.
+
+### Obtained
+
+| file | task | licence | note |
+| --- | --- | --- | --- |
+| `preprint.pdf` | B | CC-BY-NC 4.0, read from the PDF's own per-page banner | committed to `raw/`; 23 pages; includes Supplementary Figures 1 to 4 |
+| `uniprot_P03355.fasta` | B | CC-BY 4.0 | `SV=5`; the canonical RT frame |
+
+The licence question for Task B is therefore closed: CC-BY-NC 4.0 permits redistribution
+with attribution for non-commercial use, so the preprint is committed rather than only
+scripted.
+
+### Not obtained, and the attempts made
+
+Supplementary Sequence 1 and Tables S5 to S7 are referenced in the preprint but are not in
+the main PDF and were not reachable:
+
+- the supplementary-material page returns HTTP 200, but its static HTML lists no files,
+  contains no `media-N` reference, and contains no occurrence of the word "supplement" in
+  its rendered text, which means the listing is either client-rendered or absent
+- legacy bioRxiv adjunct paths under `.../DC1/embed/media-1.{pdf,xlsx}` return HTTP 404
+- `highwire/filestream/5608071/field_highwire_adjunct_files/{0..4}/media-{1..5}.{pdf,xlsx,docx,zip}`,
+  twenty combinations, all non-200
+- the `.full-text` view returned HTTP 429, at which point probing stopped rather than
+  continuing to hammer the host
+- Addgene 132775 was tried as a fallback for the substitution question: the sequences page
+  returns HTTP 200 but embeds no sequence in static HTML, and the GenBank file derived from
+  the map image path returned HTTP 404
+
+Cell's Table S1 was not attempted, because an Elsevier supplementary file behind the
+article interstitial is not scriptable and the checklist already says so.
+
+**So the manual fetch list shrinks but does not disappear.** What a human still has to get
+is in `data_acquisition/MANUAL_FETCH.md`: the bioRxiv supplementary bundle, and Cell Table
+S1.
+
+## Blocking item 1 is now closed
+
+The Task B numbering conflict is resolved, and the resolution is recorded in
+`tasks/taskB_mmlv_dms/PROVENANCE.md` with a reproducing script at
+`data_acquisition/resolve_mmlv_reference.py`.
+
+Nine anchors, being every residue identity the preprint states, all match UniProt P03355
+`SV=5` under the hypothesis that the preprint's RT residue 1 is the first residue of the
+annotated p80 chain at Gag-Pol 660. A second confirmation, independent of the anchors,
+reproduces the preprint's own two arithmetic statements exactly: retained residues 1 to 498
+give 1494 base pairs as stated, and 179 deleted of 677 gives 0.2644, which rounds to the
+stated 26.4 percent.
+
+671 against 677 dissolves. Both are right about different things: the preprint's RT extends
+six residues past the annotated p80 chain, to Gag-Pol 1336, into the region UniProt assigns
+to integrase, and those residues are `IENSSP`, ending in the P the preprint calls P677.
+There is no offset in either source.
+
+One question on the reference stays open: whether PE2dR retains PE2's RT substitutions.
+L603 falls inside the deleted region, so the reference is most likely a tetramutant
+truncation carrying D200N, T306K, W313F, T330P and not L603W. That is a derivation, and the
+strings "pentamutant", "D200N", and "L603W" appear nowhere in the PDF, so the file written
+is named `reference_candidate_unconfirmed.fasta`, carries no substitutions, and no parser
+may consume it.
+
+## Revised blocking list
+
+1. ~~The Task B reference frame.~~ Closed.
+2. Task B substitution content, from Supplementary Sequence 1.
+3. Task B activity values, from Tables S6 and S7. Without these Task B has no labels.
+4. Task A accessions and DOIs for all 57 rows.
+5. The Task A label's provenance: which locus, or which aggregation rule.
+6. The 57 against 59 and 21 against 20 reconciliations.
+7. Task A2 efficiencies, from the same Cell supplementary set.
+
+Items 2, 3, 4, 5, 6, and 7 all depend on files a human must download. Phases 2 and 3 cannot
+complete until then.

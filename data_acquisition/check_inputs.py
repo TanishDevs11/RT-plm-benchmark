@@ -123,13 +123,26 @@ EXPECTED: tuple[ExpectedInput, ...] = (
         source="https://www.cell.com/cell/pdf/S0092-8674(23)00854-1.pdf",
     ),
     ExpectedInput(
-        path="tasks/taskA_crossfamily/raw/uniprot_P03355.fasta",
-        task="A",
-        purpose="M-MLV Gag-Pol, whose p80 chain at 660 to 1330 is the canonical RT frame of reference",
-        required=False,
-        priority=2,
+        path="tasks/taskB_mmlv_dms/raw/uniprot_P03355.fasta",
+        task="B",
+        purpose=(
+            "M-MLV Gag-Pol; its p80 chain at 660 to 1330 is the canonical RT frame, and the "
+            "frame resolution in resolve_mmlv_reference.py is checked against it"
+        ),
+        required=True,
+        priority=1,
         source="https://rest.uniprot.org/uniprotkb/P03355.fasta",
         automatable=True,
+    ),
+    # Task A2, opened by the Gate G1 ruling. Its values sit in the same Cell supplementary
+    # set as Task A, so it needs a ruling and a parse rather than a separate download.
+    ExpectedInput(
+        path="tasks/taskA2_evolved/raw/doman2023_pe6_efficiencies.xlsx",
+        task="A2",
+        purpose="PE6a to PE6g measured efficiencies; may be the same file as Task A Table S1",
+        required=False,
+        priority=3,
+        source="https://www.cell.com/cell/fulltext/S0092-8674(23)00854-1#supplementaryMaterial",
     ),
 )
 
