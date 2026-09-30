@@ -448,3 +448,29 @@ Stated plainly, because the temptation to read an inventory as a result is real.
     python embeddings/verify_manifest.py
 
 Every script prints the shared seed, its library versions, and the SHA256 of each input.
+
+---
+
+## 9. Definition of done, audited honestly
+
+The brief lists ten conditions. Six are met, three are met only as far as the missing data
+allows, and one cannot be met at all. Marking any of the last four as done would be false.
+
+| # | condition | state |
+| --- | --- | --- |
+| 1 | every `curated.csv` passes the validator, and the validator rejects a merged two-task table in a test | **partly.** The validator and its 21 tests exist, and `test_rejects_merged_two_task_table` proves the merge is blocked both through the helper and when a frame is merged by hand. But **no `curated.csv` exists** for any task, so the first half is untested against real data. |
+| 2 | every row has a source DOI and a reference accession | **not met.** No curated rows exist. Of the 57 inherited Task A sequences, 33 now have a verified accession plus version and 24 do not; none has a `source_doi` recorded in a task table yet. |
+| 3 | the Task B parser halts on any wild-type residue mismatch, proved by a test feeding a deliberately wrong reference | **partly.** The residue-assertion component exists as `resolve_mmlv_reference.py` and 6 tests prove it halts rather than adapts, including a positive control that deletes six residues ahead of the RT start, which is what a wrong frame actually looks like. The parser itself does not exist, because Task B has no activity values to parse. |
+| 4 | identity clusters at 90, 70 and 50 percent for every task | **met for every task that has sequences**, which is Task A alone. Task A2 and Task B have none, and the three Task C tasks were ruled out. Cross-task clustering is therefore unmeasured. |
+| 5 | splits are frozen files, not runtime code, and the leaky split is labelled as such in the file itself | **met.** Task A leave-one-family-out and all three Task B regimes are files. The leaky split is labelled in its filename and in a `leaky` column and a `never_report` column on every row. `curation/test_splits.py` also includes a positive control that it really does leak. |
+| 6 | feature matrices contain no scaled, imputed or selected values | **met.** Raw values only, with a missingness mask; the only missing values are the 12 structural columns of the one row with no structure. |
+| 7 | `embeddings/MANIFEST.json` is complete and every checksum verifies | **met.** 4 runs, 24 artifacts, 0 problems, checked by `embeddings/verify_manifest.py`, which also confirms every matrix's row order against its task table. |
+| 8 | ESM-1v zero-shot scores exist for every Task B variant | **cannot be met.** There are no Task B variants, because the activity values are not publicly deposited. The ESM-1v checkpoint locally available is also a partial download. |
+| 9 | `reports/data_pipeline_report.md` is written and no performance number appears in it | **met.** Verified by scanning for CLS, correlation, AUC and accuracy terms. |
+| 10 | no model has been trained | **met.** |
+
+The honest summary is that the pipeline is complete in every part that does not require a file
+nobody can currently obtain, and that the one irreducible gap, Task B's labels, is the gap that
+removes the benchmark's central contrast. That is a finding about the state of the field's data
+availability, not a shortfall in the pipeline, and per the brief it is preserved here rather than
+worked around.
