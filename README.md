@@ -6,6 +6,53 @@ The original holds the submitted competition artifact and is **not modified by t
 work**: no push, no branch, no tag, no pull request. It was cloned once at commit
 `c1620706685d1a29e874031abd62d88a763d241e`, tagged here as `provenance`.
 
+## Status: the benchmark is being rebuilt as a multi-task benchmark
+
+Everything below the next three sections is the completed single-task work on the 57-RT
+cross-family panel, and it stands. Since 2026-09-30 that panel is being rebuilt as **Task A**
+of a multi-task benchmark, so that a cross-family transfer task can be contrasted against a
+within-protein variant effect task. Progress is in
+[reports/progress_2026-09-30.md](reports/progress_2026-09-30.md).
+
+| task | what it measures | assay | status |
+| --- | --- | --- | --- |
+| **A** cross-family | does a representation transfer across RT families | prime editing, percent precise edits, HEK293T | 57 sequences; blocked on accessions |
+| **A2** evolved | transfer onto selected variants, evaluation only | prime editing, evolved editors in their own scaffolds | not acquired |
+| **B** M-MLV DMS | within-protein variant effect | prime editing, normalized so wild type is zero | reference frame resolved; **blocked, labels not publicly deposited** |
+| C retron, C DGR, C retroviral | breadth of representation analysis | msDNA, mutagenic homing, in vitro kinetics | **blocked**, no usable panel found |
+
+The scientific point of running A and B together is the contrast. Protein language models are
+known to do well on within-protein variant effect prediction, and the audit in this repository
+measured raw ESM-2 embeddings at CLS 0.3052 on the cross-family task, below what protein length
+alone achieves with no training. If that contrast holds under a clean protocol, the finding is
+that these representations capture lineage and local mutational tolerance but not cross-family
+functional transfer.
+
+## Why labels are never merged across assays
+
+**There is no merged label column in this repository, and no code path that produces one.**
+
+Activity measurements in the reverse transcriptase literature are not commensurable. Prime
+editing efficiency in HEK293T, retron msDNA production, DGR adenine mutagenesis rate, and in
+vitro nucleotide incorporation are four different physical quantities in four different units.
+Assay type is also almost perfectly confounded with RT family, because each family was
+characterised by a different subfield using its own readout.
+
+So if those numbers shared a column, a leave-one-family-out split would silently become a
+leave-one-assay-out split, and a model could score well by learning which publication a
+sequence came from rather than anything about catalysis. That is not a hypothetical: the audit
+already found that mean-pooled embeddings on this panel carry lineage signal.
+
+Each assay is therefore its own task, with its own label scale, its own split, and its own
+reported metric. This is enforced mechanically, not by convention. `schemas/task_schema.py`
+rejects a table carrying two tasks, rejects inconsistent units inside a task, and refuses to
+concatenate tables whose `label_units` or `label_assay` differ;
+`schemas/test_task_schema.py` proves the refusal holds both through the helper and when a
+merged frame is built by hand with plain pandas.
+
+Cross-task comparison is still the point of the exercise. It happens in explicitly labelled
+representation-analysis code that keeps the label columns separate, never by stacking rows.
+
 ## Headline result
 
 **No method tested beats using `protein_length_aa` as the score with no training at
@@ -80,6 +127,13 @@ variants became the **most** lineage-predictive of all at 0.818 family accuracy.
 | `bench/results/` | All measured results |
 | `legacy_leaky/` | Quarantined inherited code. Not usable in any results table |
 | `legacy_submission/` | The submitted artifact, as the object of study |
+| `tasks/` | One directory per task: `raw/`, `curated.csv`, `splits/`, `PROVENANCE.md` |
+| `schemas/task_schema.py` | The shared row schema and the validator that forbids merged labels |
+| `data_acquisition/` | Source parsers, the manual fetch checklist, the reference resolver |
+| `curation/` | Identity clustering and the frozen split definitions |
+| `features/handcrafted/` | Feature matrices, missingness masks, and the feature dictionary |
+| `embeddings/` | Representation matrices, zero-shot scores, and `MANIFEST.json` |
+| `reports/` | Acquisition plan, split design, progress records |
 | `PROGRESS.md` | Dated execution record |
 
 ## Reproducing
