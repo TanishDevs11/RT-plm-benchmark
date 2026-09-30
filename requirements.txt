@@ -21,3 +21,6 @@ shap>=0.45
 umap-learn>=0.5.6
 qiskit>=1.2
 qiskit-machine-learning>=0.8
+
+# Phase 4 structural features (secondary structure from backbone geometry)
+pydssp>=0.9
