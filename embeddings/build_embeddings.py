@@ -347,7 +347,11 @@ def run_model(
         for identifier in no_motif:
             print("    " + identifier)
 
-    manifest.setdefault("runs", []).append(
+    # Replace any earlier entry for this model and task rather than appending, so a rerun
+    # updates the manifest instead of leaving two contradictory records of the same files.
+    runs = manifest.setdefault("runs", [])
+    runs[:] = [r for r in runs if not (r.get("model") == model_name and r.get("task") == task)]
+    runs.append(
         {
             "model": model_name,
             "model_size": size,
@@ -370,7 +374,10 @@ def run_model(
             "peak_rss_mib": round(peak, 1) if peak else None,
             "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "files": entries,
-            "zero_shot_files": [pll_path.relative_to(REPO_ROOT).as_posix()],
+            "zero_shot_files": (
+                [pll_path.relative_to(REPO_ROOT).as_posix()]
+                + ([masked_path.relative_to(REPO_ROOT).as_posix()] if masked_pll else [])
+            ),
             "windows_file": windows_path.relative_to(REPO_ROOT).as_posix(),
         }
     )

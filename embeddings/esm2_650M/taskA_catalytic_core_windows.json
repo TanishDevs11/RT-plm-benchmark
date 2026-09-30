@@ -1,0 +1,380 @@
+{
+  "A_A.platensis-Cas1-RT": {
+    "end_1based": 278,
+    "found": true,
+    "length": 268,
+    "note": "YXDD at residue 211",
+    "start_1based": 11
+  },
+  "A_AFY36037.1-RT": {
+    "end_1based": 226,
+    "found": true,
+    "length": 226,
+    "note": "YXDD at residue 105",
+    "start_1based": 1
+  },
+  "A_ASLV-RT": {
+    "end_1based": 319,
+    "found": true,
+    "length": 319,
+    "note": "YXDD at residue 180",
+    "start_1based": 1
+  },
+  "A_AVIRE-RT": {
+    "end_1based": 360,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 221",
+    "start_1based": 21
+  },
+  "A_Abi-RT": {
+    "end_1based": 315,
+    "found": true,
+    "length": 309,
+    "note": "YXDD at residue 207; 2 matches, first used",
+    "start_1based": 7
+  },
+  "A_BAEMV-RT": {
+    "end_1based": 358,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 219",
+    "start_1based": 19
+  },
+  "A_BLV-RT": {
+    "end_1based": 319,
+    "found": true,
+    "length": 319,
+    "note": "YXDD at residue 180",
+    "start_1based": 1
+  },
+  "A_Bel-RT": {
+    "end_1based": 295,
+    "found": true,
+    "length": 295,
+    "note": "YXDD at residue 156",
+    "start_1based": 1
+  },
+  "A_CHLRE": {
+    "found": false,
+    "reason": "no YXDD match"
+  },
+  "A_CRISPRRT2-RT": {
+    "end_1based": 319,
+    "found": true,
+    "length": 301,
+    "note": "YXDD at residue 219",
+    "start_1based": 19
+  },
+  "A_CaMV-RT": {
+    "end_1based": 539,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 400",
+    "start_1based": 200
+  },
+  "A_DRG2-RT": {
+    "end_1based": 336,
+    "found": true,
+    "length": 322,
+    "note": "YXDD at residue 215",
+    "start_1based": 15
+  },
+  "A_Drg-RT": {
+    "end_1based": 327,
+    "found": true,
+    "length": 316,
+    "note": "YXDD at residue 212",
+    "start_1based": 12
+  },
+  "A_Ec48-RT": {
+    "found": false,
+    "reason": "no YXDD match"
+  },
+  "A_Ec67-RT": {
+    "end_1based": 338,
+    "found": true,
+    "length": 338,
+    "note": "YXDD at residue 199",
+    "start_1based": 1
+  },
+  "A_Er-RT": {
+    "end_1based": 362,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 223",
+    "start_1based": 23
+  },
+  "A_FENV1-RT": {
+    "end_1based": 336,
+    "found": true,
+    "length": 336,
+    "note": "YXDD at residue 197",
+    "start_1based": 1
+  },
+  "A_FoxC-RT": {
+    "end_1based": 441,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 302",
+    "start_1based": 102
+  },
+  "A_FuRT-Cas1-RT": {
+    "found": false,
+    "reason": "no YXDD match"
+  },
+  "A_GALV-RT": {
+    "end_1based": 358,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 219",
+    "start_1based": 19
+  },
+  "A_Gate-RT": {
+    "end_1based": 379,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 240",
+    "start_1based": 40
+  },
+  "A_GroupII_CLA-RT": {
+    "end_1based": 306,
+    "found": true,
+    "length": 235,
+    "note": "YXDD at residue 272",
+    "start_1based": 72
+  },
+  "A_Gs-RT": {
+    "end_1based": 359,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 220",
+    "start_1based": 20
+  },
+  "A_Gypsy-RT": {
+    "end_1based": 308,
+    "found": true,
+    "length": 308,
+    "note": "YXDD at residue 169",
+    "start_1based": 1
+  },
+  "A_HIVpol+MMLVRNaseH_RT": {
+    "end_1based": 322,
+    "found": true,
+    "length": 322,
+    "note": "YXDD at residue 183",
+    "start_1based": 1
+  },
+  "A_IPMA-RT": {
+    "end_1based": 318,
+    "found": true,
+    "length": 318,
+    "note": "YXDD at residue 179",
+    "start_1based": 1
+  },
+  "A_KORV-RT": {
+    "end_1based": 358,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 219",
+    "start_1based": 19
+  },
+  "A_Line1-RT": {
+    "found": false,
+    "reason": "no YXDD match"
+  },
+  "A_LtrA-RT": {
+    "end_1based": 444,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 305",
+    "start_1based": 105
+  },
+  "A_MMLV-RT": {
+    "end_1based": 361,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 222",
+    "start_1based": 22
+  },
+  "A_MMTV-RT": {
+    "end_1based": 350,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 211",
+    "start_1based": 11
+  },
+  "A_MPMV-RT": {
+    "end_1based": 386,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 247",
+    "start_1based": 47
+  },
+  "A_Med-CasRT": {
+    "end_1based": 311,
+    "found": true,
+    "length": 268,
+    "note": "YXDD at residue 244",
+    "start_1based": 44
+  },
+  "A_Mx65-RT": {
+    "end_1based": 426,
+    "found": true,
+    "length": 315,
+    "note": "YXDD at residue 312",
+    "start_1based": 112
+  },
+  "A_Ne144-RT": {
+    "end_1based": 478,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 339",
+    "start_1based": 139
+  },
+  "A_Ngaro-RT": {
+    "found": false,
+    "reason": "no YXDD match"
+  },
+  "A_PERV-RT": {
+    "end_1based": 360,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 221",
+    "start_1based": 21
+  },
+  "A_POL11ERV-RT": {
+    "end_1based": 319,
+    "found": true,
+    "length": 319,
+    "note": "YXDD at residue 180",
+    "start_1based": 1
+  },
+  "A_ROSE-CRISPR-RT": {
+    "found": false,
+    "reason": "no YXDD match"
+  },
+  "A_RSVSB-RT": {
+    "end_1based": 374,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 235",
+    "start_1based": 35
+  },
+  "A_Retron86-RT": {
+    "end_1based": 319,
+    "found": true,
+    "length": 319,
+    "note": "YXDD at residue 194",
+    "start_1based": 1
+  },
+  "A_Rs-RT": {
+    "end_1based": 292,
+    "found": true,
+    "length": 262,
+    "note": "YXDD at residue 231",
+    "start_1based": 31
+  },
+  "A_SEN1-RT": {
+    "end_1based": 310,
+    "found": true,
+    "length": 310,
+    "note": "YXDD at residue 182",
+    "start_1based": 1
+  },
+  "A_SRV2-RT": {
+    "end_1based": 386,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 247",
+    "start_1based": 47
+  },
+  "A_Sau1-RT": {
+    "end_1based": 479,
+    "found": true,
+    "length": 339,
+    "note": "YXDD at residue 341",
+    "start_1based": 141
+  },
+  "A_TCDM_11122-RT": {
+    "end_1based": 449,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 310",
+    "start_1based": 110
+  },
+  "A_Tel4c-RT": {
+    "end_1based": 411,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 272",
+    "start_1based": 72
+  },
+  "A_Tf1-RT": {
+    "end_1based": 352,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 213",
+    "start_1based": 13
+  },
+  "A_Thr-RT": {
+    "end_1based": 554,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 415",
+    "start_1based": 215
+  },
+  "A_Ty1B-RT": {
+    "found": false,
+    "reason": "no YXDD match"
+  },
+  "A_Ty3-RT": {
+    "end_1based": 352,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 213",
+    "start_1based": 13
+  },
+  "A_Tyrosinerecomb-RT": {
+    "end_1based": 301,
+    "found": true,
+    "length": 301,
+    "note": "YXDD at residue 162",
+    "start_1based": 1
+  },
+  "A_Vc95-RT": {
+    "end_1based": 314,
+    "found": true,
+    "length": 314,
+    "note": "YXDD at residue 187",
+    "start_1based": 1
+  },
+  "A_Vp96-RT": {
+    "end_1based": 312,
+    "found": true,
+    "length": 312,
+    "note": "YXDD at residue 184",
+    "start_1based": 1
+  },
+  "A_WDSV-RT": {
+    "end_1based": 354,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 215",
+    "start_1based": 15
+  },
+  "A_WMSV-RT": {
+    "end_1based": 358,
+    "found": true,
+    "length": 340,
+    "note": "YXDD at residue 219",
+    "start_1based": 19
+  },
+  "A_retronE,coli-RT": {
+    "end_1based": 333,
+    "found": true,
+    "length": 331,
+    "note": "YXDD at residue 203",
+    "start_1based": 3
+  }
+}
