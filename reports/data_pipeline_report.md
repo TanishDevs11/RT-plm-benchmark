@@ -386,7 +386,12 @@ Stated plainly, because the temptation to read an inventory as a result is real.
 1. **Task B activity values.** Tables S6 and S7 are not publicly deposited. Without them Task B
    has no labels and the A-against-B contrast, which is the scientific point of the multi-task
    design, cannot be run. The only routes are the corresponding author, a later preprint version,
-   or the peer-reviewed publication.
+   or the peer-reviewed publication. Decided at Gate G3: request the files from the corresponding
+   author, with a draft at `data_acquisition/AUTHOR_REQUEST.md`, and let the modelling phase run
+   on Task A alone in the meantime with the missing contrast reported as pending rather than
+   absent. If there is no reply, that outcome is recorded here as the result of a documented
+   attempt. There is no acceptable substitute for the labels: a simulated or reconstructed deep
+   mutational scan would make every downstream number meaningless.
 2. **Task B reference substitution content.** Supplementary Sequence 1. Needed before any variant
    sequence is constructed, even though the frame is settled.
 3. **Task A provenance.** Supplementary Table S1 of Doman et al. 2023, for accessions and the

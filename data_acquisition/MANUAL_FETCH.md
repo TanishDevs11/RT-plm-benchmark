@@ -1,5 +1,21 @@
 # Manual fetch checklist
 
+## The one outstanding human action, as of Gate G3
+
+**Download Supplementary Table S1 of Doman et al. 2023 from Cell.** That single file closes four
+open items at once: accessions for the 24 Task A rows still unresolved, the paper's 14-class
+assignment, the per-locus efficiencies that decide whether the inherited single scalar per enzyme
+is an aggregate, and the 57-against-59 and 21-against-20 reconciliations. It also carries the
+Task A2 efficiencies, so no separate download is needed for that cohort.
+
+Details are under Priority 2 below.
+
+Everything else is either already obtained or is not publicly available. The Task B supplementary
+bundle falls in the second category; the route for it is
+[AUTHOR_REQUEST.md](AUTHOR_REQUEST.md), a drafted request to the corresponding author, decided at
+Gate G3.
+
+
 Files a human has to download, because they sit behind a publisher interstitial or a
 JavaScript page that a script cannot get through. Nothing here has been fetched yet.
 
