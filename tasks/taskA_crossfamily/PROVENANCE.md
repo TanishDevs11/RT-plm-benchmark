@@ -2,8 +2,11 @@
 
 Task identifier: `A`
 Directory: `tasks/taskA_crossfamily/`
-Status: **SOURCE ACQUIRED, NOT YET PARSED.** Awaiting the Gate G1 ruling on the sheet
-identification in `reports/tableS1_inventory.md`.
+Status: **PARSED AND CURATED.** Gate G1 was confirmed on 2026-10-02: block 1 of sheet
+`Table S1`, rows 6 to 118, 57 entries, 21 highlighted, is the assayed panel and the sole
+source for `curated.csv`; block 2's 486 entries are excluded from the benchmark entirely
+and retained only as provenance. Awaiting the Gate G2 ruling on
+`reports/reconciliation.md`.
 
 This file is the per-task provenance record. It is written before any data is parsed and
 is filled in as acquisition proceeds, so that the gap between what was planned and what
@@ -73,10 +76,26 @@ Recorded in full in `data_acquisition/fetch_doman_s1_attempts.json`. In summary:
 
 ## Reconciliation
 
-To be written by the parser run, not by hand: rows expected, rows parsed, rows dropped,
-and the reason for every drop. Not yet run; gated on G1.
+Written by the parser run. Full detail in `reports/reconciliation.md`.
 
-What the acquisition already establishes, before any parse:
+| quantity | value |
+| --- | --- |
+| rows expected, per the Gate G1 ruling | 57 |
+| rows parsed | 57 |
+| rows dropped | 0 |
+| rows from the excluded phylogenetic block | 0, asserted by the parser |
+| actives, from the green fill | 21 |
+| sequences byte-identical to the primary source | 57 of 57 |
+| accessions pinned exactly, with version and FASTA | 27 |
+| accessions left empty, with a recorded reason | 30 |
+| curated table | `curated.csv`, SHA256 `5e159976a37be07e797ad7048200a6a56fd1b0f396baff6e533f2c467e1b98dc` |
+
+Nothing was dropped and nothing was imputed. The parser asserts the block captions, the
+entry count, the highlight count and the index range before reading any data row, so a
+replaced or re-exported workbook halts the run rather than silently yielding a different
+table. `data_acquisition/test_parse_taskA.py` exercises each of those halts.
+
+What the acquisition established, before any parse:
 
 - Table S1's assayed block holds **57** entries, and their names are exactly the 57
   `rt_name` values in the inherited `data/rt_sequences.csv`, as sets.

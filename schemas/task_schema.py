@@ -131,7 +131,28 @@ ASSAY_BY_TASK: dict[str, frozenset[str]] = {
 # columns are a violation: a column that matters enough to compute is a column that
 # matters enough to declare here.
 EXTRA_COLUMNS_BY_TASK: dict[str, tuple[str, ...]] = {
-    "A": (),
+    # Task A's curated table carries the cross-family survey's own vocabulary alongside
+    # the core schema. `rt_name` is the laboratory label Table S1 uses and is what every
+    # split file, cluster file and feature matrix in this repository keys on. `active` and
+    # `pe_efficiency_pct` duplicate `label_binary` and `label_value` under the names the
+    # task brief specifies; the parser asserts the pairs agree, so the duplication is a
+    # checked invariant rather than two columns free to diverge. `efficiency_source_column`
+    # names which published panel the efficiency is attributed to, and carries the word
+    # UNVERIFIED, because Table S1 publishes no efficiency values at all.
+    # `sequence_sha256` is the identifier that actually pins a row, given that the source
+    # publishes no accessions.
+    "A": (
+        "rt_name",
+        "accession",
+        "accession_version",
+        "host_organism",
+        "active",
+        "pe_efficiency_pct",
+        "efficiency_source_column",
+        "table_s1_index",
+        "table_s1_name_row",
+        "sequence_sha256",
+    ),
     # The evolved cohort records which published editor each row is, and which Task A
     # enzyme it descends from. The descent is recorded as text rather than as parent_id,
     # because parent_id must resolve inside its own table and a cross-task pointer would
