@@ -103,6 +103,8 @@ pipeline-splits:
 ## Handcrafted feature matrices and missingness masks
 pipeline-features:
 	$(PYTHON) features/build_handcrafted.py
+	$(PYTHON) features/build_handcrafted_taskA.py
+	$(PYTHON) features/test_handcrafted_taskA.py
 
 ## ESM-2 representations at four scales, then verify every manifest checksum
 pipeline-embeddings:
