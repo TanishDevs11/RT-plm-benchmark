@@ -1,0 +1,27 @@
+{
+  "doi": "10.1016/j.cell.2023.07.039",
+  "pmc": "PMC10482982",
+  "access_date": "2026-10-02",
+  "attempts": [
+    {
+      "route": 1,
+      "label": "Europe PMC supplementaryFiles, no inline images",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles?includeInlineImage=false",
+      "status": 200,
+      "content_type": "application/zip",
+      "bytes_received": 509830,
+      "sha256": "beb118b9719c57e45629d14eca16da61b8ec1cc01f55e9a4e3703dc4b8164a4b",
+      "outcome": "success, 6 spreadsheet members",
+      "detail": "members: mmc2.xlsx, mmc3.xlsx, mmc4.xlsx, mmc5.xlsx, mmc6.xlsx, mmc7.xlsx",
+      "members": [
+        "mmc7.xlsx",
+        "mmc5.xlsx",
+        "mmc4.xlsx",
+        "mmc6.xlsx",
+        "mmc3.xlsx",
+        "mmc2.xlsx",
+        "mmc1.pdf"
+      ]
+    }
+  ]
+}

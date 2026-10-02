@@ -1,0 +1,19 @@
+# Checksums for the Doman et al. 2023 supplementary files
+#
+# Written by data_acquisition/fetch_doman_s1.py. Each file is stored exactly as
+# served, byte for byte. Nothing here has been opened in a spreadsheet
+# application, because a save from one can rewrite a numeric cell to its
+# displayed precision, and a silently rounded activity value is an invented
+# activity value.
+#
+# article DOI: 10.1016/j.cell.2023.07.039
+# PMC accession: PMC10482982
+# access date: 2026-10-02
+
+filename	sha256	bytes	source_url
+mmc2.xlsx	16cdb2109749210fb35acf5e511cbf6a2858982865e88b081ec2c514e88d931c	215647	https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles?includeInlineImage=false
+mmc3.xlsx	541a6c236f4b98402b1259bc80339bc3f4e6355476e3194887a0e2fd5bff8b18	107645	https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles?includeInlineImage=false
+mmc4.xlsx	b781fc5ba50810b7b03d1e372176ed14a79ca8bbac0335d6e8ddf0ebd190dd42	56016	https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles?includeInlineImage=false
+mmc5.xlsx	8883df7b18a3ac566ba26a4b30198dea1195a669726c17fbfcc9a8f4941ba159	33730	https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles?includeInlineImage=false
+mmc6.xlsx	aaa38000856621c83f648fbfbd867728af5d8a4fa6c890d2924ef8f16db78735	10127	https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles?includeInlineImage=false
+mmc7.xlsx	3cc3b4977174710b31d7e86961e018c229207323a6714d57fb2d5079c5c1b1b6	219558	https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles?includeInlineImage=false

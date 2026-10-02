@@ -1,23 +1,28 @@
 # Manual fetch checklist
 
-## The one outstanding human action, as of Gate G3
+## Status update, 2026-10-02: Table S1 is no longer a human action
 
-**Download Supplementary Table S1 of Doman et al. 2023 from Cell.** That single file closes four
-open items at once: accessions for the 24 Task A rows still unresolved, the paper's 14-class
-assignment, the per-locus efficiencies that decide whether the inherited single scalar per enzyme
-is an aggregate, and the 57-against-59 and 21-against-20 reconciliations. It also carries the
-Task A2 efficiencies, so no separate download is needed for that cohort.
+**Doman et al. Supplementary Table S1 has been acquired by script and is committed.** It
+is `tasks/taskA_crossfamily/raw/mmc2.xlsx`, SHA256
+`16cdb2109749210fb35acf5e511cbf6a2858982865e88b081ec2c514e88d931c`, fetched from the
+Europe PMC supplementary files endpoint for `PMC10482982`. The article is CC BY 4.0, so
+committing it is permitted. Run `make pipeline-taskA-source` to reproduce the fetch, the
+full text extraction and the sheet inventory.
 
-Details are under Priority 2 below.
+The Priority 2 block below is kept for the record of what was wanted and why. What it
+asked for is now in `raw/`, and what the table turned out not to contain is in
+`tasks/taskA_crossfamily/PROVENANCE.md`. In short: Table S1 carries names, sequences and
+a binary activity highlight for 57 enzymes, and carries no efficiency values, no
+accessions and no class labels. The four questions that block asked are answered in
+`reports/tableS1_inventory.md` and `reports/doman2023_source_facts.md`, except the
+efficiency provenance, which no supplementary file can answer.
 
-Everything else is either already obtained or is not publicly available. The Task B supplementary
-bundle falls in the second category; the route for it is
-[AUTHOR_REQUEST.md](AUTHOR_REQUEST.md), a drafted request to the corresponding author, decided at
-Gate G3.
-
+**The one outstanding human action is now Task B**, whose supplementary bundle is not
+publicly deposited. The route for it is [AUTHOR_REQUEST.md](AUTHOR_REQUEST.md), a drafted
+request to the corresponding author, decided at Gate G3. Nothing has been sent.
 
 Files a human has to download, because they sit behind a publisher interstitial or a
-JavaScript page that a script cannot get through. Nothing here has been fetched yet.
+JavaScript page that a script cannot get through.
 
 Read `reports/acquisition_plan.md` first: it says what each file is expected to contain and
 what question each one answers. This file says only where to get it and where to put it.

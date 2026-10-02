@@ -1,6 +1,8 @@
 PYTHON ?= python
 
-.PHONY: all audit test null bench figures reproduce clean \n	pipeline-test pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
+.PHONY: all audit test null bench figures reproduce clean selfcheck scale
+.PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source
+.PHONY: pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
 
 all: audit test null bench
 
@@ -55,6 +57,7 @@ clean:
 pipeline-test:
 	$(PYTHON) schemas/test_task_schema.py
 	$(PYTHON) data_acquisition/test_resolve_mmlv_reference.py
+	$(PYTHON) data_acquisition/test_fetch_doman_s1.py
 	$(PYTHON) curation/test_splits.py
 	$(PYTHON) data_acquisition/check_inputs.py --allow-missing
 
@@ -65,6 +68,14 @@ pipeline-reference:
 ## Resolve Task A accessions from sequence; needs network, and is resumable
 pipeline-accessions:
 	$(PYTHON) data_acquisition/resolve_taskA_accessions.py
+
+## Acquire Doman et al. Supplementary Table S1, then inventory every sheet of it.
+## The inventory must be read by a human before anything is parsed: Table S1 holds
+## both the 59 assayed enzymes and the 543 unassayed phylogenetic sequences.
+pipeline-taskA-source:
+	$(PYTHON) data_acquisition/fetch_doman_s1.py
+	$(PYTHON) data_acquisition/extract_doman_fulltext_facts.py
+	$(PYTHON) data_acquisition/inventory_tableS1.py
 
 ## Identity clustering. Needs MMseqs2: set MMSEQS_BIN to its path.
 pipeline-clusters:

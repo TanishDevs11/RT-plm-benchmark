@@ -104,23 +104,33 @@ EXPECTED: tuple[ExpectedInput, ...] = (
     # Priority 2: Task A. Without these, no Task A row can carry an accession, and no Task
     # A row passes the schema validator.
     ExpectedInput(
-        path="tasks/taskA_crossfamily/raw/doman2023_table_s1.xlsx",
+        path="tasks/taskA_crossfamily/raw/mmc2.xlsx",
         task="A",
         purpose=(
-            "the 59-enzyme cross-family panel: names, classes, efficiencies; resolves 57 "
-            "against 59, 21 actives against 20, and the 7 against 14 class coarsening"
+            "Supplementary Table S1: the 59-enzyme cross-family panel, and also the 543 "
+            "unassayed phylogenetic sequences, in one workbook. Resolves 57 against 59, "
+            "21 actives against 20, and the 7 against 14 class coarsening. The publisher "
+            "filename is kept rather than a descriptive one, so the file in raw/ is "
+            "recognisably the one the article links"
         ),
         required=True,
         priority=2,
-        source="https://www.cell.com/cell/fulltext/S0092-8674(23)00854-1#supplementaryMaterial",
+        source="https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/supplementaryFiles",
+        automatable=True,
     ),
     ExpectedInput(
-        path="tasks/taskA_crossfamily/raw/doman2023.pdf",
+        path="tasks/taskA_crossfamily/raw/PMC10482982_fulltext.xml",
         task="A",
-        purpose="verbatim label definition and the paper's detectable-activity threshold",
-        required=False,
+        purpose=(
+            "article full text as JATS XML, the machine readable form of the published "
+            "article. Carries what a spreadsheet cannot: the verbatim efficiency "
+            "definition, the 59 and 20 counts, the per-class breakdown of the actives, "
+            "and the CC BY licence statement that permits committing raw/"
+        ),
+        required=True,
         priority=2,
-        source="https://www.cell.com/cell/pdf/S0092-8674(23)00854-1.pdf",
+        source="https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10482982/fullTextXML",
+        automatable=True,
     ),
     ExpectedInput(
         path="tasks/taskB_mmlv_dms/raw/uniprot_P03355.fasta",

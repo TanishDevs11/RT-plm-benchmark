@@ -22,3 +22,6 @@ bench/cache_extract_log.txt
 
 # Local tool caches, not artifacts
 .uniprot_cache/
+
+# Downloaded archives opened once for a supplementary file, not artifacts
+.fetch_cache/

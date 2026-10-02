@@ -11,7 +11,15 @@ than an assumed one.
 
 Clustering parameters, fixed a priori
 ------------------------------------
-Thresholds: 90, 70, and 50 percent sequence identity, as the brief specifies.
+Thresholds: 90, 70, 50, and 30 percent sequence identity.
+
+30 percent is the one that matters most for a cross-family panel and it was added last.
+Above roughly 30 percent identity two proteins are usually homologous, so a split that
+leaves a train-test pair above that line has not held out an independent protein. The
+higher thresholds detect near-duplicates; 30 percent is the threshold at which a
+cross-family panel can be claimed to be non-redundant at all. Note that MMseqs2
+alignment-based clustering is at the edge of its reliable range at 30 percent, so a
+cluster found there is weaker evidence than one found at 70, and the report says so.
 
 Coverage: ``--cov-mode 1 -c 0.8``, so coverage is measured over the target. This choice is
 load bearing and is not the MMseqs2 default, so the reason is recorded here. These sequences
@@ -48,7 +56,7 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from schemas.task_schema import print_run_header, read_task_table, sha256_of  # noqa: E402
 
-IDENTITY_THRESHOLDS = (90, 70, 50)
+IDENTITY_THRESHOLDS = (90, 70, 50, 30)
 COVERAGE = "0.8"
 COVERAGE_MODE = "1"
 SENSITIVITY = "7.5"
