@@ -171,11 +171,17 @@ most important cross-task duplicate would have gone unreported.
 | 90 percent | 57 | 53 | 49 singletons, 4 pairs |
 | 70 percent | 57 | 49 | 44 singletons, 3 pairs, 1 triple, 1 quadruple |
 | 50 percent | 57 | 44 | 39 singletons, 3 pairs, 1 quadruple, 1 cluster of 8 |
+| 30 percent | 57 | 24 | 14 singletons, 2 pairs, 4 triples, 1 quadruple, 1 of 5, 1 of 8, 1 of 10 |
 
 Four findings, with the full argument in `reports/split_design.md`:
 
-1. **No cluster crosses a family boundary at any threshold.** Leave-one-family-out therefore
-   prevents identity leakage as well as family leakage. This was not guaranteed.
+1. **No cluster crosses a family boundary above 50 percent identity, but four do at 30.**
+   Corrected 2026-10-03: this finding originally read "at any threshold", which was written
+   when only 90, 70 and 50 percent had been computed. 30 percent was added in the Phase 2
+   rerun and four clusters cross a family boundary there, so leave-one-family-out prevents
+   identity leakage down to 50 percent but not remote homology at 30. The four crossing
+   clusters are named in `reports/split_design.md`; three of them join bacterial families to
+   each other and look like genuine phylogeny that the 7-way labelling coarsens away.
 2. **The redundancy that exists is concentrated where the positives are.** At 50 percent, 12 of
    the 18 retroviral sequences sit in just 2 clusters, and the retroviral fold holds 12 of the
    21 positives. Its 18 rows are worth far fewer than 18 independent observations.

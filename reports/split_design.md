@@ -34,24 +34,52 @@ excised domains actually looks like.
 
 ### Task A cluster structure
 
-57 sequences. Assignments are in `tasks/taskA_crossfamily/splits/clusters_{90,70,50}.tsv`.
+57 sequences. Assignments are in `tasks/taskA_crossfamily/splits/clusters_{90,70,50,30}.tsv`.
 
-| threshold | clusters | size distribution |
-| --- | --- | --- |
-| 90 percent | 53 | 49 singletons, 4 pairs |
-| 70 percent | 49 | 44 singletons, 3 pairs, one triple, one quadruple |
-| 50 percent | 44 | 39 singletons, 3 pairs, one quadruple, one cluster of 8 |
+| threshold | clusters | size distribution | clusters crossing a family boundary |
+| --- | --- | --- | --- |
+| 90 percent | 53 | 49 singletons, 4 pairs | 0 |
+| 70 percent | 49 | 44 singletons, 3 pairs, one triple, one quadruple | 0 |
+| 50 percent | 44 | 39 singletons, 3 pairs, one quadruple, one cluster of 8 | 0 |
+| 30 percent | 24 | 14 singletons, 2 pairs, 4 triples, one quadruple, one of 5, one of 8, one of 10 | **4** |
 
-### Finding 1: no cluster crosses a family boundary, at any threshold
+### Finding 1, corrected 2026-10-03: no cluster crosses a family boundary above 50 percent, but four do at 30
 
-At 90, 70, and 50 percent, every multi-member cluster lies entirely inside one family. This is
-a real result and it validates the leave-one-family-out design: holding out a family also
-holds out an identity cluster, so there is no train-test pair above 50 percent identity across
-the fold boundary. Leave-one-family-out is doing the job it is supposed to do.
+**This section previously claimed that no cluster crosses a family boundary at any
+threshold. That claim was threshold-limited and is now known to be false at 30 percent.**
+It was written when only 90, 70 and 50 percent had been computed. 30 percent was added in
+the Phase 2 rerun, and it is the threshold at which the claim fails.
 
-It was not guaranteed. A single retroviral RT clustering with a retrotransposon RT above 50
-percent would have meant that the headline Task A split leaked, and the inherited audit
-numbers would have needed re-reading. It does not.
+At 90, 70 and 50 percent the original finding holds: every multi-member cluster lies
+entirely inside one family, so holding out a family also holds out an identity cluster and
+there is no train-test pair above 50 percent identity across a fold boundary.
+
+At 30 percent, four clusters cross a family boundary:
+
+- `CaMV-RT` (Other) with `Tf1-RT` and `Ty3-RT` (LTR_Retrotransposon)
+- `AFY36037.1-RT` (Unclassified) with `DRG2-RT` and `Drg-RT` (Other)
+- `A.platensis-Cas1-RT`, `FuRT-Cas1-RT`, `Med-CasRT` (CRISPR-associated) with `Gs-RT`
+  (Group_II_Intron) and `Rs-RT` (Retron)
+- `CRISPRRT2-RT` (CRISPR-associated) with `Er-RT`, `GroupII_CLA-RT` and `Tel4c-RT`
+  (Group_II_Intron)
+
+So leave-one-family-out does **not** hold out an identity cluster at 30 percent, and 30
+percent is the conventional line below which two proteins are not assumed homologous. For
+the families involved, holding out the family still leaves relatives above 30 percent
+identity in the training set.
+
+These look like genuine phylogeny rather than labelling errors. Three of the four join
+bacterial families to each other, which is consistent with CRISPR-associated RTs being
+derived from group II intron RTs; the fourth joins a caulimovirus RT to LTR retrotransposon
+RTs, and caulimoviruses are pararetroviruses. Two of the four involve `Other` or
+`Unclassified`, which are catch-all labels rather than clades, so part of what the 30
+percent clustering exposes is that the 7-way labelling is not purely phylogenetic.
+
+What this changes: the leave-one-family-out result may be read as holding out a clade at
+the 50 percent level, which is still a meaningful cross-lineage test, but not as holding
+out all detectable homology. The leave-one-cluster-out split at 70 percent is the stricter
+control, and the remote homology at 30 percent is a stated limitation rather than something
+either split removes.
 
 ### Finding 2: the redundancy is concentrated in the family that carries the signal
 
@@ -139,7 +167,12 @@ them as zero invents a measurement.
 **What this split prevents:** train-test pairs from the same RT family, and, as Finding 1
 establishes, train-test pairs above 50 percent identity.
 
-**What it does not prevent:** nothing stops a model from learning coarse lineage signal that
+**What it does not prevent, at the identity level:** remote homology. Four clusters cross a
+family boundary at 30 percent identity, so for the families named in Finding 1 the training
+set still holds relatives of the held-out family at that level. The split holds out a clade
+at the 50 percent level, not all detectable homology.
+
+**What it does not prevent, at the label level:** nothing stops a model from learning coarse lineage signal that
 correlates with the label across families, because family and activity are genuinely
 associated in these data (12 of 18 retroviral RTs are active against 0 of 15 across
 CRISPR-associated, Other, and Unclassified). A model that predicts "retroviral, therefore

@@ -2,7 +2,7 @@ PYTHON ?= python
 
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
-.PHONY: pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
+.PHONY: pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
 
 all: audit test null bench
 
@@ -89,6 +89,10 @@ pipeline-taskA-parse:
 pipeline-clusters:
 	$(PYTHON) curation/cluster_redundancy.py --mmseqs $(MMSEQS_BIN)
 
+## Descriptive overview of the Task A panel, plus its figures. Needs the clusters.
+pipeline-taskA-overview:
+	$(PYTHON) curation/dataset_overview_taskA.py
+
 ## Rewrite the frozen split definition files
 pipeline-splits:
 	$(PYTHON) curation/define_splits.py
@@ -103,5 +107,5 @@ pipeline-embeddings:
 	$(PYTHON) embeddings/verify_manifest.py
 
 ## The whole pipeline, in dependency order. Stops early if a guard fails.
-pipeline: pipeline-test pipeline-reference pipeline-taskA-parse pipeline-splits pipeline-features pipeline-embeddings
+pipeline: pipeline-test pipeline-reference pipeline-taskA-parse pipeline-taskA-overview pipeline-splits pipeline-features pipeline-embeddings
 	@echo "Pipeline complete. Reports in reports/. No model has been trained."
