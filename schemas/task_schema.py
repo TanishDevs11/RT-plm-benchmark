@@ -169,6 +169,25 @@ EXTRA_COLUMNS_BY_TASK: dict[str, tuple[str, ...]] = {
 
 _MUTATION_RE = re.compile("^([" + AA20 + "])([0-9]+)([" + AA20 + "])$")
 _SEQUENCE_RE = re.compile("^[" + AA20 + "X]+$")
+_SHA256_RE = re.compile("^[0-9a-f]{64}$")
+
+# Tasks permitted to leave reference_accession empty, and why.
+#
+# The schema's default is that every row names the accession plus version of its parent
+# sequence. That rule assumes the source publication identifies its proteins, and for
+# Task A it does not: Doman et al. Table S1 lists the 57 assayed enzymes by bare
+# laboratory label, with no database identifier anywhere in the workbook, and the article
+# full text carries no protein accession either. 30 of the 57 rows cannot be pinned, 13
+# of them because the construct differs from its parent entry at a single residue, often
+# an initiating methionine on an excised domain.
+#
+# Ruled at Gate G2, 2026-10-02: relax the rule for Task A rather than drop half the panel
+# or carry a permanently failing guard. A row in one of these tasks must still be
+# identifiable, so sequence_sha256 becomes required in the accession's place and is
+# checked against the row's own sequence. That digest is in fact the stronger identifier:
+# it pins the exact residues, whereas an accession points at a database record that can be
+# merged, demerged or revised.
+ACCESSION_OPTIONAL_TASKS: frozenset[str] = frozenset({"A"})
 _BOOL_TRUE = frozenset({"true", "1", "yes"})
 _BOOL_FALSE = frozenset({"false", "0", "no"})
 
@@ -504,11 +523,47 @@ def _validate_rows(df: pd.DataFrame, task: str | None, report: ValidationReport)
         if is_null(row.get("source_table")):
             add("source_table.null", "every row must name the table or figure it came from", "source_table")
         if is_null(row.get("reference_accession")):
-            add(
-                "reference_accession.null",
-                "every row must name the accession plus version of its parent sequence",
-                "reference_accession",
-            )
+            if task in ACCESSION_OPTIONAL_TASKS:
+                # Downgraded to a warning for this task only, by the ruling recorded in
+                # ACCESSION_OPTIONAL_TASKS. The row still has to be identifiable, and for
+                # these tasks the sequence digest is what identifies it, so the digest is
+                # required in the accession's place rather than nothing being required.
+                digest = str(row.get("sequence_sha256", "")).strip()
+                if is_null(digest):
+                    add(
+                        "sequence_sha256.null",
+                        "this task may omit reference_accession, but then sequence_sha256 "
+                        "is required: a row has to be identifiable by something",
+                        "sequence_sha256",
+                    )
+                elif not _SHA256_RE.match(digest):
+                    add(
+                        "sequence_sha256.format",
+                        "not a sha256 hex digest: " + repr(digest),
+                        "sequence_sha256",
+                    )
+                elif digest != hashlib.sha256(sequence.encode("utf-8")).hexdigest():
+                    add(
+                        "sequence_sha256.mismatch",
+                        "sequence_sha256 does not hash this row's sequence",
+                        "sequence_sha256",
+                    )
+                else:
+                    report.warnings.append(
+                        Violation(
+                            "reference_accession.absent",
+                            "no accession; identified by sequence_sha256 instead, per the "
+                            "ruling for task " + str(task),
+                            row=position,
+                            column="reference_accession",
+                        )
+                    )
+            else:
+                add(
+                    "reference_accession.null",
+                    "every row must name the accession plus version of its parent sequence",
+                    "reference_accession",
+                )
 
 
 def validate_task_table(

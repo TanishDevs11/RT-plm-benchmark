@@ -2,11 +2,8 @@
 
 Task identifier: `A`
 Directory: `tasks/taskA_crossfamily/`
-Status: **PARSED AND CURATED.** Gate G1 was confirmed on 2026-10-02: block 1 of sheet
-`Table S1`, rows 6 to 118, 57 entries, 21 highlighted, is the assayed panel and the sole
-source for `curated.csv`; block 2's 486 entries are excluded from the benchmark entirely
-and retained only as provenance. Awaiting the Gate G2 ruling on
-`reports/reconciliation.md`.
+Status: **PARSED, CURATED, AND ENDORSED THROUGH GATE G2.** The dataset is frozen at 57
+rows with 21 actives, and the benchmark phases may proceed against it.
 
 This file is the per-task provenance record. It is written before any data is parsed and
 is filled in as acquisition proceeds, so that the gap between what was planned and what
@@ -16,6 +13,60 @@ The brief for this task names the directory `tasks/taskA/`. The longer name here
 one already carried by the frozen splits, the audit and the earlier reports, so it is
 kept and this line records the alias rather than creating a second directory holding the
 same task.
+
+## Gate rulings
+
+Both gates have been ruled on. Each ruling is implemented in code, not only recorded
+here, and the implementation is named so it can be checked.
+
+### Gate G1, confirmed 2026-10-02: the sheet identification
+
+Block 1 of sheet `Table S1` in `mmc2.xlsx`, rows 6 to 118, 57 entries, 21 carrying the
+green activity fill, is the assayed prime editing panel and the **sole** source for
+`curated.csv`.
+
+Block 2, the 486 UniProt BLAST hits at rows 122 to 1092, is **excluded entirely** from
+Task A modelling, benchmarking, feature generation and evaluation. It is retained only as
+provenance and background, and must not enter the benchmark dataset.
+
+Implemented in `data_acquisition/parse_taskA.py`, which asserts the block captions, the
+entry count, the highlight count and the index range before reading any data row, and
+halts if any of them moves. `data_acquisition/test_parse_taskA.py` contains three positive
+controls that it does halt, and one asserting no name containing a pipe, the signature of
+a block 2 FASTA header, ever reaches a parsed row.
+
+### Findings recorded at G1, as instructed
+
+1. The 57 RT panel in Table S1 matches the inherited 57-row dataset **exactly**, as sets
+   of names.
+2. The 21 active labels match **exactly**.
+3. The published prose, 59 enzymes and 20 active, is inconsistent with Table S1 and is
+   **documented as a source discrepancy rather than corrected**. The responsible enzyme
+   for the activity count is identified as M-MLV RT, the PE1 comparator; the two missing
+   enzymes are named nowhere in the published record.
+4. **No efficiency values are present in Table S1.** No numeric cell exists in the sheet
+   except the row index, and none of the six supplementary workbooks carries the
+   per-enzyme survey values.
+5. **No verified accessions are provided** for the assayed RT panel. Their names are bare
+   laboratory labels.
+6. **No class labels are provided** in the supplementary table. The paper's 14 classes
+   exist only in the Figure 1B tree image.
+
+### Gate G2, ruled 2026-10-02: the four open discrepancies
+
+| ruling | decision | implemented in |
+| --- | --- | --- |
+| row count | **57 rows.** Table S1's assayed block is the sole source; the prose's 59 names no additional enzyme | `parse_taskA.py`, `EXPECTED_ENTRIES` |
+| active count | **21 actives**, Table S1's own fill-based labelling. The prose's 20 excludes M-MLV RT as the PE1 comparator. Both definitions documented | `parse_taskA.py`, `EXPECTED_HIGHLIGHTED` |
+| `reference_accession` schema rule | **Relaxed for Task A only**, with `sequence_sha256` required in its place and verified against the row's own sequence | `schemas/task_schema.py`, `ACCESSION_OPTIONAL_TASKS` |
+| the efficiency column | **Kept, with classification as the primary result.** Every regression, weighted Spearman and CLS figure must be reported with the Figure S1A digitization stated | `efficiency_source_column`, which carries the word UNVERIFIED in its value |
+
+The consequence of the last ruling, which governs every later phase: the binary `active`
+label is reproducible from Table S1 and carries the headline claim, while the efficiency
+column is a figure read at roughly half a percentage point of resolution. A representation
+comparison on the binary label is evidence about representations; the same comparison on
+the efficiency column is evidence about representations **and** about a figure having been
+read accurately. They must not be reported as though they had equal standing.
 
 ## Sources
 

@@ -560,20 +560,40 @@ def main() -> int:
     # is a real conflict between the schema's expectations and the published record, and
     # it is a Gate G2 decision, not something this script may resolve.
     print("")
-    print("=== repository schema validator, reported not enforced ===")
+    # The repository's own schema validator, enforced. It was reported rather than
+    # enforced while the reference_accession conflict was open: the schema required an
+    # accession on every row and the source publishes none. The Gate G2 ruling settled it
+    # by exempting Task A and requiring sequence_sha256 in the accession's place, so the
+    # validator now passes and a failure here is a real defect again.
+    print("=== repository schema validator, enforced ===")
     report = validate_task_table(read_task_table(CURATED), task=TASK, source=str(CURATED))
-    print(report.render())
     kinds: dict[str, int] = {}
     for violation in report.violations:
         kinds[violation.rule] = kinds.get(violation.rule, 0) + 1
+    warning_kinds: dict[str, int] = {}
+    for warning in report.warnings:
+        warning_kinds[warning.rule] = warning_kinds.get(warning.rule, 0) + 1
+    print(
+        "rows="
+        + str(report.n_rows)
+        + " violations="
+        + str(len(report.violations))
+        + " warnings="
+        + str(len(report.warnings))
+    )
+    for rule, count in sorted(warning_kinds.items()):
+        print("  warning " + rule + ": " + str(count))
     for rule, count in sorted(kinds.items()):
-        print("  " + rule + ": " + str(count))
+        print("  VIOLATION " + rule + ": " + str(count))
     if not kinds:
         print("  no violations")
 
-    write_reconciliation(entries, rows, inherited, accessions, near_matches, kinds)
+    write_reconciliation(
+        entries, rows, inherited, accessions, near_matches, kinds, warning_kinds
+    )
     print("")
     print("wrote " + RECONCILIATION.relative_to(REPO_ROOT).as_posix())
+    report.raise_if_failed()
     return 0
 
 
@@ -584,6 +604,7 @@ def write_reconciliation(
     accessions: dict,
     near_matches: dict,
     schema_violations: dict[str, int],
+    schema_warnings: dict[str, int],
 ) -> None:
     """Every discrepancy between the source, the inherited file, and the article prose."""
     table_names = [e.name for e in entries]
@@ -972,17 +993,28 @@ def write_reconciliation(
 
     lines += [
         "",
-        "Three ways to settle it, for a human to choose:",
+        "**Ruled at Gate G2, 2026-10-02: relax the rule for Task A.** The source publishes",
+        "no accessions, so requiring one would mean either dropping 30 of 57 rows,",
+        "including actives, or carrying a permanently failing guard. Neither is acceptable.",
         "",
-        "1. **Relax the rule for Task A**, on the ground that the source publishes no",
-        "   accessions and a sequence SHA256 is the stronger identifier anyway. Every row",
-        "   carries `sequence_sha256`, which pins the sequence exactly and does not depend",
-        "   on a database that may reassign an accession later. This is the recommendation.",
-        "2. **Drop the rows without an accession.** That removes 30 of 57 rows, including",
-        "   actives, and would leave a benchmark too small to say anything. Not recommended,",
-        "   and recorded here only so the option is on the record.",
-        "3. **Keep the rule and leave Task A failing it.** Honest, but it means the pipeline",
-        "   has a permanently failing guard, which is how guards come to be ignored.",
+        "The relaxation is narrow and does not weaken identity. `ACCESSION_OPTIONAL_TASKS`",
+        "in `schemas/task_schema.py` names Task A and nothing else, and for an exempt task",
+        "the validator requires `sequence_sha256` in the accession's place and checks that",
+        "it actually hashes that row's sequence. So an exempt row is still identified, and",
+        "arguably better identified: a digest pins the exact residues, whereas an accession",
+        "points at a database record that can be merged, demerged or revised. The absence",
+        "is recorded per row as a warning rather than passing silently.",
+        "",
+        "`curated.csv` under the ruling: "
+        + str(sum(schema_violations.values()))
+        + " violations, "
+        + str(sum(schema_warnings.values()))
+        + " warnings.",
+        "",
+        "Five tests in `schemas/test_task_schema.py` hold the exemption to its scope: that",
+        "an exempt row with a valid digest passes, that a missing digest is still a",
+        "violation, that a digest of some other sequence is a violation, that a malformed",
+        "digest is a violation, and that Task B does not inherit the exemption.",
         "",
         "## 6. Duplicate and near-identical sequences",
         "",
@@ -1043,19 +1075,36 @@ def write_reconciliation(
         "those exist only in the Figure 1B tree image. `pe_efficiency_pct` is discussed in",
         "section 4 above.",
         "",
-        "## Open rulings for Gate G2",
+        "## Gate G2 rulings, given 2026-10-02",
         "",
-        "1. **Does the benchmark stand at 57 rows?** Recommended yes: 57 is what Table S1",
-        "   lists and the prose's 59 names no additional enzyme.",
-        "2. **21 actives or 20?** Recommended 21, the table's own labelling, with the 20",
-        "   definition documented. The difference is M-MLV RT.",
-        "3. **The `reference_accession` schema rule.** Recommended option 1, relax it for",
-        "   Task A and rely on `sequence_sha256`.",
-        "4. **Does the efficiency column stay in the benchmark at all?** It is a figure",
-        "   digitization. Recommended: keep it, because it is the only continuous signal",
-        "   available and the inherited CLS metric needs it, but report every regression",
-        "   result with the digitization stated as a limitation, and treat classification on",
-        "   the binary label as the primary result.",
+        "All four open items are settled. The rulings are recorded here and in",
+        "`tasks/taskA_crossfamily/PROVENANCE.md`, and each one is implemented in code",
+        "rather than only written down.",
+        "",
+        "1. **The benchmark stands at 57 rows.** Block 1 of Table S1 is the sole source.",
+        "   The prose's 59 names no additional enzyme and nothing in the published record",
+        "   identifies the missing two, so there is nothing to add. Documented as a source",
+        "   discrepancy, not corrected.",
+        "2. **21 actives, the table's own labelling.** The prose's 20 excludes M-MLV RT as",
+        "   the PE1 comparator. Both definitions are stated above; the benchmark uses the",
+        "   one attached to the itemised table rather than to a sentence.",
+        "3. **The `reference_accession` rule is relaxed for Task A**, with",
+        "   `sequence_sha256` required in its place and checked against the sequence. See",
+        "   section 5.",
+        "4. **The efficiency column stays, and classification is the primary result.**",
+        "   The binary `active` label is read directly from Table S1's fill and is",
+        "   reproducible from the file, so it carries the headline claim. The efficiency",
+        "   column is a digitization of Figure S1A at roughly half a percentage point of",
+        "   resolution, so every regression, weighted Spearman and CLS number in this",
+        "   benchmark must be reported with that digitization stated. It is kept because it",
+        "   is the only continuous signal available and because the inherited CLS audit",
+        "   needs it for comparability, not because it is sound.",
+        "",
+        "The practical consequence of ruling 4, carried into every later phase: a",
+        "representation comparison on the binary label is evidence about representations,",
+        "and the same comparison on the efficiency column is evidence about representations",
+        "**and** about a figure having been read accurately. The two must not be reported",
+        "as though they had the same standing.",
     ]
 
     RECONCILIATION.parent.mkdir(parents=True, exist_ok=True)

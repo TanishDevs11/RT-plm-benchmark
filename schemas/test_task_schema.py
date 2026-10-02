@@ -16,6 +16,8 @@ concatenated into one label column.
 
 from __future__ import annotations
 
+import hashlib
+
 import sys
 from pathlib import Path
 
@@ -290,6 +292,50 @@ def test_rejects_missing_binary_call_where_one_is_declared() -> None:
     row["label_binary"] = ""
     report = validate_task_table(frame([row]), task="A")
     assert "label_binary.null" in rules(report), report.render()
+
+
+def test_accession_exempt_task_accepts_a_sequence_digest_instead() -> None:
+    """Task A may omit reference_accession, by the Gate G2 ruling, but not identity."""
+    row = task_a_row("A_one", SEQ_ONE)
+    row["reference_accession"] = ""
+    row["sequence_sha256"] = hashlib.sha256(SEQ_ONE.encode("utf-8")).hexdigest()
+    report = validate_task_table(frame([row]), task="A")
+    assert report.ok, report.render()
+    assert "reference_accession.absent" in [w.rule for w in report.warnings], report.render()
+
+
+def test_accession_exempt_task_still_requires_some_identifier() -> None:
+    """The exemption must not degrade into no identifier at all."""
+    row = task_a_row("A_one", SEQ_ONE)
+    row["reference_accession"] = ""
+    row["sequence_sha256"] = ""
+    report = validate_task_table(frame([row]), task="A")
+    assert "sequence_sha256.null" in rules(report), report.render()
+
+
+def test_accession_exempt_task_rejects_a_digest_of_another_sequence() -> None:
+    """A digest that does not hash this row's sequence identifies the wrong thing."""
+    row = task_a_row("A_one", SEQ_ONE)
+    row["reference_accession"] = ""
+    row["sequence_sha256"] = hashlib.sha256(b"a different sequence").hexdigest()
+    report = validate_task_table(frame([row]), task="A")
+    assert "sequence_sha256.mismatch" in rules(report), report.render()
+
+
+def test_accession_exempt_task_rejects_a_malformed_digest() -> None:
+    row = task_a_row("A_one", SEQ_ONE)
+    row["reference_accession"] = ""
+    row["sequence_sha256"] = "not-a-digest"
+    report = validate_task_table(frame([row]), task="A")
+    assert "sequence_sha256.format" in rules(report), report.render()
+
+
+def test_a_task_without_the_exemption_still_requires_an_accession() -> None:
+    """The relaxation is per task. Task B must not inherit it."""
+    row = task_b_row("B_wt", SEQ_ONE)
+    row["reference_accession"] = ""
+    report = validate_task_table(frame([row]), task="B")
+    assert "reference_accession.null" in rules(report), report.render()
 
 
 def main() -> int:
