@@ -24,3 +24,7 @@ qiskit-machine-learning>=0.8
 
 # Phase 4 structural features (secondary structure from backbone geometry)
 pydssp>=0.9
+
+# umap-learn, for the representation diagnostics UMAP projection
+umap-learn>=0.5
+psutil>=5.9

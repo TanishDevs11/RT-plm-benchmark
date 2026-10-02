@@ -1,0 +1,122 @@
+{
+  "curated_csv": "tasks/taskA_crossfamily/curated.csv",
+  "curated_sha256": "5e159976a37be07e797ad7048200a6a56fd1b0f396baff6e533f2c467e1b98dc",
+  "layer_policy": "the model's final transformer block, no sweep",
+  "library_versions": {
+    "Bio": "1.86",
+    "numpy": "2.4.2",
+    "pandas": "3.0.1",
+    "python": "3.14.2",
+    "scipy": "1.17.1",
+    "sklearn": "1.8.0",
+    "torch": "2.11.0+cpu"
+  },
+  "pooling": "mean over residue positions, excluding the BOS and EOS tokens",
+  "runs": [
+    {
+      "checkpoint_file": "esm2_t6_8M_UR50D.pt",
+      "checkpoint_sha256": "46f002a9870c9bdecd0ea887acb1f9a38a6b561e8f8bf8a6990b679b9d31b928",
+      "dtype": "float16",
+      "file": "embeddings/esm2_8M/taskA_v2_mean_full_final.npz",
+      "file_sha256": "def760b76a2575f7ab08f686c6c4b8ed1f528a4e0b7030ba560d8b923d68238c",
+      "generated": "2026-10-03",
+      "ids_file": "embeddings/esm2_8M/taskA_v2_mean_full_final_ids.txt",
+      "ids_sha256": "d2574322a3035fa7196b09e0d8ecbcd374c7981f1e142983b45ecd96c06ce5ed",
+      "inference_seconds": 3.94,
+      "layer": 6,
+      "layer_is_final": true,
+      "load_seconds": 0.14,
+      "model_name": "esm2_t6_8M_UR50D",
+      "model_size": "8M",
+      "n_layers": 6,
+      "peak_rss_bytes_sampled": 532836352,
+      "peak_rss_gib_sampled": 0.496,
+      "pooling": "mean over residue positions, excluding the BOS and EOS tokens",
+      "row_order": "exactly tasks/taskA_crossfamily/curated.csv, asserted after writing",
+      "shape": [
+        57,
+        320
+      ],
+      "wall_clock_seconds": 4.09
+    },
+    {
+      "checkpoint_file": "esm2_t12_35M_UR50D.pt",
+      "checkpoint_sha256": "7f21e80e61d16a71735163ef555d3009afb0c98da74c48e29df08606973cc55e",
+      "dtype": "float16",
+      "file": "embeddings/esm2_35M/taskA_v2_mean_full_final.npz",
+      "file_sha256": "e38e77397bd08cb0ae2ad95441b5e50034605156652a4be57b7569365ad7ac4e",
+      "generated": "2026-10-03",
+      "ids_file": "embeddings/esm2_35M/taskA_v2_mean_full_final_ids.txt",
+      "ids_sha256": "d2574322a3035fa7196b09e0d8ecbcd374c7981f1e142983b45ecd96c06ce5ed",
+      "inference_seconds": 11.73,
+      "layer": 12,
+      "layer_is_final": true,
+      "load_seconds": 0.45,
+      "model_name": "esm2_t12_35M_UR50D",
+      "model_size": "35M",
+      "n_layers": 12,
+      "peak_rss_bytes_sampled": 681029632,
+      "peak_rss_gib_sampled": 0.634,
+      "pooling": "mean over residue positions, excluding the BOS and EOS tokens",
+      "row_order": "exactly tasks/taskA_crossfamily/curated.csv, asserted after writing",
+      "shape": [
+        57,
+        480
+      ],
+      "wall_clock_seconds": 12.18
+    },
+    {
+      "checkpoint_file": "esm2_t30_150M_UR50D.pt",
+      "checkpoint_sha256": "881c7176cf198ef8dec26a3c375d40eb58d0c33df95c22562ca6cc6d3f812c62",
+      "dtype": "float16",
+      "file": "embeddings/esm2_150M/taskA_v2_mean_full_final.npz",
+      "file_sha256": "826f4c567c68f5733024f45610880c521f47c35cb2db07be60769880940e6bee",
+      "generated": "2026-10-03",
+      "ids_file": "embeddings/esm2_150M/taskA_v2_mean_full_final_ids.txt",
+      "ids_sha256": "d2574322a3035fa7196b09e0d8ecbcd374c7981f1e142983b45ecd96c06ce5ed",
+      "inference_seconds": 42.26,
+      "layer": 30,
+      "layer_is_final": true,
+      "load_seconds": 1.75,
+      "model_name": "esm2_t30_150M_UR50D",
+      "model_size": "150M",
+      "n_layers": 30,
+      "peak_rss_bytes_sampled": 1522782208,
+      "peak_rss_gib_sampled": 1.418,
+      "pooling": "mean over residue positions, excluding the BOS and EOS tokens",
+      "row_order": "exactly tasks/taskA_crossfamily/curated.csv, asserted after writing",
+      "shape": [
+        57,
+        640
+      ],
+      "wall_clock_seconds": 44.1
+    },
+    {
+      "checkpoint_file": "esm2_t33_650M_UR50D.pt",
+      "checkpoint_sha256": "ea9d0522b335a8778dea6535a65301f10208dece28cd5865482b0b1fc446168c",
+      "dtype": "float16",
+      "file": "embeddings/esm2_650M/taskA_v2_mean_full_final.npz",
+      "file_sha256": "e9e64a4acacaf63255ca184c781cc3d5fbbeb3ab9531cfc0b678ba26590b5e97",
+      "generated": "2026-10-03",
+      "ids_file": "embeddings/esm2_650M/taskA_v2_mean_full_final_ids.txt",
+      "ids_sha256": "d2574322a3035fa7196b09e0d8ecbcd374c7981f1e142983b45ecd96c06ce5ed",
+      "inference_seconds": 165.19,
+      "layer": 33,
+      "layer_is_final": true,
+      "load_seconds": 7.32,
+      "model_name": "esm2_t33_650M_UR50D",
+      "model_size": "650M",
+      "n_layers": 33,
+      "peak_rss_bytes_sampled": 5429923840,
+      "peak_rss_gib_sampled": 5.057,
+      "pooling": "mean over residue positions, excluding the BOS and EOS tokens",
+      "row_order": "exactly tasks/taskA_crossfamily/curated.csv, asserted after writing",
+      "shape": [
+        57,
+        1280
+      ],
+      "wall_clock_seconds": 172.71
+    }
+  ],
+  "task": "A"
+}

@@ -2,7 +2,7 @@ PYTHON ?= python
 
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
-.PHONY: pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
+.PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
 
 all: audit test null bench
 
@@ -111,6 +111,13 @@ pipeline-embeddings:
 	$(PYTHON) embeddings/build_embeddings.py
 	$(PYTHON) embeddings/verify_manifest.py
 
+## Task A ESM-2 representations: final layer, mean pooled, four sizes. Run one size at a
+## time on a memory-constrained host: 650M peaks around 5 GiB.
+pipeline-taskA-embeddings:
+	$(PYTHON) embeddings/build_embeddings_taskA.py
+	$(PYTHON) embeddings/test_embeddings_taskA.py
+	$(PYTHON) embeddings/representation_diagnostics_taskA.py
+
 ## The whole pipeline, in dependency order. Stops early if a guard fails.
-pipeline: pipeline-test pipeline-reference pipeline-taskA-parse pipeline-taskA-overview pipeline-splits pipeline-features pipeline-embeddings
+pipeline: pipeline-test pipeline-reference pipeline-taskA-parse pipeline-taskA-overview pipeline-splits pipeline-features pipeline-embeddings pipeline-taskA-embeddings
 	@echo "Pipeline complete. Reports in reports/. No model has been trained."

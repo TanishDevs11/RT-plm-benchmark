@@ -49,5 +49,7 @@ jobs:
         run: python curation/verify_splits_taskA.py
       - name: Task A feature matrices are aligned, raw and masked
         run: python features/test_handcrafted_taskA.py
+      - name: Task A embedding files are aligned and the manifest is honest
+        run: python embeddings/test_embeddings_taskA.py
       - name: Input preflight reports the acquisition state without failing the build
         run: python data_acquisition/check_inputs.py --allow-missing
