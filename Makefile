@@ -2,6 +2,7 @@ PYTHON ?= python
 
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
+.PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret pipeline-taskA-report
 .PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
 
 all: audit test null bench
@@ -117,6 +118,25 @@ pipeline-taskA-embeddings:
 	$(PYTHON) embeddings/build_embeddings_taskA.py
 	$(PYTHON) embeddings/test_embeddings_taskA.py
 	$(PYTHON) embeddings/representation_diagnostics_taskA.py
+
+## Task A modelling, validation, interpretation and the final report.
+## Deliberately two model heads only: logistic regression and ridge. The validation stage
+## refits the protocol on noise and on permuted labels, so it is the slow one.
+pipeline-taskA-bench:
+	$(PYTHON) bench/representations_taskA.py
+
+pipeline-taskA-validate:
+	$(PYTHON) bench/validate_taskA.py --stage all
+
+pipeline-taskA-interpret:
+	$(PYTHON) bench/interpret_taskA.py
+
+pipeline-taskA-report:
+	$(PYTHON) reports/build_final_report.py
+
+## Everything from the curated table to the final report.
+taskA: pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret pipeline-taskA-report
+	@echo "Task A complete. Final report in reports/FINAL_REPORT.md."
 
 ## The whole pipeline, in dependency order. Stops early if a guard fails.
 pipeline: pipeline-test pipeline-reference pipeline-taskA-parse pipeline-taskA-overview pipeline-splits pipeline-features pipeline-embeddings pipeline-taskA-embeddings

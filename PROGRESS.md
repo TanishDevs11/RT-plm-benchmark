@@ -63,6 +63,14 @@ against the wrong statistic. The procedure was not modified to obtain agreement.
 | 29 | 0.8629 | 0.9340 | 0.9503 |
 | 50 | 0.9210 | 0.9727 | 0.9737 |
 
+**Correction, 2026-10-03.** The sentence below this table previously read "fifty reach
+the submitted score", which pairs the submitted result with a null computed at a
+free-parameter count it did not use. The submitted search used 29 weights plus a power
+exponent, so K=29 is its matched null, where the p95 is 0.9340 and the submitted 0.9754
+sits above it by +0.0414 rather than below. The score is still not distinguishable from
+the null, because that margin is about half the 0.0794 bootstrap interval width, but the
+reason is the interval width and not the null's height. See README.md.
+
 Budget sweep at K=29: 10 iterations reach mean 0.6809, 30 reach 0.7396, 60 reach
 0.7828, 130 reach 0.8314, 260 reach 0.8629.
 

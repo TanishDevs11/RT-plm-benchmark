@@ -116,8 +116,22 @@ def apply_gate(
             if head == "classification":
                 pr = entry[head]["pr_auc"]
                 noise_pr = noise_entry.get("pr_auc")
+                # The permuted-label p95, where it was measured. A representation that
+                # does not beat its own shuffled labels has not been shown to use the
+                # real ones, and that disqualification is not optional: it is the control
+                # that caught esm2_650M, which clears its noise control comfortably and
+                # then loses to permuted labels.
+                permuted = (
+                    validation.get("permutation", {})
+                    .get(label, {})
+                    .get(head, {})
+                    .get("pr_auc_p95")
+                )
                 if noise_pr is not None:
-                    worst = max(noise_pr, prevalence)
+                    floors = [noise_pr, prevalence]
+                    if permuted is not None:
+                        floors.append(permuted)
+                    worst = max(floors)
                     if pr > worst:
                         cleared_pr.append(
                             {
@@ -127,7 +141,9 @@ def apply_gate(
                                 "score": pr,
                                 "noise": noise_pr,
                                 "floor": prevalence,
+                                "permuted_p95": permuted,
                                 "margin": pr - worst,
+                                "permutation_tested": permuted is not None,
                             }
                         )
     return (
@@ -231,6 +247,131 @@ def figure_error_vs_length(
     plt.close(fig)
 
 
+def write_attribution(
+    cleared_pr: list[dict], main_results: dict, data, lines: list[str]
+) -> None:
+    """Attribution for every representation that cleared the PR-AUC gate."""
+    from attribution_taskA import summarise
+
+    lines += [
+        "## Attribution, for the representations that cleared the PR-AUC gate",
+        "",
+        "The head is a logistic regression, so Shapley attributions are **exact** rather",
+        "than estimated: for a linear model the Shapley value of a feature is its",
+        "coefficient times its centred value, which is what a linear SHAP explainer",
+        "computes. Nothing here is sampled and no SHAP package is used.",
+        "",
+        "Attributions are computed **out of fold**. For each held-out family the",
+        "configuration its own inner loop selected is refitted on the training families and",
+        "attributions are taken for the held-out rows only, so they describe the models the",
+        "benchmark actually scored rather than one fitted on all 57 labels.",
+        "",
+    ]
+    for item in cleared_pr:
+        label = item["label"]
+        matrix = load_representations([label])[label][0]
+        selected = main_results["results"][label]["classification"]["selected"]
+        scores = np.asarray(
+            main_results["results"][label]["classification"]["predictions"], dtype=float
+        )
+        summary = summarise(matrix, data, selected, scores)
+        lines += [
+            "### `" + label + "`",
+            "",
+            "| quantity | value | how to read it |",
+            "| --- | --- | --- |",
+            "| features | " + str(summary["n_features"]) + " | against 57 rows |",
+            "| PR-AUC | "
+            + format(item["score"], ".4f")
+            + " | its noise control is "
+            + format(item["noise"], ".4f")
+            + ", margin "
+            + format(item["margin"], "+.4f")
+            + " |",
+            "| out-of-fold score against sequence length | Spearman "
+            + format(summary["score_vs_length_rho"], "+.4f")
+            + ", p "
+            + format(summary["score_vs_length_p"], ".3g")
+            + " | **the row that matters.** A score strongly ranked by length is a length detector, and length is free |",
+            "| attribution mass in the top decile of family-explained features | "
+            + format(summary["lineage_mass_share"], ".4f")
+            + " | against a feature share of "
+            + format(summary["lineage_feature_share"], ".4f")
+            + ". Far above means the model leans on lineage |",
+            "| attribution mass in the top 1 percent of features | "
+            + format(summary["concentration_share"], ".4f")
+            + " | against a feature share of "
+            + format(summary["concentration_feature_share"], ".4f")
+            + ". Low means the signal is spread thinly, so no individual feature is doing the work |",
+            "| per-feature importance against family-explained variance | Spearman "
+            + format(summary["importance_vs_eta_rho"], "+.4f")
+            + ", p "
+            + format(summary["importance_vs_eta_p"], ".3g")
+            + " | positive means the fit preferentially used lineage dimensions |",
+            "",
+        ]
+        importance = summary["importance"]
+        eta = summary["eta"]
+        total = summary["total_mass"]
+        names = feature_names(label, summary["n_features"])
+        lines += [
+            "Top 15 features by mean absolute out-of-fold attribution:",
+            "",
+            "| rank | feature | mean absolute attribution | share of mass | family-explained variance |",
+            "| --- | --- | --- | --- | --- |",
+        ]
+        for rank, index in enumerate(summary["top_indices"], start=1):
+            lines.append(
+                "| "
+                + str(rank)
+                + " | `"
+                + names[int(index)]
+                + "` | "
+                + format(float(importance[index]), ".5f")
+                + " | "
+                + format(float(importance[index] / total), ".5f")
+                + " | "
+                + format(float(eta[index]), ".4f")
+                + " |"
+            )
+        lines += [
+            "",
+            "**Read this ranking with care.** With "
+            + str(summary["n_features"])
+            + " features and 57 rows no individual",
+            "coefficient is estimable, so the ranking describes which directions a",
+            "regularized fit happened to use, not which features matter. The concentration",
+            "row above is the honest summary: mass spread thinly across thousands of",
+            "features is not a motif finding.",
+            "",
+        ]
+
+
+def feature_names(label: str, n_features: int) -> list[str]:
+    """Human-readable names for a representation's columns, where they exist."""
+    import csv as _csv
+
+    if label.startswith("kmer"):
+        k = label.replace("kmer", "")
+        path = (
+            REPO_ROOT / "features" / "handcrafted" / ("taskA_kmer" + k + "_vocabulary.txt")
+        )
+        if path.is_file():
+            vocabulary = path.read_text(encoding="utf-8").split()
+            if len(vocabulary) == n_features:
+                return vocabulary
+    if label.startswith("esm2_"):
+        return ["dim_" + str(i) for i in range(n_features)]
+    table = REPO_ROOT / "features" / "handcrafted" / "taskA_features_v2.csv"
+    if table.is_file():
+        with table.open(encoding="utf-8") as handle:
+            header = next(_csv.reader(handle))
+        columns = [c for c in header if c != "rt_name"]
+        if len(columns) == n_features:
+            return columns
+    return ["feature_" + str(i) for i in range(n_features)]
+
+
 def rank_percentile(values: np.ndarray) -> np.ndarray:
     order = np.argsort(np.argsort(values))
     return order / max(1, len(values) - 1)
@@ -315,9 +456,9 @@ def main() -> int:
         + " | "
         + str(len(cleared_cls))
         + " |",
-        "| PR-AUC, classification only | PR-AUC | the larger of its noise control and the positive prevalence of "
+        "| PR-AUC, classification only | PR-AUC | the largest of its noise control, the positive prevalence of "
         + format(prevalence, ".4f")
-        + " | "
+        + ", and its permuted-label p95 where measured | "
         + str(len(cleared_pr))
         + " |",
         "",
@@ -336,10 +477,11 @@ def main() -> int:
         lines += [
             "## Representations that cleared a gate",
             "",
-            "| representation | head | metric | score | noise control | floor | margin |",
-            "| --- | --- | --- | --- | --- | --- | --- |",
+            "| representation | head | metric | score | noise control | chance floor | permuted p95 | margin |",
+            "| --- | --- | --- | --- | --- | --- | --- | --- |",
         ]
         for item in cleared:
+            permuted = item.get("permuted_p95")
             lines.append(
                 "| `"
                 + item["label"]
@@ -353,6 +495,12 @@ def main() -> int:
                 + format(item["noise"], ".4f")
                 + " | "
                 + format(item["floor"], ".4f")
+                + " | "
+                + (
+                    format(permuted, ".4f")
+                    if permuted is not None
+                    else "**not tested**"
+                )
                 + " | "
                 + format(item["margin"], "+.4f")
                 + " |"
@@ -378,6 +526,8 @@ def main() -> int:
             "better than they classify activity.",
             "",
         ]
+        if cleared_pr:
+            write_attribution(cleared_pr, main_results, data, lines)
         best = cleared[0]
     else:
         lines += [

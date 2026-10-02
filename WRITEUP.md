@@ -37,14 +37,21 @@ of pure Gaussian noise containing no information about activity whatsoever:
 | 5 | 0.5606 |
 | 10 | 0.6536 |
 | 20 | 0.8637 |
-| 29 | 0.9340 |
-| 50 | **0.9727** |
+| **29, the matched count** | **0.9340** |
+| 50 | 0.9727 |
 
-The stored search artifacts in this repository contain up to **62** fitted
-parameters. At 50 parameters the search reaches 0.9727 on noise. My submission
-scored 0.9754. The margin over what the procedure manufactures from nothing is
-about 0.025, and the bootstrap 95 percent interval on that submission spans 0.079.
-The reported score sits inside its own noise floor.
+**Corrected 2026-10-03.** This passage previously bolded the K=50 row and concluded
+that the submitted score "sits inside its own noise floor". That compared a
+29-parameter search against the noise ceiling of a 50-parameter one, which is an
+invalid comparison, and the 62 fitted parameters it cites belong to a different
+stored artifact scoring 0.8978 rather than to the submission.
+
+At the matched count of 29 the p95 is 0.9340 and the submission's 0.9754 sits
+**above** it by +0.0414. The correct statement is weaker in a different way: that
+margin is about half the 0.0794 bootstrap interval width on the submitted vector,
+against a Kish effective sample size of 11.34, so the score is **not
+distinguishable** from what the procedure manufactures from noise. It is not shown
+to be inside the null, and it is not shown to be outside it either.
 
 I am not claiming the underlying model learned nothing. I am claiming that this
 experiment cannot distinguish whether it did, and that I presented the number as
@@ -291,9 +298,15 @@ work, and the metric is the cheaper of the two to fix.
 
 ## Conclusions
 
-1. **The 0.9754 is not a measurement.** A 62-parameter search on an effective
-   sample of 11 reaches 0.9727 on pure noise. The submitted score does not clear
-   that, and I optimized it against its own test labels.
+1. **The 0.9754 is not a measurement.** Corrected 2026-10-03: this conclusion
+   previously read that a 62-parameter search reaches 0.9727 on noise and the
+   submitted score does not clear it. Both halves were wrong in detail. The 62
+   parameters belong to a different artifact, and at the submission's matched count
+   of 29 the noise p95 is 0.9340, which 0.9754 does clear by +0.0414. What survives,
+   and is sufficient: that margin is about half the bootstrap interval width on an
+   effective sample of 11, so it is not distinguishable from manufactured score, and
+   the search optimized `compute_cls` directly against its own test labels. The
+   second half of that sentence was never in doubt and does not depend on the null.
 2. **Mean-pooled protein language model embeddings encode lineage and length, not
    function, on this task.** Family accuracy near 0.80, PC1 to length at -0.77, and
    out-of-family CLS at or below a zero-training length baseline.

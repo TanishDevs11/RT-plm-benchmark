@@ -1,0 +1,2410 @@
+{
+  "curated_sha256": "5e159976a37be07e797ad7048200a6a56fd1b0f396baff6e533f2c467e1b98dc",
+  "free_parameters_used": 1,
+  "intervals": {
+    "aa_composition": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.4177221736200519,
+          "ci_low": 0.0,
+          "sd": 0.14770703039656877
+        },
+        "pr_auc": {
+          "ci_high": 0.412343898208029,
+          "ci_low": 0.18887996202269966,
+          "sd": 0.057113224048145124
+        },
+        "w_spearman": {
+          "ci_high": 0.6214592312054055,
+          "ci_low": 0.0,
+          "sd": 0.193029764539337
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.37441859390542737,
+          "ci_low": 0.0,
+          "sd": 0.1250426860576021
+        },
+        "pr_auc": {
+          "ci_high": 0.5033339563844107,
+          "ci_low": 0.22684696774340735,
+          "sd": 0.07088201914816024
+        },
+        "w_spearman": {
+          "ci_high": 0.4142039578846406,
+          "ci_low": 0.0,
+          "sd": 0.12318948085330439
+        }
+      }
+    },
+    "dipeptide": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.3600199573779876,
+          "ci_low": 0.0,
+          "sd": 0.11284625096008415
+        },
+        "pr_auc": {
+          "ci_high": 0.4618332246549275,
+          "ci_low": 0.2090184198136557,
+          "sd": 0.06444739264251116
+        },
+        "w_spearman": {
+          "ci_high": 0.43627817958591575,
+          "ci_low": 0.0,
+          "sd": 0.12160958442516034
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.3304051315368454,
+          "ci_low": 0.0,
+          "sd": 0.10064035459421024
+        },
+        "pr_auc": {
+          "ci_high": 0.510153541420308,
+          "ci_low": 0.213908650176947,
+          "sd": 0.0751391396633863
+        },
+        "w_spearman": {
+          "ci_high": 0.3632161423640545,
+          "ci_low": 0.0,
+          "sd": 0.10134386615718118
+        }
+      }
+    },
+    "esm2_150M": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.4871333634759355,
+          "ci_low": 0.0,
+          "sd": 0.16712463664578928
+        },
+        "pr_auc": {
+          "ci_high": 0.4816789775682008,
+          "ci_low": 0.20518482458211681,
+          "sd": 0.06997368699439722
+        },
+        "w_spearman": {
+          "ci_high": 0.6569600308253811,
+          "ci_low": 0.0,
+          "sd": 0.20870149828083617
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.18879848484037146,
+          "ci_low": 0.0,
+          "sd": 0.04739344789689213
+        },
+        "pr_auc": {
+          "ci_high": 0.5351265979234395,
+          "ci_low": 0.22274994470193132,
+          "sd": 0.0807377468002908
+        },
+        "w_spearman": {
+          "ci_high": 0.14037659195027388,
+          "ci_low": 0.0,
+          "sd": 0.04322455742201428
+        }
+      }
+    },
+    "esm2_35M": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.46898729242420895,
+          "ci_low": 0.0,
+          "sd": 0.15753427559075295
+        },
+        "pr_auc": {
+          "ci_high": 0.4976994684244694,
+          "ci_low": 0.20660973704148552,
+          "sd": 0.07540633768484313
+        },
+        "w_spearman": {
+          "ci_high": 0.6039175479569231,
+          "ci_low": 0.0,
+          "sd": 0.18667131410914042
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.5042631666236219,
+          "ci_low": 0.0,
+          "sd": 0.16495378628575055
+        },
+        "pr_auc": {
+          "ci_high": 0.6073763076853511,
+          "ci_low": 0.2610293096112059,
+          "sd": 0.08712458302402847
+        },
+        "w_spearman": {
+          "ci_high": 0.6011826489265625,
+          "ci_low": 0.0,
+          "sd": 0.18391770286952533
+        }
+      }
+    },
+    "esm2_650M": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.4613843834930373,
+          "ci_low": 0.0,
+          "sd": 0.16347694549227132
+        },
+        "pr_auc": {
+          "ci_high": 0.6492499873758618,
+          "ci_low": 0.266459057326147,
+          "sd": 0.09911454277754847
+        },
+        "w_spearman": {
+          "ci_high": 0.4872544440322835,
+          "ci_low": 0.0,
+          "sd": 0.1543992167460362
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.3762223444743114,
+          "ci_low": 0.0,
+          "sd": 0.11602118062383514
+        },
+        "pr_auc": {
+          "ci_high": 0.62909624561086,
+          "ci_low": 0.27105955165994566,
+          "sd": 0.09092488786528935
+        },
+        "w_spearman": {
+          "ci_high": 0.3496099618661245,
+          "ci_low": 0.0,
+          "sd": 0.10026610431595916
+        }
+      }
+    },
+    "esm2_8M": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.39647357443676395,
+          "ci_low": 0.0,
+          "sd": 0.12238864271120896
+        },
+        "pr_auc": {
+          "ci_high": 0.571020581459878,
+          "ci_low": 0.22424501531398142,
+          "sd": 0.08811450773015181
+        },
+        "w_spearman": {
+          "ci_high": 0.42305723679375346,
+          "ci_low": 0.0,
+          "sd": 0.11767665904591583
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.46246177487917206,
+          "ci_low": 0.0,
+          "sd": 0.14658869803689395
+        },
+        "pr_auc": {
+          "ci_high": 0.4999373949048929,
+          "ci_low": 0.22422999293968573,
+          "sd": 0.0709894571823984
+        },
+        "w_spearman": {
+          "ci_high": 0.6116258595895504,
+          "ci_low": 0.0,
+          "sd": 0.18475773894133835
+        }
+      }
+    },
+    "handcrafted": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.4643342531955773,
+          "ci_low": 0.0,
+          "sd": 0.14264000217219555
+        },
+        "pr_auc": {
+          "ci_high": 0.447533789083304,
+          "ci_low": 0.20003316348194877,
+          "sd": 0.06312821869400852
+        },
+        "w_spearman": {
+          "ci_high": 0.7040501174298377,
+          "ci_low": 0.0,
+          "sd": 0.20880822994666373
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.4430916459265841,
+          "ci_low": 0.0,
+          "sd": 0.14600620281576185
+        },
+        "pr_auc": {
+          "ci_high": 0.45738763131806986,
+          "ci_low": 0.20755143276025936,
+          "sd": 0.06362599525487234
+        },
+        "w_spearman": {
+          "ci_high": 0.6067541199748582,
+          "ci_low": 0.0,
+          "sd": 0.1851362510264312
+        }
+      }
+    },
+    "handcrafted_plus_esm2_650M": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.5135743790801397,
+          "ci_low": 0.0,
+          "sd": 0.12631269855662772
+        },
+        "pr_auc": {
+          "ci_high": 0.47483924557991547,
+          "ci_low": 0.20931456584680014,
+          "sd": 0.06701892402155402
+        },
+        "w_spearman": {
+          "ci_high": 0.7459964400149943,
+          "ci_low": 0.0,
+          "sd": 0.20172288577524028
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.3767021598643522,
+          "ci_low": 0.0,
+          "sd": 0.12239688019114293
+        },
+        "pr_auc": {
+          "ci_high": 0.5440623565489675,
+          "ci_low": 0.2391934616091306,
+          "sd": 0.07771955400806936
+        },
+        "w_spearman": {
+          "ci_high": 0.41291711494920436,
+          "ci_low": 0.0,
+          "sd": 0.11915559655016508
+        }
+      }
+    },
+    "kmer3": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.4864069829966869,
+          "ci_low": 0.0,
+          "sd": 0.14994012305770574
+        },
+        "pr_auc": {
+          "ci_high": 0.4955456645417518,
+          "ci_low": 0.20852093311203582,
+          "sd": 0.07270818447103648
+        },
+        "w_spearman": {
+          "ci_high": 0.692017374237119,
+          "ci_low": 0.0,
+          "sd": 0.21154918061281944
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.3767332329968746,
+          "ci_low": 0.0,
+          "sd": 0.12252111193580409
+        },
+        "pr_auc": {
+          "ci_high": 0.4534740923397459,
+          "ci_low": 0.19699823174625394,
+          "sd": 0.06510188866130888
+        },
+        "w_spearman": {
+          "ci_high": 0.4439998032031646,
+          "ci_low": 0.0,
+          "sd": 0.12785465896595383
+        }
+      }
+    },
+    "kmer4": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.5670895932017411,
+          "ci_low": 0.0,
+          "sd": 0.2044315979681615
+        },
+        "pr_auc": {
+          "ci_high": 0.8324612300085804,
+          "ci_low": 0.42854003845765115,
+          "sd": 0.10391882189669413
+        },
+        "w_spearman": {
+          "ci_high": 0.5303539532748449,
+          "ci_low": 0.0,
+          "sd": 0.17321861964772645
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.1684184603590296,
+          "ci_low": 0.0,
+          "sd": 0.042442925820151786
+        },
+        "pr_auc": {
+          "ci_high": 0.4708933882043058,
+          "ci_low": 0.19218253567375918,
+          "sd": 0.07093995865631661
+        },
+        "w_spearman": {
+          "ci_high": 0.11953854509574074,
+          "ci_low": 0.0,
+          "sd": 0.039275777103109255
+        }
+      }
+    },
+    "length": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.3758019219595781,
+          "ci_low": 0.0,
+          "sd": 0.13148163115943473
+        },
+        "pr_auc": {
+          "ci_high": 0.39225367496737534,
+          "ci_low": 0.17628444117423772,
+          "sd": 0.05525541173014215
+        },
+        "w_spearman": {
+          "ci_high": 0.5107425789389686,
+          "ci_low": 0.0,
+          "sd": 0.15566446792915967
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.49920249303902947,
+          "ci_low": 0.0,
+          "sd": 0.12594245212713148
+        },
+        "pr_auc": {
+          "ci_high": 0.48679203326755827,
+          "ci_low": 0.22895776664769243,
+          "sd": 0.06691326549409644
+        },
+        "w_spearman": {
+          "ci_high": 0.6762058135278505,
+          "ci_low": 0.0,
+          "sd": 0.1820643878312462
+        }
+      }
+    },
+    "physicochemical": {
+      "classification": {
+        "cls": {
+          "ci_high": 0.525769154419569,
+          "ci_low": 0.0,
+          "sd": 0.1416123063661501
+        },
+        "pr_auc": {
+          "ci_high": 0.5448277549020447,
+          "ci_low": 0.24570881319858837,
+          "sd": 0.07675854453422634
+        },
+        "w_spearman": {
+          "ci_high": 0.6783581862871205,
+          "ci_low": 0.0,
+          "sd": 0.19216791699628907
+        }
+      },
+      "regression": {
+        "cls": {
+          "ci_high": 0.41704994929765044,
+          "ci_low": 0.0,
+          "sd": 0.1436232306353441
+        },
+        "pr_auc": {
+          "ci_high": 0.5730682064666971,
+          "ci_low": 0.24911476165773566,
+          "sd": 0.08276533969322694
+        },
+        "w_spearman": {
+          "ci_high": 0.4593829356574727,
+          "ci_low": 0.0,
+          "sd": 0.14121828989222882
+        }
+      }
+    }
+  },
+  "n_bootstrap": 10000,
+  "n_permutations": 20,
+  "noise": {
+    "aa_composition": {
+      "classification": {
+        "cls": 0.0,
+        "pr_auc": 0.3261314262538253,
+        "seconds": 4.1,
+        "w_spearman": 0.0
+      },
+      "n_features": 20,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.3129703766791236,
+        "seconds": 3.75,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "dipeptide": {
+      "classification": {
+        "cls": 0.024056497967572994,
+        "pr_auc": 0.3117867849390302,
+        "seconds": 4.27,
+        "w_spearman": 0.012510900038759497
+      },
+      "n_features": 400,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.47017760823838517,
+        "seconds": 3.93,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "esm2_150M": {
+      "classification": {
+        "cls": 0.2506285022292427,
+        "pr_auc": 0.28559153895894407,
+        "seconds": 4.33,
+        "w_spearman": 0.22329233486951588
+      },
+      "n_features": 640,
+      "regression": {
+        "cls": 0.2773844480167621,
+        "pr_auc": 0.35202093568253534,
+        "seconds": 3.93,
+        "w_spearman": 0.2288607383608793
+      },
+      "two_head_cls": 0.25409816753568576
+    },
+    "esm2_35M": {
+      "classification": {
+        "cls": 0.24603176827848058,
+        "pr_auc": 0.28985234719634695,
+        "seconds": 4.28,
+        "w_spearman": 0.21372092231413334
+      },
+      "n_features": 480,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.33482703863713653,
+        "seconds": 3.91,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "esm2_650M": {
+      "classification": {
+        "cls": 0.03571242541657305,
+        "pr_auc": 0.28890880828555215,
+        "seconds": 4.73,
+        "w_spearman": 0.019032531760330745
+      },
+      "n_features": 1280,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.2868308509430156,
+        "seconds": 4.15,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "esm2_8M": {
+      "classification": {
+        "cls": 0.0,
+        "pr_auc": 0.2580566817407301,
+        "seconds": 4.21,
+        "w_spearman": 0.0
+      },
+      "n_features": 320,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.2869967641849893,
+        "seconds": 3.86,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "handcrafted": {
+      "classification": {
+        "cls": 0.047133358577443066,
+        "pr_auc": 0.2674798310321148,
+        "seconds": 4.36,
+        "w_spearman": 0.025843671606387734
+      },
+      "n_features": 789,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.3394231227302481,
+        "seconds": 4.0,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "handcrafted_plus_esm2_650M": {
+      "classification": {
+        "cls": 0.0,
+        "pr_auc": 0.2969883744388805,
+        "seconds": 4.97,
+        "w_spearman": 0.0
+      },
+      "n_features": 2069,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.32463538761815514,
+        "seconds": 4.38,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "kmer3": {
+      "classification": {
+        "cls": 0.0,
+        "pr_auc": 0.3029369200206685,
+        "seconds": 8.02,
+        "w_spearman": 0.0
+      },
+      "n_features": 6256,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.3017295277195372,
+        "seconds": 6.8,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "kmer4": {
+      "classification": {
+        "cls": 0.0,
+        "pr_auc": 0.4457805023604007,
+        "seconds": 18.87,
+        "w_spearman": 0.0
+      },
+      "n_features": 20115,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.43997690434219683,
+        "seconds": 13.59,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    },
+    "length": {
+      "classification": {
+        "cls": 0.06445103456468528,
+        "pr_auc": 0.24735747459641405,
+        "seconds": 4.43,
+        "w_spearman": 0.037052712539988535
+      },
+      "n_features": 1,
+      "regression": {
+        "cls": 0.11921002254301094,
+        "pr_auc": 0.25721377549386537,
+        "seconds": 3.77,
+        "w_spearman": 0.07758375519340228
+      },
+      "two_head_cls": 0.11811933971419872
+    },
+    "physicochemical": {
+      "classification": {
+        "cls": 0.0,
+        "pr_auc": 0.2642779890313741,
+        "seconds": 4.07,
+        "w_spearman": 0.0
+      },
+      "n_features": 13,
+      "regression": {
+        "cls": 0.0,
+        "pr_auc": 0.2853247770310158,
+        "seconds": 3.76,
+        "w_spearman": 0.0
+      },
+      "two_head_cls": 0.0
+    }
+  },
+  "pairwise": {
+    "classification|aa_composition|vs|dipeptide": {
+      "ci_high": 0.4157737851175968,
+      "ci_low": -0.32717132162802914,
+      "mean_difference": 0.07565495879272913,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5022,
+      "sd_difference": 0.20259066571060183
+    },
+    "classification|aa_composition|vs|esm2_150M": {
+      "ci_high": 0.1561988792331581,
+      "ci_low": -0.26071785814799714,
+      "mean_difference": -0.05259877855427096,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1325,
+      "sd_difference": 0.09588756673833818
+    },
+    "classification|aa_composition|vs|esm2_35M": {
+      "ci_high": 0.20974884989915768,
+      "ci_low": -0.2899455227346856,
+      "mean_difference": -0.05838889402712867,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1739,
+      "sd_difference": 0.11616324056514207
+    },
+    "classification|aa_composition|vs|esm2_650M": {
+      "ci_high": 0.389592401276785,
+      "ci_low": -0.44570762190312285,
+      "mean_difference": -0.013235741153824724,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4072,
+      "sd_difference": 0.23658520729919022
+    },
+    "classification|aa_composition|vs|esm2_8M": {
+      "ci_high": 0.3480451982119782,
+      "ci_low": -0.10752503528021423,
+      "mean_difference": 0.06824326068177033,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4728,
+      "sd_difference": 0.1183154848889584
+    },
+    "classification|aa_composition|vs|handcrafted": {
+      "ci_high": 0.010954022917746662,
+      "ci_low": -0.3228691769291201,
+      "mean_difference": -0.10704493659735236,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0381,
+      "sd_difference": 0.09914122535237896
+    },
+    "classification|aa_composition|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.0,
+      "ci_low": -0.4052754420920106,
+      "mean_difference": -0.18162177022813983,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0242,
+      "sd_difference": 0.12179068062467564
+    },
+    "classification|aa_composition|vs|kmer3": {
+      "ci_high": 0.33437202476776756,
+      "ci_low": -0.46933374141932144,
+      "mean_difference": -0.13971328167139677,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2627,
+      "sd_difference": 0.22586791040454832
+    },
+    "classification|aa_composition|vs|kmer4": {
+      "ci_high": 0.41613778251229294,
+      "ci_low": -0.5343819568933174,
+      "mean_difference": -0.006853998895772517,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4611,
+      "sd_difference": 0.28967452003733046
+    },
+    "classification|aa_composition|vs|length": {
+      "ci_high": 0.3019768131790369,
+      "ci_low": -0.21159736963103595,
+      "mean_difference": 0.020904602611996274,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3986,
+      "sd_difference": 0.11660443224128535
+    },
+    "classification|aa_composition|vs|physicochemical": {
+      "ci_high": 0.31681287312217127,
+      "ci_low": -0.5152545352339092,
+      "mean_difference": -0.1860088772500124,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2166,
+      "sd_difference": 0.2321480146100647
+    },
+    "classification|dipeptide|vs|esm2_150M": {
+      "ci_high": 0.31066301813977854,
+      "ci_low": -0.4871055982496302,
+      "mean_difference": -0.1282537373470001,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2346,
+      "sd_difference": 0.2248752418782566
+    },
+    "classification|dipeptide|vs|esm2_35M": {
+      "ci_high": 0.3322098755257507,
+      "ci_low": -0.46898729242420895,
+      "mean_difference": -0.13404385281985778,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2386,
+      "sd_difference": 0.22677689336922602
+    },
+    "classification|dipeptide|vs|esm2_650M": {
+      "ci_high": 0.3534237744073391,
+      "ci_low": -0.4580014426059031,
+      "mean_difference": -0.08889069994655385,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2329,
+      "sd_difference": 0.2237252956428395
+    },
+    "classification|dipeptide|vs|esm2_8M": {
+      "ci_high": 0.359682942174331,
+      "ci_low": -0.39647357443676395,
+      "mean_difference": -0.007411698110958794,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2927,
+      "sd_difference": 0.19032165399465745
+    },
+    "classification|dipeptide|vs|handcrafted": {
+      "ci_high": 0.21646982607799897,
+      "ci_low": -0.45995286497303545,
+      "mean_difference": -0.18269989539008147,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1372,
+      "sd_difference": 0.18426830967531693
+    },
+    "classification|dipeptide|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.19073544081921256,
+      "ci_low": -0.5122748220854768,
+      "mean_difference": -0.25727672902086896,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0983,
+      "sd_difference": 0.18530194324666047
+    },
+    "classification|dipeptide|vs|kmer3": {
+      "ci_high": 0.313355771961752,
+      "ci_low": -0.4834704876134537,
+      "mean_difference": -0.21536824046412595,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1437,
+      "sd_difference": 0.215187007251268
+    },
+    "classification|dipeptide|vs|kmer4": {
+      "ci_high": 0.056746430223761204,
+      "ci_low": -0.44922998479270554,
+      "mean_difference": -0.08250895768850164,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0446,
+      "sd_difference": 0.14058078423511428
+    },
+    "classification|dipeptide|vs|length": {
+      "ci_high": 0.3560353424927663,
+      "ci_low": -0.37580192195957823,
+      "mean_difference": -0.05475035618073285,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.272,
+      "sd_difference": 0.2063875135990104
+    },
+    "classification|dipeptide|vs|physicochemical": {
+      "ci_high": 0.157326398755261,
+      "ci_low": -0.5132015563647166,
+      "mean_difference": -0.2616638360427415,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0686,
+      "sd_difference": 0.17954763133201077
+    },
+    "classification|esm2_150M|vs|esm2_35M": {
+      "ci_high": 0.17695247282971316,
+      "ci_low": -0.2057422630426604,
+      "mean_difference": -0.005790115472857708,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3759,
+      "sd_difference": 0.08336487836711663
+    },
+    "classification|esm2_150M|vs|esm2_650M": {
+      "ci_high": 0.43411995222027633,
+      "ci_low": -0.4219882718257555,
+      "mean_difference": 0.03936303740044624,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4975,
+      "sd_difference": 0.23608470254979935
+    },
+    "classification|esm2_150M|vs|esm2_8M": {
+      "ci_high": 0.38210428635624477,
+      "ci_low": 0.0,
+      "mean_difference": 0.1208420392360413,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6661,
+      "sd_difference": 0.12241545227931266
+    },
+    "classification|esm2_150M|vs|handcrafted": {
+      "ci_high": 0.12213158760795265,
+      "ci_low": -0.3111988143901257,
+      "mean_difference": -0.054446158043081366,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.291,
+      "sd_difference": 0.11119556715946563
+    },
+    "classification|esm2_150M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.017272389027332732,
+      "ci_low": -0.3616601113483111,
+      "mean_difference": -0.12902299167386885,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0559,
+      "sd_difference": 0.10950058347352337
+    },
+    "classification|esm2_150M|vs|kmer3": {
+      "ci_high": 0.3578467389661307,
+      "ci_low": -0.45342578935076067,
+      "mean_difference": -0.0871145031171258,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3448,
+      "sd_difference": 0.22303449786286625
+    },
+    "classification|esm2_150M|vs|kmer4": {
+      "ci_high": 0.4871333634759355,
+      "ci_low": -0.5347167291130386,
+      "mean_difference": 0.045744779658498456,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5596,
+      "sd_difference": 0.3214596487604104
+    },
+    "classification|esm2_150M|vs|length": {
+      "ci_high": 0.3007216009886836,
+      "ci_low": -0.06549682811621119,
+      "mean_difference": 0.07350338116626724,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6305,
+      "sd_difference": 0.09297108624716226
+    },
+    "classification|esm2_150M|vs|physicochemical": {
+      "ci_high": 0.4022930442122205,
+      "ci_low": -0.5161185276008705,
+      "mean_difference": -0.1334100986957414,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3085,
+      "sd_difference": 0.2600475194794724
+    },
+    "classification|esm2_35M|vs|esm2_650M": {
+      "ci_high": 0.4046672673936418,
+      "ci_low": -0.39002187876186134,
+      "mean_difference": 0.04515315287330395,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5122,
+      "sd_difference": 0.2101095010358355
+    },
+    "classification|esm2_35M|vs|esm2_8M": {
+      "ci_high": 0.3696563572195679,
+      "ci_low": 0.0,
+      "mean_difference": 0.12663215470889902,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7115,
+      "sd_difference": 0.11903239998927412
+    },
+    "classification|esm2_35M|vs|handcrafted": {
+      "ci_high": 0.20015699121249508,
+      "ci_low": -0.33538399802444535,
+      "mean_difference": -0.04865604257022366,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3291,
+      "sd_difference": 0.13115798654898667
+    },
+    "classification|esm2_35M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.018030748455680947,
+      "ci_low": -0.36069552327193155,
+      "mean_difference": -0.12323287620101114,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.053,
+      "sd_difference": 0.1066584723900962
+    },
+    "classification|esm2_35M|vs|kmer3": {
+      "ci_high": 0.3083629923603685,
+      "ci_low": -0.43503960079325593,
+      "mean_difference": -0.0813243876442681,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3282,
+      "sd_difference": 0.19554639158243672
+    },
+    "classification|esm2_35M|vs|kmer4": {
+      "ci_high": 0.46898729242420895,
+      "ci_low": -0.5408393046669098,
+      "mean_difference": 0.051534895131356166,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5944,
+      "sd_difference": 0.32324123166489366
+    },
+    "classification|esm2_35M|vs|length": {
+      "ci_high": 0.28294949406194503,
+      "ci_low": -0.04957823781953006,
+      "mean_difference": 0.07929349663912495,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6852,
+      "sd_difference": 0.08928338893450226
+    },
+    "classification|esm2_35M|vs|physicochemical": {
+      "ci_high": 0.38924947150551326,
+      "ci_low": -0.5048750536111406,
+      "mean_difference": -0.1276199832228837,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.292,
+      "sd_difference": 0.24382794485847406
+    },
+    "classification|esm2_650M|vs|esm2_8M": {
+      "ci_high": 0.4478291749454315,
+      "ci_low": -0.29263903264467084,
+      "mean_difference": 0.08147900183559506,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4718,
+      "sd_difference": 0.19314432035889756
+    },
+    "classification|esm2_650M|vs|handcrafted": {
+      "ci_high": 0.3976970409922096,
+      "ci_low": -0.44313916765131217,
+      "mean_difference": -0.09380919544352762,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3151,
+      "sd_difference": 0.23125716937439617
+    },
+    "classification|esm2_650M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.31468962420740776,
+      "ci_low": -0.47995946018134106,
+      "mean_difference": -0.1683860290743151,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2145,
+      "sd_difference": 0.21470800231280884
+    },
+    "classification|esm2_650M|vs|kmer3": {
+      "ci_high": 0.05335326432077144,
+      "ci_low": -0.3761524148695571,
+      "mean_difference": -0.12647754051757207,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0968,
+      "sd_difference": 0.12581217148936638
+    },
+    "classification|esm2_650M|vs|kmer4": {
+      "ci_high": 0.4555210318645807,
+      "ci_low": -0.5583831563000199,
+      "mean_difference": 0.006381742258052208,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4767,
+      "sd_difference": 0.3028197895504224
+    },
+    "classification|esm2_650M|vs|length": {
+      "ci_high": 0.4093090498553887,
+      "ci_low": -0.3053250668618767,
+      "mean_difference": 0.034140343765821,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.431,
+      "sd_difference": 0.18250867234451265
+    },
+    "classification|esm2_650M|vs|physicochemical": {
+      "ci_high": 0.2642417132193938,
+      "ci_low": -0.4860182127902968,
+      "mean_difference": -0.17277313609618766,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1725,
+      "sd_difference": 0.19860636646041274
+    },
+    "classification|esm2_8M|vs|handcrafted": {
+      "ci_high": 0.039664876479325116,
+      "ci_low": -0.4143941130350461,
+      "mean_difference": -0.17528819727912268,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0503,
+      "sd_difference": 0.13817578842164693
+    },
+    "classification|esm2_8M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.0,
+      "ci_low": -0.45504627213453763,
+      "mean_difference": -0.24986503090991014,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0103,
+      "sd_difference": 0.12812882326858438
+    },
+    "classification|esm2_8M|vs|kmer3": {
+      "ci_high": 0.16058851881159272,
+      "ci_low": -0.4745009773685337,
+      "mean_difference": -0.2079565423531671,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1056,
+      "sd_difference": 0.18225507825391968
+    },
+    "classification|esm2_8M|vs|kmer4": {
+      "ci_high": 0.39647357443676395,
+      "ci_low": -0.5670895932017412,
+      "mean_difference": -0.07509725957754286,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3205,
+      "sd_difference": 0.27711560910953126
+    },
+    "classification|esm2_8M|vs|length": {
+      "ci_high": 0.08114825084633734,
+      "ci_low": -0.268621494660707,
+      "mean_difference": -0.04733865806977406,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.119,
+      "sd_difference": 0.09005680104444527
+    },
+    "classification|esm2_8M|vs|physicochemical": {
+      "ci_high": 0.30346820323132995,
+      "ci_low": -0.5243569663469595,
+      "mean_difference": -0.25425213793178275,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1353,
+      "sd_difference": 0.2214220794505805
+    },
+    "classification|handcrafted_plus_esm2_650M|vs|kmer3": {
+      "ci_high": 0.42658921289945206,
+      "ci_low": -0.36705988766332925,
+      "mean_difference": 0.04190848855674304,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5752,
+      "sd_difference": 0.19658252591472913
+    },
+    "classification|handcrafted_plus_esm2_650M|vs|kmer4": {
+      "ci_high": 0.5124537213724261,
+      "ci_low": -0.4496443025988909,
+      "mean_difference": 0.17476777133236732,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.706,
+      "sd_difference": 0.282476875596627
+    },
+    "classification|handcrafted_plus_esm2_650M|vs|length": {
+      "ci_high": 0.41805529206643505,
+      "ci_low": 0.0,
+      "mean_difference": 0.20252637284013608,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.9454,
+      "sd_difference": 0.11375654645155218
+    },
+    "classification|handcrafted_plus_esm2_650M|vs|physicochemical": {
+      "ci_high": 0.4263932129929099,
+      "ci_low": -0.4377114014145384,
+      "mean_difference": -0.004387107021872559,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4679,
+      "sd_difference": 0.21082747602949134
+    },
+    "classification|handcrafted|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.14746696372674184,
+      "ci_low": -0.32705848821541644,
+      "mean_difference": -0.07457683363078749,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1748,
+      "sd_difference": 0.11096416364513964
+    },
+    "classification|handcrafted|vs|kmer3": {
+      "ci_high": 0.3908852142124111,
+      "ci_low": -0.4262642757492484,
+      "mean_difference": -0.03266834507404443,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4073,
+      "sd_difference": 0.21244620703298375
+    },
+    "classification|handcrafted|vs|kmer4": {
+      "ci_high": 0.4614840160979454,
+      "ci_low": -0.4280143600115706,
+      "mean_difference": 0.10019093770157983,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6077,
+      "sd_difference": 0.2694363488946324
+    },
+    "classification|handcrafted|vs|length": {
+      "ci_high": 0.3842241398058211,
+      "ci_low": -0.08390026507112339,
+      "mean_difference": 0.1279495392093486,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7894,
+      "sd_difference": 0.12768749781847796
+    },
+    "classification|handcrafted|vs|physicochemical": {
+      "ci_high": 0.38208586681756124,
+      "ci_low": -0.4912746538009044,
+      "mean_difference": -0.07896394065266003,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3608,
+      "sd_difference": 0.23244620900925747
+    },
+    "classification|kmer3|vs|kmer4": {
+      "ci_high": 0.4768821797222798,
+      "ci_low": -0.5089645763281403,
+      "mean_difference": 0.13285928277562428,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6634,
+      "sd_difference": 0.2888575452892843
+    },
+    "classification|kmer3|vs|length": {
+      "ci_high": 0.4533763903640375,
+      "ci_low": -0.18623414058819104,
+      "mean_difference": 0.16061788428339305,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7584,
+      "sd_difference": 0.17146531282782418
+    },
+    "classification|kmer3|vs|physicochemical": {
+      "ci_high": 0.3646750772140621,
+      "ci_low": -0.42766562469262054,
+      "mean_difference": -0.0462955955786156,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.375,
+      "sd_difference": 0.19095353594282224
+    },
+    "classification|kmer4|vs|length": {
+      "ci_high": 0.5644651958586229,
+      "ci_low": -0.37580192195957823,
+      "mean_difference": 0.027758601507768786,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3877,
+      "sd_difference": 0.3017670003310429
+    },
+    "classification|kmer4|vs|physicochemical": {
+      "ci_high": 0.39837298360024603,
+      "ci_low": -0.49929901813785205,
+      "mean_difference": -0.17915487835423988,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2207,
+      "sd_difference": 0.24421147008076843
+    },
+    "classification|length|vs|physicochemical": {
+      "ci_high": 0.3084892702346486,
+      "ci_low": -0.519377910017229,
+      "mean_difference": -0.20691347986200861,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1789,
+      "sd_difference": 0.22547888443075761
+    },
+    "regression|aa_composition|vs|dipeptide": {
+      "ci_high": 0.3600384989199524,
+      "ci_low": -0.2939097793238325,
+      "mean_difference": 0.04674688078216627,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4285,
+      "sd_difference": 0.1568333314928558
+    },
+    "regression|aa_composition|vs|esm2_150M": {
+      "ci_high": 0.37441859390542737,
+      "ci_low": -0.16642712115236258,
+      "mean_difference": 0.08740091540461527,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4856,
+      "sd_difference": 0.13796171757927528
+    },
+    "regression|aa_composition|vs|esm2_35M": {
+      "ci_high": 0.3247008190711099,
+      "ci_low": -0.4957678201842827,
+      "mean_difference": -0.13468066099924844,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2493,
+      "sd_difference": 0.22759413554848293
+    },
+    "regression|aa_composition|vs|esm2_650M": {
+      "ci_high": 0.36085731226724804,
+      "ci_low": -0.32500018608578174,
+      "mean_difference": 0.035654863317921795,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4052,
+      "sd_difference": 0.16319641026626283
+    },
+    "regression|aa_composition|vs|esm2_8M": {
+      "ci_high": 0.27674444769667045,
+      "ci_low": -0.44700632025869314,
+      "mean_difference": -0.1386497313877262,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2015,
+      "sd_difference": 0.19371960093469293
+    },
+    "regression|aa_composition|vs|handcrafted": {
+      "ci_high": 0.29042287603921263,
+      "ci_low": -0.4282866825103147,
+      "mean_difference": -0.11263726729437526,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2351,
+      "sd_difference": 0.19382355006446303
+    },
+    "regression|aa_composition|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.3598285357993014,
+      "ci_low": -0.34525532339173476,
+      "mean_difference": 0.015617004297580383,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3916,
+      "sd_difference": 0.1784242908062308
+    },
+    "regression|aa_composition|vs|kmer3": {
+      "ci_high": 0.37229013117010384,
+      "ci_low": -0.3703718342886101,
+      "mean_difference": 0.015786549727583157,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4247,
+      "sd_difference": 0.19837895752825635
+    },
+    "regression|aa_composition|vs|kmer4": {
+      "ci_high": 0.37441859390542737,
+      "ci_low": -0.16194233194516863,
+      "mean_difference": 0.08958428164473879,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4932,
+      "sd_difference": 0.13788105671178935
+    },
+    "regression|aa_composition|vs|length": {
+      "ci_high": 0.2204389592471685,
+      "ci_low": -0.4901354932887864,
+      "mean_difference": -0.21802774833657473,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.125,
+      "sd_difference": 0.18836910540034638
+    },
+    "regression|aa_composition|vs|physicochemical": {
+      "ci_high": 0.3151884610139668,
+      "ci_low": -0.36405982509554513,
+      "mean_difference": -0.030251176230392064,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2963,
+      "sd_difference": 0.16770606974599409
+    },
+    "regression|dipeptide|vs|esm2_150M": {
+      "ci_high": 0.31848043385077224,
+      "ci_low": -0.11458942545138112,
+      "mean_difference": 0.040654034622449,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2639,
+      "sd_difference": 0.1031588593593524
+    },
+    "regression|dipeptide|vs|esm2_35M": {
+      "ci_high": 0.1662399806833492,
+      "ci_low": -0.4681468061122561,
+      "mean_difference": -0.1814275417814147,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0761,
+      "sd_difference": 0.172365195241977
+    },
+    "regression|dipeptide|vs|esm2_650M": {
+      "ci_high": 0.32787046253142516,
+      "ci_low": -0.37168895070524977,
+      "mean_difference": -0.011092017464244463,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2477,
+      "sd_difference": 0.16473926466269437
+    },
+    "regression|dipeptide|vs|esm2_8M": {
+      "ci_high": 0.01773793774124884,
+      "ci_low": -0.4287032760544379,
+      "mean_difference": -0.18539661216989248,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0317,
+      "sd_difference": 0.14219655447375945
+    },
+    "regression|dipeptide|vs|handcrafted": {
+      "ci_high": 0.0,
+      "ci_low": -0.3842889342604221,
+      "mean_difference": -0.15938414807654153,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0158,
+      "sd_difference": 0.12749153544014383
+    },
+    "regression|dipeptide|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.278379523408723,
+      "ci_low": -0.3513328382339469,
+      "mean_difference": -0.031129876484585883,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1901,
+      "sd_difference": 0.1420953756321364
+    },
+    "regression|dipeptide|vs|kmer3": {
+      "ci_high": 0.23688014745358055,
+      "ci_low": -0.30925579795795965,
+      "mean_difference": -0.030960331054583106,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1579,
+      "sd_difference": 0.11933817744288769
+    },
+    "regression|dipeptide|vs|kmer4": {
+      "ci_high": 0.3175390250520023,
+      "ci_low": -0.059588371175747695,
+      "mean_difference": 0.04283740086257253,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2657,
+      "sd_difference": 0.10024158028947372
+    },
+    "regression|dipeptide|vs|length": {
+      "ci_high": 0.0,
+      "ci_low": -0.4746197688839527,
+      "mean_difference": -0.26477462911874095,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0222,
+      "sd_difference": 0.1412597599566279
+    },
+    "regression|dipeptide|vs|physicochemical": {
+      "ci_high": 0.31261796766540284,
+      "ci_low": -0.40718719926895064,
+      "mean_difference": -0.07699805701255832,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1991,
+      "sd_difference": 0.18539623790369295
+    },
+    "regression|esm2_150M|vs|esm2_35M": {
+      "ci_high": 0.0,
+      "ci_low": -0.49668269180485053,
+      "mean_difference": -0.22208157640386372,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0225,
+      "sd_difference": 0.16924822296678355
+    },
+    "regression|esm2_150M|vs|esm2_650M": {
+      "ci_high": 0.13354679420155727,
+      "ci_low": -0.36884209506011906,
+      "mean_difference": -0.051746052086693466,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0543,
+      "sd_difference": 0.12141376292171002
+    },
+    "regression|esm2_150M|vs|esm2_8M": {
+      "ci_high": 0.0,
+      "ci_low": -0.4557835910704235,
+      "mean_difference": -0.22605064679234146,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0207,
+      "sd_difference": 0.15235099989520978
+    },
+    "regression|esm2_150M|vs|handcrafted": {
+      "ci_high": 0.0,
+      "ci_low": -0.4345420921501603,
+      "mean_difference": -0.2000381826989905,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0109,
+      "sd_difference": 0.14620365303252045
+    },
+    "regression|esm2_150M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.0,
+      "ci_low": -0.3510585808960304,
+      "mean_difference": -0.07178391110703489,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0166,
+      "sd_difference": 0.11300211935702655
+    },
+    "regression|esm2_150M|vs|kmer3": {
+      "ci_high": 0.06064716776898352,
+      "ci_low": -0.35976268252036075,
+      "mean_difference": -0.07161436567703211,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0364,
+      "sd_difference": 0.12234009232890945
+    },
+    "regression|esm2_150M|vs|kmer4": {
+      "ci_high": 0.15945102286727866,
+      "ci_low": -0.12278555034139338,
+      "mean_difference": 0.002183366240123534,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0647,
+      "sd_difference": 0.053519987235387624
+    },
+    "regression|esm2_150M|vs|length": {
+      "ci_high": 0.0,
+      "ci_low": -0.49306769460520516,
+      "mean_difference": -0.30542866374118993,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.009,
+      "sd_difference": 0.13196220215653154
+    },
+    "regression|esm2_150M|vs|physicochemical": {
+      "ci_high": 0.12872827438451173,
+      "ci_low": -0.4149486089253199,
+      "mean_difference": -0.11765209163500734,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.051,
+      "sd_difference": 0.15284164959510788
+    },
+    "regression|esm2_35M|vs|esm2_650M": {
+      "ci_high": 0.5042631666236219,
+      "ci_low": -0.3655413762844194,
+      "mean_difference": 0.17033552431717025,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7182,
+      "sd_difference": 0.24575497939187102
+    },
+    "regression|esm2_35M|vs|esm2_8M": {
+      "ci_high": 0.37315298605568686,
+      "ci_low": -0.3675605875665223,
+      "mean_difference": -0.003969070388477766,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4867,
+      "sd_difference": 0.18796573558968144
+    },
+    "regression|esm2_35M|vs|handcrafted": {
+      "ci_high": 0.33378496644939215,
+      "ci_low": -0.2981912289030928,
+      "mean_difference": 0.022043393704873186,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5506,
+      "sd_difference": 0.1518510759253276
+    },
+    "regression|esm2_35M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.49333402496343726,
+      "ci_low": -0.3450940954635117,
+      "mean_difference": 0.15029766529682884,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6923,
+      "sd_difference": 0.23490246542493096
+    },
+    "regression|esm2_35M|vs|kmer3": {
+      "ci_high": 0.41065482670298714,
+      "ci_low": -0.020108098050271285,
+      "mean_difference": 0.15046721072683164,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7633,
+      "sd_difference": 0.13218696398828414
+    },
+    "regression|esm2_35M|vs|kmer4": {
+      "ci_high": 0.4804267480803728,
+      "ci_low": 0.0,
+      "mean_difference": 0.22426494264398725,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7899,
+      "sd_difference": 0.1578306121836996
+    },
+    "regression|esm2_35M|vs|length": {
+      "ci_high": 0.24498144450920722,
+      "ci_low": -0.3859182867411107,
+      "mean_difference": -0.08334708733732624,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2955,
+      "sd_difference": 0.15940288379601308
+    },
+    "regression|esm2_35M|vs|physicochemical": {
+      "ci_high": 0.49957311117158004,
+      "ci_low": -0.38377113017537595,
+      "mean_difference": 0.1044294847688564,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6221,
+      "sd_difference": 0.2598148492881632
+    },
+    "regression|esm2_650M|vs|esm2_8M": {
+      "ci_high": 0.3213156257909275,
+      "ci_low": -0.4619504285778663,
+      "mean_difference": -0.17430459470564802,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.181,
+      "sd_difference": 0.2149100059909022
+    },
+    "regression|esm2_650M|vs|handcrafted": {
+      "ci_high": 0.349055821005015,
+      "ci_low": -0.4426955638600069,
+      "mean_difference": -0.14829213061229707,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2046,
+      "sd_difference": 0.218150188571112
+    },
+    "regression|esm2_650M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.2402785552521518,
+      "ci_low": -0.3049336826699791,
+      "mean_difference": -0.02003785902034142,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1993,
+      "sd_difference": 0.1201252632417456
+    },
+    "regression|esm2_650M|vs|kmer3": {
+      "ci_high": 0.3753500467917383,
+      "ci_low": -0.37673323299687467,
+      "mean_difference": -0.019868313590338645,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2904,
+      "sd_difference": 0.1949085457030075
+    },
+    "regression|esm2_650M|vs|kmer4": {
+      "ci_high": 0.3762223444743114,
+      "ci_low": -0.1678679460360948,
+      "mean_difference": 0.053929418326817,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3052,
+      "sd_difference": 0.12815763523693732
+    },
+    "regression|esm2_650M|vs|length": {
+      "ci_high": 0.24958429085537506,
+      "ci_low": -0.49797229412352106,
+      "mean_difference": -0.25368261165449646,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.117,
+      "sd_difference": 0.19778843507069643
+    },
+    "regression|esm2_650M|vs|physicochemical": {
+      "ci_high": 0.1697185288855337,
+      "ci_low": -0.3453457312190084,
+      "mean_difference": -0.06590603954831385,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1226,
+      "sd_difference": 0.12689511676427606
+    },
+    "regression|esm2_8M|vs|handcrafted": {
+      "ci_high": 0.33119403964782507,
+      "ci_low": -0.29678827887375375,
+      "mean_difference": 0.026012464093350944,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5519,
+      "sd_difference": 0.14933863709103082
+    },
+    "regression|esm2_8M|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.44530037966243413,
+      "ci_low": -0.30011300367755867,
+      "mean_difference": 0.1542667356853066,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7378,
+      "sd_difference": 0.1953127244652463
+    },
+    "regression|esm2_8M|vs|kmer3": {
+      "ci_high": 0.4106957211062687,
+      "ci_low": -0.10795604301437446,
+      "mean_difference": 0.15443628111530938,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7785,
+      "sd_difference": 0.14493129916952022
+    },
+    "regression|esm2_8M|vs|kmer4": {
+      "ci_high": 0.4503248132449751,
+      "ci_low": 0.0,
+      "mean_difference": 0.22823401303246502,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.8364,
+      "sd_difference": 0.14346724744391467
+    },
+    "regression|esm2_8M|vs|length": {
+      "ci_high": 0.2733531069249969,
+      "ci_low": -0.39047185245087934,
+      "mean_difference": -0.07937801694884848,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.265,
+      "sd_difference": 0.15691885419267604
+    },
+    "regression|esm2_8M|vs|physicochemical": {
+      "ci_high": 0.44495509022080854,
+      "ci_low": -0.2908433795993814,
+      "mean_difference": 0.10839855515733415,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6435,
+      "sd_difference": 0.19833515496637677
+    },
+    "regression|handcrafted_plus_esm2_650M|vs|kmer3": {
+      "ci_high": 0.36093351986580596,
+      "ci_low": -0.3475827157695006,
+      "mean_difference": 0.00016954543000277626,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3295,
+      "sd_difference": 0.1755493360369446
+    },
+    "regression|handcrafted_plus_esm2_650M|vs|kmer4": {
+      "ci_high": 0.3741592209494228,
+      "ci_low": -0.12844914739722707,
+      "mean_difference": 0.07396727734715841,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4067,
+      "sd_difference": 0.12992381891895088
+    },
+    "regression|handcrafted_plus_esm2_650M|vs|length": {
+      "ci_high": 0.17650324054105204,
+      "ci_low": -0.4810453009881524,
+      "mean_difference": -0.23364475263415507,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0988,
+      "sd_difference": 0.17680998232787015
+    },
+    "regression|handcrafted_plus_esm2_650M|vs|physicochemical": {
+      "ci_high": 0.30322168530252813,
+      "ci_low": -0.3755156386211643,
+      "mean_difference": -0.045868180527972445,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.2455,
+      "sd_difference": 0.1649495096813458
+    },
+    "regression|handcrafted|vs|handcrafted_plus_esm2_650M": {
+      "ci_high": 0.4186733224619178,
+      "ci_low": -0.2768631009315656,
+      "mean_difference": 0.12825427159195565,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.6775,
+      "sd_difference": 0.1847677883166122
+    },
+    "regression|handcrafted|vs|kmer3": {
+      "ci_high": 0.3752177876864436,
+      "ci_low": -0.04985330302439865,
+      "mean_difference": 0.12842381702195843,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7395,
+      "sd_difference": 0.1259218897019312
+    },
+    "regression|handcrafted|vs|kmer4": {
+      "ci_high": 0.42820446903484466,
+      "ci_low": 0.0,
+      "mean_difference": 0.20222154893911407,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7862,
+      "sd_difference": 0.14167518386613276
+    },
+    "regression|handcrafted|vs|length": {
+      "ci_high": 0.22960304523920344,
+      "ci_low": -0.38953945737599216,
+      "mean_difference": -0.10539048104219942,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.1887,
+      "sd_difference": 0.15016920832192227
+    },
+    "regression|handcrafted|vs|physicochemical": {
+      "ci_high": 0.43686560709434374,
+      "ci_low": -0.37643226757131115,
+      "mean_difference": 0.08238609106398322,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.5984,
+      "sd_difference": 0.232483510464686
+    },
+    "regression|kmer3|vs|kmer4": {
+      "ci_high": 0.32889561208508405,
+      "ci_low": 0.0,
+      "mean_difference": 0.07379773191715563,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.4044,
+      "sd_difference": 0.10829627038587111
+    },
+    "regression|kmer3|vs|length": {
+      "ci_high": 0.0,
+      "ci_low": -0.4476085746258588,
+      "mean_difference": -0.23381429806415785,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0138,
+      "sd_difference": 0.13110783266529968
+    },
+    "regression|kmer3|vs|physicochemical": {
+      "ci_high": 0.37272307152359263,
+      "ci_low": -0.4144877036562092,
+      "mean_difference": -0.04603772595797522,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.3227,
+      "sd_difference": 0.2210871941491583
+    },
+    "regression|kmer4|vs|length": {
+      "ci_high": 0.0,
+      "ci_low": -0.48639181507027696,
+      "mean_difference": -0.30761202998131354,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0001,
+      "sd_difference": 0.12398623169427934
+    },
+    "regression|kmer4|vs|physicochemical": {
+      "ci_high": 0.1635791939918656,
+      "ci_low": -0.4170499492976505,
+      "mean_difference": -0.11983545787513088,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.0579,
+      "sd_difference": 0.1567249609157581
+    },
+    "regression|length|vs|physicochemical": {
+      "ci_high": 0.49233403041069007,
+      "ci_low": -0.29542538188604356,
+      "mean_difference": 0.18777657210618262,
+      "n_draws": 10000,
+      "probability_a_beats_b": 0.7853,
+      "sd_difference": 0.2147424382463309
+    }
+  },
+  "permutation": {
+    "esm2_650M": {
+      "classification": {
+        "max": 0.3851113754518273,
+        "mean": 0.10511173112111047,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.3700449061837291,
+        "pr_auc_max": 0.5274756162426686,
+        "pr_auc_mean": 0.39694272614565307,
+        "pr_auc_p95": 0.5216972395414095,
+        "pr_auc_std": 0.06306329985582577,
+        "pr_auc_values": [
+          0.39554151253668207,
+          0.4041001247805691,
+          0.4223856036366692,
+          0.4066680900928584,
+          0.5274756162426686,
+          0.33785277869020963,
+          0.44943900496607414,
+          0.40892409605181307,
+          0.46592751230857277,
+          0.3264310519941578,
+          0.3427123589014353,
+          0.37279568046084366,
+          0.3583203204301355,
+          0.3343348577574912,
+          0.33402000410368093,
+          0.5213931144518695,
+          0.30958327431112187,
+          0.44972365055905134,
+          0.42132001175956507,
+          0.34990585887759096
+        ],
+        "std": 0.14759493364365545,
+        "values": [
+          0.0,
+          0.2245091041838029,
+          0.0,
+          0.12882247828278484,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.33309196779966355,
+          0.3692519341169871,
+          0.0,
+          0.3484116519343739,
+          0.3851113754518273,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.1258874165206556,
+          0.0,
+          0.1871486941321145
+        ]
+      },
+      "regression": {
+        "max": 0.4012031150854346,
+        "mean": 0.1047180554861193,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.3528653719724996,
+        "pr_auc_max": 0.5377983257923715,
+        "pr_auc_mean": 0.40207560236811873,
+        "pr_auc_p95": 0.5041760734419025,
+        "pr_auc_std": 0.05807710829265031,
+        "pr_auc_values": [
+          0.5377983257923715,
+          0.4005827288929758,
+          0.44924578514987296,
+          0.42399215291609105,
+          0.4289906694354821,
+          0.3206681632836002,
+          0.4108886512386678,
+          0.40074225004386654,
+          0.3588023579694236,
+          0.44168920650163657,
+          0.380784767519458,
+          0.41084456548350173,
+          0.34267561575749744,
+          0.39429718934872837,
+          0.407464717623574,
+          0.426650189795744,
+          0.2903701891699265,
+          0.3736209662970985,
+          0.3389970739299279,
+          0.5024064812129304
+        ],
+        "std": 0.13472364567187528,
+        "values": [
+          0.0,
+          0.24283834896419743,
+          0.17421297544086478,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.11582375433317277,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.12394647757676808,
+          0.0,
+          0.23509871251723896,
+          0.2776813801783653,
+          0.35032128022971354,
+          0.17323506539663067,
+          0.4012031150854346
+        ]
+      }
+    },
+    "esm2_8M": {
+      "classification": {
+        "max": 0.4018562391662068,
+        "mean": 0.14098358067258202,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.3536502009961374,
+        "pr_auc_max": 0.5687778951829336,
+        "pr_auc_mean": 0.3976391940328938,
+        "pr_auc_p95": 0.5675792007886098,
+        "pr_auc_std": 0.08897719096310976,
+        "pr_auc_values": [
+          0.3224259402536044,
+          0.471005006479209,
+          0.5428184978021595,
+          0.3562880864380459,
+          0.3195395383618391,
+          0.30847117390941914,
+          0.5687778951829336,
+          0.40226714048082474,
+          0.4448248762072511,
+          0.3854371326945861,
+          0.38194825254420883,
+          0.3508407402193109,
+          0.30464061572181345,
+          0.5675161116099612,
+          0.3459046064413424,
+          0.507792920694781,
+          0.3242877690377273,
+          0.30189251997221145,
+          0.3598384170177624,
+          0.38626663958888424
+        ],
+        "std": 0.15673119993954787,
+        "values": [
+          0.0,
+          0.0,
+          0.3511130410924495,
+          0.24428859746075635,
+          0.21170486373107958,
+          0.0,
+          0.3502667112007829,
+          0.3164116691892772,
+          0.0,
+          0.3281778901720575,
+          0.1194596767231514,
+          0.4018562391662068,
+          0.0,
+          0.18897646534382942,
+          0.0,
+          0.3074164593720496,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "regression": {
+        "max": 0.4578479396279032,
+        "mean": 0.07364921927556252,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.25301043237873694,
+        "pr_auc_max": 0.5752877700765495,
+        "pr_auc_mean": 0.4189296971258155,
+        "pr_auc_p95": 0.5650293043551058,
+        "pr_auc_std": 0.0671984947287819,
+        "pr_auc_values": [
+          0.42058931466669613,
+          0.366672638978342,
+          0.36397410320989193,
+          0.5752877700765495,
+          0.35788194830946224,
+          0.3327352367479911,
+          0.4750413322411181,
+          0.40775576570320804,
+          0.5644893851066087,
+          0.4065987579825274,
+          0.4106127355885394,
+          0.3872353821989186,
+          0.3852731729354974,
+          0.4223347595175338,
+          0.491672344943649,
+          0.4082089459107801,
+          0.3378731411726957,
+          0.4439476969751815,
+          0.459466494869565,
+          0.3609430153815551
+        ],
+        "std": 0.12443950972417611,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.24222951094457015,
+          0.172094265716712,
+          0.0,
+          0.20243980564670835,
+          0.0,
+          0.0,
+          0.09558610294563359,
+          0.08495546664350992,
+          0.0,
+          0.0,
+          0.4578479396279032,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.217831293986213
+        ]
+      }
+    },
+    "handcrafted": {
+      "classification": {
+        "max": 0.5399598698948852,
+        "mean": 0.154818457333124,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.36441002331511374,
+        "pr_auc_max": 0.5024582737742397,
+        "pr_auc_mean": 0.37685427581715664,
+        "pr_auc_p95": 0.48908887981609345,
+        "pr_auc_std": 0.060529868598830035,
+        "pr_auc_values": [
+          0.3483273918912213,
+          0.40011799020372285,
+          0.3920482312735421,
+          0.38032887493734086,
+          0.44392760074563586,
+          0.3402664127367659,
+          0.37031079071941525,
+          0.39738911987155395,
+          0.5024582737742397,
+          0.3706323908221564,
+          0.4883852275025068,
+          0.29398102595236475,
+          0.302730291908589,
+          0.36918729095969083,
+          0.3353809712092145,
+          0.4548288497971298,
+          0.2963263441195265,
+          0.296289245213332,
+          0.365627659203727,
+          0.38854153350145754
+        ],
+        "std": 0.15662053232252404,
+        "values": [
+          0.3413760470898047,
+          0.10210073237626188,
+          0.10520424845276222,
+          0.15987527905533333,
+          0.0,
+          0.0,
+          0.20136977171779893,
+          0.14957158369931187,
+          0.5399598698948852,
+          0.3341623086803499,
+          0.25339065646908754,
+          0.3551705577056519,
+          0.06104876826044581,
+          0.0,
+          0.250989575294691,
+          0.0,
+          0.0,
+          0.2421497479660955,
+          0.0,
+          0.0
+        ]
+      },
+      "regression": {
+        "max": 0.45505934835050393,
+        "mean": 0.12146644251743119,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.30718753826748296,
+        "pr_auc_max": 0.49781484940183074,
+        "pr_auc_mean": 0.3812916299636918,
+        "pr_auc_p95": 0.4829955479743546,
+        "pr_auc_std": 0.06252119465896577,
+        "pr_auc_values": [
+          0.4136485839498055,
+          0.32801356630524003,
+          0.3516631830955096,
+          0.3246394214865781,
+          0.4055599790602668,
+          0.2961783377833733,
+          0.35588659278314344,
+          0.34997177043416006,
+          0.49781484940183074,
+          0.4320994993603055,
+          0.3754017249434315,
+          0.44287220528031784,
+          0.30168403631377727,
+          0.46405292481543,
+          0.3686064214593281,
+          0.41341621027330705,
+          0.2771111675791262,
+          0.3472281630361478,
+          0.48221558474132953,
+          0.3977683771714281
+        ],
+        "std": 0.13820709575533574,
+        "values": [
+          0.26208293864912535,
+          0.0,
+          0.0,
+          0.29940481142100805,
+          0.125639654475601,
+          0.17056753309438796,
+          0.1469895898551772,
+          0.0,
+          0.45505934835050393,
+          0.0,
+          0.06424755863010116,
+          0.11340757180718802,
+          0.0,
+          0.0,
+          0.2663448802580596,
+          0.0,
+          0.2683645424054961,
+          0.2572204214019753,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "kmer4": {
+      "classification": {
+        "max": 0.4671299949668973,
+        "mean": 0.19160493058206945,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.43705912401445457,
+        "pr_auc_max": 0.5504467702325566,
+        "pr_auc_mean": 0.3839361642923863,
+        "pr_auc_p95": 0.5397642006190239,
+        "pr_auc_std": 0.08820219602053213,
+        "pr_auc_values": [
+          0.5504467702325566,
+          0.5392019601130484,
+          0.40443520950328493,
+          0.45091383603180196,
+          0.2903113638056478,
+          0.29725261221239796,
+          0.39223180583787537,
+          0.38849947451783096,
+          0.5343698685480046,
+          0.2815041483349636,
+          0.4063942114161817,
+          0.2976727465023011,
+          0.3021025499382163,
+          0.46061515587929125,
+          0.2895074362985147,
+          0.4271430472038725,
+          0.2939402821692306,
+          0.3631725880343896,
+          0.351963818397964,
+          0.35704440087035116
+        ],
+        "std": 0.16959991604364733,
+        "values": [
+          0.0,
+          0.43547644659590495,
+          0.4671299949668973,
+          0.024324983402848988,
+          0.10039281769032503,
+          0.2640643648831668,
+          0.0,
+          0.0,
+          0.36456121711066963,
+          0.3478922725619216,
+          0.36852625398220223,
+          0.2664786692084215,
+          0.23377087446161102,
+          0.053772912121497596,
+          0.2794279648096767,
+          0.0,
+          0.31681133636821895,
+          0.0,
+          0.3094685034780267,
+          0.0
+        ]
+      },
+      "regression": {
+        "max": 0.3019417615170723,
+        "mean": 0.039331309530239306,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.26219108927386003,
+        "pr_auc_max": 0.4602877310105075,
+        "pr_auc_mean": 0.35708959180253885,
+        "pr_auc_p95": 0.44916606292672695,
+        "pr_auc_std": 0.05953597144133651,
+        "pr_auc_values": [
+          0.3310095968868836,
+          0.40132305471131113,
+          0.29191146035909016,
+          0.4602877310105075,
+          0.23726001914309275,
+          0.3297317470890536,
+          0.40882249466628073,
+          0.35824036651263197,
+          0.30050939563802426,
+          0.3925822902762828,
+          0.44664743298505505,
+          0.34567833695402556,
+          0.3206683899228211,
+          0.34805807040561365,
+          0.30037492102531577,
+          0.402007875738498,
+          0.31193648169551313,
+          0.31894586831894545,
+          0.44858071197494903,
+          0.3872155907368826
+        ],
+        "std": 0.09576996670979315,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.21516468172205086,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.009420798736182531,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.2600989486294804,
+          0.0,
+          0.3019417615170723,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "length": {
+      "classification": {
+        "max": 0.41528485024976075,
+        "mean": 0.12656846354627216,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.34176360466444544,
+        "pr_auc_max": 0.4200415715104655,
+        "pr_auc_mean": 0.32248217648702926,
+        "pr_auc_p95": 0.4111259552108239,
+        "pr_auc_std": 0.04221938007789665,
+        "pr_auc_values": [
+          0.28897174535569586,
+          0.3094468649404377,
+          0.28782427106011144,
+          0.3350272013675752,
+          0.2756244256117971,
+          0.28472578157682105,
+          0.41065671224768485,
+          0.2906301362035908,
+          0.374111319733603,
+          0.3339940977981044,
+          0.38053439969382336,
+          0.29546364487403737,
+          0.30844280117770967,
+          0.3193867676125524,
+          0.31042034332563967,
+          0.3010196146346932,
+          0.284411887222302,
+          0.32682563610095944,
+          0.4200415715104655,
+          0.31208430769298035
+        ],
+        "std": 0.15431394475955404,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.32593018510321187,
+          0.0,
+          0.15580163648359638,
+          0.0,
+          0.3269459373921202,
+          0.0,
+          0.41528485024976075,
+          0.08563320970672574,
+          0.337894065423113,
+          0.25769431056022996,
+          0.0,
+          0.2650827032270388,
+          0.0,
+          0.3212578018329388,
+          0.03984457094670763,
+          0.0,
+          0.0
+        ]
+      },
+      "regression": {
+        "max": 0.1426404987315824,
+        "mean": 0.026412173034612397,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.14059153225954085,
+        "pr_auc_max": 0.48270355435394313,
+        "pr_auc_mean": 0.3661999260656308,
+        "pr_auc_p95": 0.48069661568686145,
+        "pr_auc_std": 0.06612469521165253,
+        "pr_auc_values": [
+          0.297544302691428,
+          0.3406188045748594,
+          0.34589270077240214,
+          0.43891575447350006,
+          0.28279445768432077,
+          0.32844626406579003,
+          0.48270355435394313,
+          0.3994722048316072,
+          0.4805909873359624,
+          0.34452636575124007,
+          0.461651699349688,
+          0.31635426763307334,
+          0.2863003846497087,
+          0.3632826757725802,
+          0.38520096662211706,
+          0.3694480919510524,
+          0.2933613443736498,
+          0.3068105024657166,
+          0.4543983369374367,
+          0.34568485502254154
+        ],
+        "std": 0.04984408827915612,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.14048369191890708,
+          0.0,
+          0.0721182322244219,
+          0.0,
+          0.0,
+          0.06518633649697798,
+          0.0,
+          0.0,
+          0.1426404987315824,
+          0.0,
+          0.0,
+          0.10781470132035859,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "physicochemical": {
+      "classification": {
+        "max": 0.38008738921872515,
+        "mean": 0.10762289323655741,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.3785552881491183,
+        "pr_auc_max": 0.5363958054947496,
+        "pr_auc_mean": 0.34503371353342893,
+        "pr_auc_p95": 0.4253928758525326,
+        "pr_auc_std": 0.05772947496861897,
+        "pr_auc_values": [
+          0.419550616397679,
+          0.5363958054947496,
+          0.2860217305868112,
+          0.34938117432639615,
+          0.3652423523855967,
+          0.36468224825012796,
+          0.38181835606903414,
+          0.3298547327880323,
+          0.30081187374988677,
+          0.29064608473324616,
+          0.3694405275749493,
+          0.3222522838717188,
+          0.2725363372889307,
+          0.32898486318388714,
+          0.342419425613143,
+          0.3235131514243262,
+          0.30762009321896405,
+          0.3034775551395227,
+          0.35442008194927743,
+          0.3516049766222982
+        ],
+        "std": 0.14223050996173664,
+        "values": [
+          0.0,
+          0.02716651853179293,
+          0.0,
+          0.06722219512885755,
+          0.0,
+          0.0,
+          0.062463477140661895,
+          0.012033696269422578,
+          0.0,
+          0.3159019106871154,
+          0.20986123477902396,
+          0.38008738921872515,
+          0.30779029789477935,
+          0.0,
+          0.23938626071534372,
+          0.0,
+          0.0,
+          0.15207023311470777,
+          0.37847465125071794,
+          0.0
+        ]
+      },
+      "regression": {
+        "max": 0.3589441697768156,
+        "mean": 0.05983761697001091,
+        "min": 0.0,
+        "n_repeats": 20,
+        "p95": 0.30994249250546096,
+        "pr_auc_max": 0.543286370154173,
+        "pr_auc_mean": 0.3877909284327462,
+        "pr_auc_p95": 0.5343529023349985,
+        "pr_auc_std": 0.07766387513737444,
+        "pr_auc_values": [
+          0.36771802657874353,
+          0.4168256993894363,
+          0.2999045125947578,
+          0.3877776461546863,
+          0.3576526599036992,
+          0.3298003980024056,
+          0.5338827198181999,
+          0.543286370154173,
+          0.5199953834474373,
+          0.36373465994860965,
+          0.4482294110120196,
+          0.38274178360812483,
+          0.3553441825377295,
+          0.34286961239951386,
+          0.36381561589136036,
+          0.3145410695292716,
+          0.2885077353344536,
+          0.2990349848300788,
+          0.4714261964547683,
+          0.368729901065456
+        ],
+        "std": 0.11576223525281121,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.20437087886394406,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.054902861218563595,
+          0.0,
+          0.028011260011258688,
+          0.0,
+          0.0,
+          0.0037136829657056745,
+          0.3589441697768156,
+          0.30736345685960015,
+          0.23944602970433038
+        ]
+      }
+    }
+  },
+  "permutation_subset": [
+    "length",
+    "handcrafted",
+    "physicochemical",
+    "kmer4",
+    "esm2_8M",
+    "esm2_650M"
+  ],
+  "search_null_matched": {
+    "budget": 260,
+    "k": 1,
+    "max": 0.4842961175790673,
+    "mean": 0.27514314065133716,
+    "median": 0.25139778415494546,
+    "min": 0.11132300272702327,
+    "n_repeats": 10,
+    "p95": 0.44328980812745705,
+    "std": 0.12132989911522374,
+    "values": [
+      0.21860588562719382,
+      0.20025077720018708,
+      0.12589963321181966,
+      0.2197689390735278,
+      0.11132300272702327,
+      0.34783701772643205,
+      0.2830266292363631,
+      0.36725241866737957,
+      0.4842961175790673,
+      0.39317098546437806
+    ]
+  },
+  "seed": 42
+}

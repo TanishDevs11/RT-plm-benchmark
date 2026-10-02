@@ -78,9 +78,21 @@ N_PERMUTATIONS = 20
 FREE_PARAMETERS_USED = 1
 
 # Representations put through the label permutation. All twelve would be 480 protocol
-# runs; these three span the range, the trained length baseline, the best handcrafted
-# block, and the largest language model, and the subset is stated rather than silent.
-PERMUTATION_SUBSET = ("length", "handcrafted", "esm2_650M")
+# runs, so this is a subset, and it is stated rather than silent.
+#
+# The selection rule: the trained length baseline, plus every representation that leads
+# either headline metric, plus the largest language model. A permutation test is most
+# needed exactly where a score looks best, so omitting the leaders would have been the
+# one indefensible choice. physicochemical leads CLS at 0.3739 and kmer4 leads
+# classification PR-AUC at 0.6212.
+PERMUTATION_SUBSET = (
+    "length",
+    "handcrafted",
+    "physicochemical",
+    "kmer4",
+    "esm2_8M",
+    "esm2_650M",
+)
 
 # Power constants for the minimum resolvable difference. Two-sided alpha of 0.05 and 80
 # percent power, so the detectable effect is about (1.96 + 0.8416) standard errors.
@@ -199,16 +211,20 @@ def run_noise_controls(data, representations: dict, heads: list[str]) -> dict:
     return out
 
 
-def run_permutations(data, representations: dict, heads: list[str]) -> dict:
+def run_permutations(
+    data, representations: dict, heads: list[str], only: list[str] | None = None
+) -> dict:
     """Shuffle the labels inside the protocol and rerun, 20 times per representation."""
     out: dict[str, dict] = {}
-    for label in PERMUTATION_SUBSET:
+    wanted = only or list(PERMUTATION_SUBSET)
+    for label in wanted:
         if label not in representations:
             continue
         matrix = representations[label][0]
         out[label] = {}
         for head in heads:
             scores = []
+            pr_scores = []
             for repeat in range(N_PERMUTATIONS):
                 rng = np.random.default_rng(SEED + repeat)
                 shuffled = data.copy()
@@ -222,7 +238,9 @@ def run_permutations(data, representations: dict, heads: list[str]) -> dict:
                     warnings.simplefilter("ignore")
                     result = run_nested_lofo(method, shuffled, seed=SEED + repeat)
                 scores.append(result.cls)
+                pr_scores.append(result.pr_auc)
             array = np.asarray(scores, dtype=float)
+            pr_array = np.asarray(pr_scores, dtype=float)
             out[label][head] = {
                 "n_repeats": N_PERMUTATIONS,
                 "mean": float(array.mean()),
@@ -231,6 +249,14 @@ def run_permutations(data, representations: dict, heads: list[str]) -> dict:
                 "p95": float(np.percentile(array, 95)),
                 "max": float(array.max()),
                 "values": [float(v) for v in array],
+                # PR-AUC under permutation too, because the primary claim is
+                # classification and CLS can floor at zero for reasons that have nothing
+                # to do with separation.
+                "pr_auc_mean": float(pr_array.mean()),
+                "pr_auc_std": float(pr_array.std(ddof=1)),
+                "pr_auc_p95": float(np.percentile(pr_array, 95)),
+                "pr_auc_max": float(pr_array.max()),
+                "pr_auc_values": [float(v) for v in pr_array],
             }
             print(
                 "  permuted "
@@ -261,6 +287,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--stage", default="all", choices=["all", "ci", "noise", "permutation", "report"]
+    )
+    parser.add_argument(
+        "--permute-only",
+        nargs="*",
+        default=None,
+        help="restrict the permutation stage to these representations and merge the "
+        "result into any existing permutation results",
     )
     args = parser.parse_args()
 
@@ -352,8 +385,14 @@ def main() -> int:
     if args.stage in ("all", "permutation"):
         print("")
         print("=== label permutation, " + str(N_PERMUTATIONS) + " repeats ===")
-        representations = load_representations(list(PERMUTATION_SUBSET))
-        payload["permutation"] = run_permutations(data, representations, heads)
+        wanted = args.permute_only or list(PERMUTATION_SUBSET)
+        representations = load_representations(wanted)
+        fresh = run_permutations(data, representations, heads, only=wanted)
+        # Merge rather than replace, so a targeted rerun does not discard the expensive
+        # results already on disk.
+        merged = dict(payload["permutation"])
+        merged.update(fresh)
+        payload["permutation"] = merged
 
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUT_JSON.write_text(
@@ -362,7 +401,7 @@ def main() -> int:
     print("")
     print("wrote " + OUT_JSON.relative_to(REPO_ROOT).as_posix())
 
-    write_report(main_results, payload, heads)
+    write_report(main_results, payload, heads, float(np.mean(active)))
     print("wrote " + OUT_MD.relative_to(REPO_ROOT).as_posix())
     return 0
 
@@ -392,7 +431,9 @@ def minimum_resolvable_difference(pairwise: dict) -> dict:
     }
 
 
-def write_report(main_results: dict, payload: dict, heads: list[str]) -> None:
+def write_report(
+    main_results: dict, payload: dict, heads: list[str], prevalence: float
+) -> None:
     results = main_results["results"]
     intervals = payload.get("intervals", {})
     noise = payload.get("noise", {})
@@ -480,7 +521,6 @@ def write_report(main_results: dict, payload: dict, heads: list[str]) -> None:
     # for the primary claim, which is classification, PR-AUC against the noise control is
     # the test that is actually about the representation rather than about the figure.
     if "classification" in heads:
-        prevalence = float(np.mean(active))
         lines += [
             "## The primary test: PR-AUC against its own noise control",
             "",
@@ -618,36 +658,42 @@ def write_report(main_results: dict, payload: dict, heads: list[str]) -> None:
             "representations would be 480 protocol runs; the subset is stated rather than",
             "silent.",
             "",
-            "| representation | head | mean | sd | p95 | max | observed score | above the permuted p95 |",
+            "| representation | head | metric | permuted mean | permuted p95 | permuted max | observed | above the permuted p95 |",
             "| --- | --- | --- | --- | --- | --- | --- | --- |",
         ]
         for label, per_head in permutation.items():
             for head, stats in per_head.items():
-                observed = results.get(label, {}).get(head, {}).get("cls")
-                verdict = (
-                    ("yes" if observed > stats["p95"] else "**no**")
-                    if observed is not None
-                    else "unknown"
-                )
-                lines.append(
-                    "| `"
-                    + label
-                    + "` | "
-                    + head
-                    + " | "
-                    + format(stats["mean"], ".4f")
-                    + " | "
-                    + format(stats["std"], ".4f")
-                    + " | "
-                    + format(stats["p95"], ".4f")
-                    + " | "
-                    + format(stats["max"], ".4f")
-                    + " | "
-                    + (format(observed, ".4f") if observed is not None else "n/a")
-                    + " | "
-                    + verdict
-                    + " |"
-                )
+                variants = [("CLS", "mean", "p95", "max", "cls")]
+                if "pr_auc_p95" in stats:
+                    variants.append(
+                        ("PR-AUC", "pr_auc_mean", "pr_auc_p95", "pr_auc_max", "pr_auc")
+                    )
+                for metric, mean_key, p95_key, max_key, observed_key in variants:
+                    observed = results.get(label, {}).get(head, {}).get(observed_key)
+                    verdict = (
+                        ("yes" if observed > stats[p95_key] else "**no**")
+                        if observed is not None
+                        else "unknown"
+                    )
+                    lines.append(
+                        "| `"
+                        + label
+                        + "` | "
+                        + head
+                        + " | "
+                        + metric
+                        + " | "
+                        + format(stats[mean_key], ".4f")
+                        + " | "
+                        + format(stats[p95_key], ".4f")
+                        + " | "
+                        + format(stats[max_key], ".4f")
+                        + " | "
+                        + (format(observed, ".4f") if observed is not None else "n/a")
+                        + " | "
+                        + verdict
+                        + " |"
+                    )
         lines.append("")
 
     if mrd:
