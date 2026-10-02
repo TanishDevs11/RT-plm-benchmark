@@ -22,6 +22,7 @@ sys.path.insert(0, str(REPO_ROOT))
 SPLITS_A = REPO_ROOT / "tasks/taskA_crossfamily/splits"
 SPLITS_B = REPO_ROOT / "tasks/taskB_mmlv_dms/splits"
 INHERITED_A = REPO_ROOT / "data/rt_sequences.csv"
+CURATED_A = REPO_ROOT / "tasks/taskA_crossfamily/curated.csv"
 
 STRETCHES = {"1": (60, 84), "2": (95, 124)}
 AA20 = "ACDEFGHIKLMNPQRSTVWY"
@@ -177,7 +178,7 @@ def test_the_leaky_split_really_does_leak() -> None:
 
 
 def test_no_split_file_disagrees_with_the_clusters_on_ids() -> None:
-    for threshold in (90, 70, 50):
+    for threshold in (90, 70, 50, 30):
         path = SPLITS_A / ("clusters_" + str(threshold) + ".tsv")
         with path.open(encoding="utf-8") as handle:
             cluster_ids = {r["id"] for r in csv.DictReader(handle, delimiter="\t")}
@@ -185,6 +186,78 @@ def test_no_split_file_disagrees_with_the_clusters_on_ids() -> None:
         assert cluster_ids == split_ids, (
             "clusters_" + str(threshold) + ".tsv and the split file disagree on the id set"
         )
+
+
+def test_task_a_split_carries_the_rt_name_column() -> None:
+    """The brief specifies rt_name, fold, role. The id column is kept alongside it."""
+    for filename in ("leave_one_family_out.csv", "leave_one_cluster_out_70.csv"):
+        rows = read(SPLITS_A / filename)
+        assert rows, filename + " is empty"
+        for column in ("rt_name", "id", "fold", "role"):
+            assert column in rows[0], filename + " lacks the " + column + " column"
+        for row in rows:
+            assert row["id"] == "A_" + row["rt_name"], (
+                filename + ": id and rt_name disagree on " + row["id"]
+            )
+
+
+def test_task_a_leave_one_cluster_out_holds_out_whole_clusters() -> None:
+    """Each fold's test set is exactly one 70 percent identity cluster."""
+    rows = read(SPLITS_A / "leave_one_cluster_out_70.csv")
+    with (SPLITS_A / "clusters_70.tsv").open(encoding="utf-8") as handle:
+        cluster_of = {
+            r["id"]: r["cluster_representative"] for r in csv.DictReader(handle, delimiter="	")
+        }
+    all_ids = set(cluster_of)
+    folds = folds_of(rows)
+    assert len(folds) == len(set(cluster_of.values())), "one fold per cluster expected"
+    for fold, parts in folds.items():
+        assert not parts["train"] & parts["test"], fold + ": an id is both train and test"
+        assert parts["train"] | parts["test"] == all_ids, fold + ": does not cover every id"
+        assert parts["test"], fold + ": empty test set"
+        held = {cluster_of[i] for i in parts["test"]}
+        assert len(held) == 1, fold + ": test set spans more than one cluster"
+        assert held.isdisjoint({cluster_of[i] for i in parts["train"]}), (
+            fold + ": its cluster leaks into training"
+        )
+    tested = [i for parts in folds.values() for i in parts["test"]]
+    assert len(tested) == len(all_ids) and set(tested) == all_ids
+
+
+def test_the_frozen_family_split_matches_what_the_harness_derives() -> None:
+    """bench/protocol.py groups by family at run time and never reads a split file.
+
+    So the frozen file's claim to be compatible with the harness is only true if it
+    reproduces that grouping. Without this test the two can drift apart silently, and the
+    audit comparison the primary split exists to preserve would quietly stop holding.
+    """
+    sys.path.insert(0, str(REPO_ROOT / "bench"))
+    from protocol import load_dataset
+
+    data = load_dataset()
+    runtime = {
+        family: {"A_" + name for name in data.loc[data["rt_family"] == family, "rt_name"]}
+        for family in sorted(data["rt_family"].unique())
+    }
+    frozen = {
+        fold: parts["test"]
+        for fold, parts in folds_of(read(SPLITS_A / "leave_one_family_out.csv")).items()
+    }
+    assert frozen == runtime, (
+        "the frozen leave-one-family-out split and bench/protocol.py disagree on the "
+        "partition; folds differing: "
+        + str(sorted(set(frozen) ^ set(runtime)) or [f for f in frozen if frozen[f] != runtime.get(f)])
+    )
+
+
+def test_the_curated_table_and_the_split_agree_on_the_row_set() -> None:
+    if not CURATED_A.is_file():
+        print("    skipped: curated.csv is not present")
+        return
+    curated_ids = {r["id"] for r in read(CURATED_A)}
+    for filename in ("leave_one_family_out.csv", "leave_one_cluster_out_70.csv"):
+        split_ids = {r["id"] for r in read(SPLITS_A / filename)}
+        assert split_ids == curated_ids, filename + " and curated.csv disagree on the id set"
 
 
 def main() -> int:

@@ -45,5 +45,7 @@ jobs:
         run: python data_acquisition/test_parse_taskA.py
       - name: Frozen split files still say what they are supposed to say
         run: python curation/test_splits.py
+      - name: Frozen Task A splits verified against every leakage condition
+        run: python curation/verify_splits_taskA.py
       - name: Input preflight reports the acquisition state without failing the build
         run: python data_acquisition/check_inputs.py --allow-missing

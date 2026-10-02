@@ -93,9 +93,12 @@ pipeline-clusters:
 pipeline-taskA-overview:
 	$(PYTHON) curation/dataset_overview_taskA.py
 
-## Rewrite the frozen split definition files
+## Rewrite the frozen split definition files, then verify them against every
+## leakage condition. The verification is a separate step because the splits are data:
+## nothing else in the pipeline would notice if one were edited.
 pipeline-splits:
 	$(PYTHON) curation/define_splits.py
+	$(PYTHON) curation/verify_splits_taskA.py
 
 ## Handcrafted feature matrices and missingness masks
 pipeline-features:

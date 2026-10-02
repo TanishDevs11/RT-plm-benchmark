@@ -38,8 +38,12 @@ from schemas.task_schema import GLOBAL_SEED, print_run_header, sha256_of  # noqa
 
 AA20 = "ACDEFGHIKLMNPQRSTVWY"
 
+CURATED_A = REPO_ROOT / "tasks/taskA_crossfamily/curated.csv"
 INHERITED_A = REPO_ROOT / "data/rt_sequences.csv"
 SPLITS_A = REPO_ROOT / "tasks/taskA_crossfamily/splits"
+
+# The identity threshold the secondary split holds out, as the brief specifies.
+CLUSTER_SPLIT_THRESHOLD = 70
 
 REFERENCE_B = REPO_ROOT / "tasks/taskB_mmlv_dms/raw/reference_candidate_unconfirmed.fasta"
 SPLITS_B = REPO_ROOT / "tasks/taskB_mmlv_dms/splits"
@@ -66,14 +70,50 @@ def write_split(path: Path, rows: list[dict[str, object]], columns: list[str]) -
         print("      fold " + fold + " " + role + ": " + str(count))
 
 
-def task_a_splits() -> int:
-    if not INHERITED_A.is_file():
-        print("Task A source absent: " + INHERITED_A.as_posix())
-        return 1
+def load_task_a_rows() -> tuple[list[dict[str, str]], str]:
+    """Task A rows, from curated.csv when it exists and the inherited file otherwise.
+
+    curated.csv is the authority once the parse has run: it is the table built from the
+    primary source and endorsed at Gate G2. The inherited file stays as a fallback only
+    so that this script can still run before the parse, and the source actually used is
+    printed on every run rather than left to be inferred.
+    """
+    if CURATED_A.is_file():
+        rows = list(csv.DictReader(CURATED_A.open(encoding="utf-8")))
+        # Normalise to the column names the rest of this function uses, so that the two
+        # sources are interchangeable here and the difference stays in one place.
+        return (
+            [{"rt_name": r["rt_name"], "rt_family": r["family"], "active": r["active"]} for r in rows],
+            "curated.csv",
+        )
     rows = list(csv.DictReader(INHERITED_A.open(encoding="utf-8")))
+    return (
+        [{"rt_name": r["rt_name"], "rt_family": r["rt_family"], "active": r["active"]} for r in rows],
+        "FALLBACK " + INHERITED_A.relative_to(REPO_ROOT).as_posix(),
+    )
+
+
+def load_clusters(threshold: int) -> dict[str, str]:
+    """{id: cluster representative} at one identity threshold."""
+    path = SPLITS_A / ("clusters_" + str(threshold) + ".tsv")
+    if not path.is_file():
+        return {}
+    with path.open(encoding="utf-8") as handle:
+        return {
+            row["id"]: row["cluster_representative"]
+            for row in csv.DictReader(handle, delimiter="\t")
+        }
+
+
+def task_a_splits() -> int:
+    if not CURATED_A.is_file() and not INHERITED_A.is_file():
+        print("Task A source absent: " + CURATED_A.as_posix())
+        return 1
+    rows, source = load_task_a_rows()
     families = sorted({r["rt_family"] for r in rows})
     print("")
     print("=== Task A: leave-one-family-out ===")
+    print("  source: " + source)
     print("  " + str(len(rows)) + " sequences, " + str(len(families)) + " folds: " + ", ".join(families))
 
     assignments: list[dict[str, object]] = []
@@ -81,6 +121,7 @@ def task_a_splits() -> int:
         for row in rows:
             assignments.append(
                 {
+                    "rt_name": row["rt_name"],
                     "id": "A_" + row["rt_name"],
                     "fold": family,
                     "role": "test" if row["rt_family"] == family else "train",
@@ -89,8 +130,57 @@ def task_a_splits() -> int:
     write_split(
         SPLITS_A / "leave_one_family_out.csv",
         assignments,
-        ["id", "fold", "role"],
+        ["rt_name", "id", "fold", "role"],
     )
+
+    # Secondary split: leave-one-cluster-out at 70 percent identity.
+    #
+    # It exists because family labels may under-describe the redundancy. The primary
+    # split holds out a family, and the Phase 2 clustering showed that this holds out an
+    # identity cluster down to 50 percent but not at 30, where four clusters cross a
+    # family boundary. Holding out an identity cluster instead makes the redundancy
+    # control explicit rather than a consequence of the labelling.
+    #
+    # 70 percent is the threshold named in the brief. It is a stricter control than the
+    # family split in the sense that it is defined on measured sequence identity rather
+    # than on a label, and a weaker one in the sense that its folds are much smaller, so
+    # it is reported alongside the primary split rather than instead of it.
+    clusters = load_clusters(CLUSTER_SPLIT_THRESHOLD)
+    if not clusters:
+        print("")
+        print("  clusters_" + str(CLUSTER_SPLIT_THRESHOLD) + ".tsv absent, so the")
+        print("  leave-one-cluster-out split cannot be written. Run")
+        print("  curation/cluster_redundancy.py first.")
+    else:
+        print("")
+        print("=== Task A: leave-one-cluster-out at " + str(CLUSTER_SPLIT_THRESHOLD) + " percent ===")
+        missing = [r["rt_name"] for r in rows if "A_" + r["rt_name"] not in clusters]
+        if missing:
+            raise SystemExit(
+                "no cluster assignment for " + str(missing) + "; the cluster file and the "
+                "curated table disagree, which must be fixed rather than worked around"
+            )
+        # Folds are named by their representative, so a fold name is traceable to the
+        # cluster file rather than being an opaque integer.
+        representatives = sorted({clusters["A_" + r["rt_name"]] for r in rows})
+        print("  " + str(len(rows)) + " sequences, " + str(len(representatives)) + " folds")
+        cluster_assignments: list[dict[str, object]] = []
+        for representative in representatives:
+            for row in rows:
+                in_test = clusters["A_" + row["rt_name"]] == representative
+                cluster_assignments.append(
+                    {
+                        "rt_name": row["rt_name"],
+                        "id": "A_" + row["rt_name"],
+                        "fold": representative.replace("A_", "cluster_"),
+                        "role": "test" if in_test else "train",
+                    }
+                )
+        write_split(
+            SPLITS_A / ("leave_one_cluster_out_" + str(CLUSTER_SPLIT_THRESHOLD) + ".csv"),
+            cluster_assignments,
+            ["rt_name", "id", "fold", "role"],
+        )
 
     # A fold that holds no positive cannot contribute to a ranking or a precision-recall
     # measurement, and three of the seven do not. Stated here because it is a property of the
