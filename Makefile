@@ -2,7 +2,7 @@ PYTHON ?= python
 
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
-.PHONY: pipeline-taskB-source pipeline-taskB-reference
+.PHONY: pipeline-taskB-source pipeline-taskB-reference pipeline-taskB-degeneracy
 .PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret
 .PHONY: pipeline-taskA-figures pipeline-taskA-report pipeline-cross-task
 .PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
@@ -79,6 +79,10 @@ pipeline-taskB-source:
 ## identity the source states, halting rather than adapting on any mismatch.
 pipeline-taskB-reference:
 	$(PYTHON) data_acquisition/parse_mmlv_dms.py --check-reference
+
+## Task B feature-space degeneracy. Needs no activity values and no confirmed reference.
+pipeline-taskB-degeneracy:
+	$(PYTHON) features/taskB/quantify_degeneracy.py
 
 ## Resolve Task A accessions from sequence; needs network, and is resumable
 pipeline-accessions:

@@ -184,7 +184,7 @@ variants became the **most** lineage-predictive of all at 0.818 family accuracy.
 | Path | Contents |
 | --- | --- |
 | `reports/CROSS_TASK_COMPARISON.md` | **What the pair of tasks does and does not establish** |
-| `reports/taskB/` | Task B: split design, final report, both written against a blocked dataset |
+| `reports/taskB/` | Task B: split design, feature degeneracy, final report, written against a blocked dataset |
 | `reports/MANUSCRIPT_SUMMARY.md` | **Task A, manuscript-style**, generated from the result files |
 | `reports/FINAL_REPORT.md` | **Task A final report**, phase by phase, generated from the result files |
 | `tasks/taskA_crossfamily/` | Task A: raw Table S1, curated table, frozen splits, provenance |

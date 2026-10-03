@@ -142,6 +142,27 @@ ready and waiting for the labels: the frozen splits, the reference frame, the 10
 identifiers, and a parser that will reconcile whatever arrives against them and log any
 variant present in one and not the other.
 
+**One feature-space measurement was possible and was made.**
+`reports/taskB/degeneracy.md` quantifies what the brief asks to be stated explicitly: that
+k-mer frequencies and whole-sequence physicochemical descriptors are degenerate here by
+construction. Across 199809 sampled pairs, 4-mer frequency vectors have a median pairwise
+cosine similarity of 0.983968 and whole-sequence physicochemical vectors 0.999998, with
+the latter's six dimensions collapsing to a numeric rank of 5 and 98.2 percent of variance
+in a single direction.
+
+That measurement needs no labels, and it needs no resolution of the open reference
+question either: whatever the construct's substitution content turns out to be, all 1045
+variants share it, so changing the reference changes every variant identically. The script
+demonstrates that rather than asserting it, by recomputing the whole distribution against
+a reference perturbed at all four unconfirmed positions; the median cosine similarity
+moves by exactly 0.
+
+The consequence for any future results table: when a whole-sequence block scores near zero
+on this task, that is the representation being unable to distinguish the variants at all,
+not the representation failing to capture variant effects. The same degeneracy applies to
+mean-pooled language model embeddings, which is why the brief makes mean pooling a labelled
+control and never the primary condition.
+
 What is deliberately **not** written: the table parser for Tables S6 and S7, the feature
 builders, the embedding extractors, and the modelling harness adaptation. Their column
 layouts and shapes depend on files that do not exist. Writing them speculatively would
