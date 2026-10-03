@@ -211,6 +211,8 @@ def task_b_expected_ids(reference: str) -> list[dict[str, object]]:
                         "id": "B_" + wild + str(position) + mutant,
                         "position": position,
                         "stretch": stretch,
+                        "wt_aa": wild,
+                        "mut_aa": mutant,
                     }
                 )
     return variants
@@ -218,7 +220,7 @@ def task_b_expected_ids(reference: str) -> list[dict[str, object]]:
 
 def task_b_splits() -> int:
     print("")
-    print("=== Task B: three regimes ===")
+    print("=== Task B: four regimes ===")
     if not REFERENCE_B.is_file():
         print("  reference frame absent: " + REFERENCE_B.as_posix())
         print("  run data_acquisition/resolve_mmlv_reference.py first")
@@ -334,6 +336,48 @@ def task_b_splits() -> int:
     )
     print("    seeded with GLOBAL_SEED=" + str(GLOBAL_SEED))
     print("    labelled leaky in the filename and on every row; it quantifies optimism only")
+
+    # Regime 4: target amino acid held out. All substitutions TO a given residue are held
+    # out together, so the model cannot have seen any example of that substitution
+    # chemistry during training. It tests whether a representation has learned what it
+    # means to put a tryptophan somewhere, as opposed to having learned which positions
+    # in this protein tolerate change at all.
+    #
+    # One fold per target residue, 20 folds. Every fold's test set spans both stretches
+    # and many positions, so unlike the position regime it does not also hold out a
+    # region; that is deliberate, because the point is to isolate substitution chemistry
+    # from position identity rather than to confound the two.
+    assignments = []
+    targets = sorted({str(v["mut_aa"]) for v in variants})
+    for target in targets:
+        fold = "test_to_" + target
+        for variant in variants:
+            assignments.append(
+                {
+                    "id": variant["id"],
+                    "fold": fold,
+                    "role": "test" if str(variant["mut_aa"]) == target else "train",
+                    "group": "to_" + str(variant["mut_aa"]),
+                }
+            )
+        assignments.append(
+            {"id": WILD_TYPE_ID, "fold": fold, "role": "train", "group": "wild_type"}
+        )
+    write_split(
+        SPLITS_B / "aa_held_out.csv",
+        assignments,
+        ["id", "fold", "role", "group"],
+    )
+    sizes = Counter(str(v["mut_aa"]) for v in variants)
+    print(
+        "    "
+        + str(len(targets))
+        + " folds, one per target residue; test sizes "
+        + str(min(sizes.values()))
+        + " to "
+        + str(max(sizes.values()))
+        + " variants"
+    )
     return 0
 
 

@@ -26,6 +26,7 @@ CURATED_A = REPO_ROOT / "tasks/taskA_crossfamily/curated.csv"
 
 STRETCHES = {"1": (60, 84), "2": (95, 124)}
 AA20 = "ACDEFGHIKLMNPQRSTVWY"
+WILD_TYPE_ID = "B_wt"
 
 
 def read(path: Path) -> list[dict[str, str]]:
@@ -258,6 +259,52 @@ def test_the_curated_table_and_the_split_agree_on_the_row_set() -> None:
     for filename in ("leave_one_family_out.csv", "leave_one_cluster_out_70.csv"):
         split_ids = {r["id"] for r in read(SPLITS_A / filename)}
         assert split_ids == curated_ids, filename + " and curated.csv disagree on the id set"
+
+
+def test_task_b_has_no_identity_or_cluster_split() -> None:
+    """Identity clustering is undefined for Task B and must never be added.
+
+    Every row is a single substitution in the same 498-residue protein, so pairwise
+    identity is at least 99.6 percent and all 1046 rows fall into one cluster at any
+    usable threshold. A leave-one-cluster-out split over one cluster has a fold with an
+    empty training set. The failure mode this guards is a later contributor adding Task B
+    to TASK_SOURCES in curation/cluster_redundancy.py for consistency with Task A.
+    """
+    stray = sorted(p.name for p in SPLITS_B.glob("clusters_*"))
+    assert not stray, "identity cluster files exist for Task B: " + str(stray)
+    source = (REPO_ROOT / "curation/cluster_redundancy.py").read_text(encoding="utf-8")
+    task_sources = source[source.find("TASK_SOURCES") : source.find("TASK_DIR")]
+    assert '"B"' in task_sources, (
+        "cluster_redundancy.py no longer mentions task B in TASK_SOURCES; if it was "
+        "removed that is fine, but if it was removed and clustering was added elsewhere "
+        "this test needs updating"
+    )
+
+
+def test_task_b_aa_held_out_holds_out_whole_substitution_types() -> None:
+    rows = read(SPLITS_B / "aa_held_out.csv")
+    folds = folds_of(rows)
+    assert len(folds) == len(AA20), "one fold per target residue expected, got " + str(len(folds))
+    all_ids = {r["id"] for r in rows}
+    for fold, parts in folds.items():
+        target = fold.replace("test_to_", "")
+        assert not parts["train"] & parts["test"], fold + ": an id is both train and test"
+        assert parts["train"] | parts["test"] == all_ids, fold + ": does not cover every id"
+        assert parts["test"], fold + ": empty test set"
+        # Every test item must be a substitution to this fold's target residue, and no
+        # training item may be.
+        for identifier in parts["test"]:
+            assert identifier.endswith(target), (
+                fold + ": test item " + identifier + " is not a substitution to " + target
+            )
+        for identifier in parts["train"]:
+            if identifier == WILD_TYPE_ID:
+                continue
+            assert not identifier.endswith(target), (
+                fold + ": training item " + identifier + " substitutes to " + target
+            )
+    tested = [i for parts in folds.values() for i in parts["test"]]
+    assert len(set(tested)) == len(tested), "a variant is tested in more than one fold"
 
 
 def main() -> int:

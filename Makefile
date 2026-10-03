@@ -2,6 +2,7 @@ PYTHON ?= python
 
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
+.PHONY: pipeline-taskB-source pipeline-taskB-reference
 .PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret
 .PHONY: pipeline-taskA-figures pipeline-taskA-report
 .PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
@@ -61,12 +62,23 @@ pipeline-test:
 	$(PYTHON) data_acquisition/test_resolve_mmlv_reference.py
 	$(PYTHON) data_acquisition/test_fetch_doman_s1.py
 	$(PYTHON) data_acquisition/test_parse_taskA.py
+	$(PYTHON) data_acquisition/test_parse_mmlv_dms.py
 	$(PYTHON) curation/test_splits.py
 	$(PYTHON) data_acquisition/check_inputs.py --allow-missing
 
 ## Resolve the Task B reference frame against UniProt and assert every anchor
 pipeline-reference:
 	$(PYTHON) data_acquisition/resolve_mmlv_reference.py --fetch
+
+## Task B acquisition. Expected to fail: the activity tables were never deposited.
+## The failure is the recorded outcome, so this target is not part of `pipeline`.
+pipeline-taskB-source:
+	$(PYTHON) data_acquisition/fetch_mmlv_dms.py
+
+## Task B reference check. Runs without activity values and asserts every residue
+## identity the source states, halting rather than adapting on any mismatch.
+pipeline-taskB-reference:
+	$(PYTHON) data_acquisition/parse_mmlv_dms.py --check-reference
 
 ## Resolve Task A accessions from sequence; needs network, and is resumable
 pipeline-accessions:

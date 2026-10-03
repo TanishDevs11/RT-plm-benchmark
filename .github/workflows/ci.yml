@@ -43,6 +43,8 @@ jobs:
         run: python data_acquisition/test_fetch_doman_s1.py
       - name: Task A parser halts on a changed source and its validator rejects
         run: python data_acquisition/test_parse_taskA.py
+      - name: Task B parser halts on a wrong reference frame
+        run: python data_acquisition/test_parse_mmlv_dms.py
       - name: Frozen split files still say what they are supposed to say
         run: python curation/test_splits.py
       - name: Frozen Task A splits verified against every leakage condition
