@@ -3,7 +3,8 @@ PYTHON ?= python
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
 .PHONY: pipeline-taskB-source pipeline-taskB-reference pipeline-taskB-degeneracy
-.PHONY: pipeline-hivrt-source pipeline-hivrt-parse
+.PHONY: pipeline-hivrt-source pipeline-hivrt-parse pipeline-hivrt-audit
+.PHONY: pipeline-hivrt-splits pipeline-hivrt-features
 .PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret
 .PHONY: pipeline-taskA-figures pipeline-taskA-report pipeline-cross-task
 .PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
@@ -99,6 +100,19 @@ pipeline-hivrt-source:
 pipeline-hivrt-parse:
 	$(PYTHON) data_acquisition/parse_hivdb.py
 	$(PYTHON) data_acquisition/test_parse_hivdb.py
+
+## Descriptive audit: counts, censoring, the reproducibility ceiling, filtering effect.
+pipeline-hivrt-audit:
+	$(PYTHON) curation/audit_hivrt.py
+
+## Identity clustering sweep and the four frozen split regimes. Needs MMseqs2.
+pipeline-hivrt-splits:
+	$(PYTHON) curation/splits_hivrt.py --mmseqs $(MMSEQS_BIN)
+	$(PYTHON) curation/verify_splits_hivrt.py
+
+## Baseline feature blocks: mutation one-hot, DRM, physicochemical, 3-mer.
+pipeline-hivrt-features:
+	$(PYTHON) features/taskB_hivrt/build_baselines.py
 
 ## Resolve Task A accessions from sequence; needs network, and is resumable
 pipeline-accessions:

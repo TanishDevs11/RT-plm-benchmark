@@ -1,0 +1,148 @@
+{
+  "chosen_threshold": 99,
+  "drm_pattern_counts": {
+    "K65R": 126,
+    "M184V": 1826,
+    "TAM1": 892,
+    "TAM2": 188
+  },
+  "mmseqs_parameters": {
+    "cov_mode": "0",
+    "coverage": "0.8",
+    "sensitivity": "7.5"
+  },
+  "mmseqs_version": "8cc5ce367b5638c4306c2d7cfc652dd099a4643f",
+  "n_units": 4116,
+  "primary_dataset": "filtered",
+  "selection_rule": "the tightest threshold whose largest cluster holds less than 10 percent of all isolates, which is half of one fold, and which yields at least 10 clusters",
+  "subtype_coverage": {
+    "counts": {
+      "A": 35,
+      "A + G ": 1,
+      "A1": 4,
+      "AE": 1,
+      "B": 3975,
+      "B + G": 2,
+      "C": 17,
+      "CRF01_AE": 3,
+      "CRF02_AG": 16,
+      "CRF25_cpx": 2,
+      "D": 5,
+      "F": 3,
+      "F1": 1,
+      "G": 30,
+      "H": 2,
+      "U": 4,
+      "Unknown": 15
+    },
+    "units_total": 4116,
+    "units_with_subtype": 4116
+  },
+  "subtypes_held_out": [
+    "A",
+    "B",
+    "G"
+  ],
+  "thresholds": {
+    "90": {
+      "clusters": 7,
+      "largest": 3496,
+      "median_size": 8.0,
+      "sequences": 4116,
+      "share_in_largest": 0.8493683187560739,
+      "singletons": 2,
+      "size_distribution": {
+        "1": 2,
+        "3": 1,
+        "3496": 1,
+        "46": 1,
+        "561": 1,
+        "8": 1
+      }
+    },
+    "95": {
+      "clusters": 130,
+      "largest": 2057,
+      "median_size": 2.0,
+      "sequences": 4116,
+      "share_in_largest": 0.499757045675413,
+      "singletons": 38,
+      "size_distribution": {
+        "1": 38,
+        "11": 1,
+        "1142": 1,
+        "16": 1,
+        "18": 1,
+        "2": 55,
+        "2057": 1,
+        "23": 1,
+        "25": 2,
+        "3": 12,
+        "4": 7,
+        "467": 1,
+        "5": 4,
+        "6": 1,
+        "7": 1,
+        "70": 1,
+        "8": 1,
+        "9": 1
+      }
+    },
+    "98": {
+      "clusters": 2216,
+      "largest": 548,
+      "median_size": 1.0,
+      "sequences": 4116,
+      "share_in_largest": 0.13313896987366375,
+      "singletons": 1722,
+      "size_distribution": {
+        "1": 1722,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "13": 2,
+        "181": 1,
+        "2": 389,
+        "20": 2,
+        "248": 1,
+        "3": 48,
+        "4": 26,
+        "45": 1,
+        "49": 1,
+        "5": 9,
+        "50": 1,
+        "52": 1,
+        "548": 1,
+        "6": 6,
+        "7": 1,
+        "8": 1
+      }
+    },
+    "99": {
+      "clusters": 3323,
+      "largest": 176,
+      "median_size": 1.0,
+      "sequences": 4116,
+      "share_in_largest": 0.042759961127308066,
+      "singletons": 3060,
+      "size_distribution": {
+        "1": 3060,
+        "12": 1,
+        "166": 1,
+        "176": 1,
+        "18": 1,
+        "2": 221,
+        "24": 1,
+        "3": 22,
+        "33": 1,
+        "4": 3,
+        "40": 1,
+        "5": 2,
+        "6": 4,
+        "7": 1,
+        "8": 1,
+        "9": 2
+      }
+    }
+  }
+}
