@@ -2,10 +2,15 @@
 
 Task identifier: `B`
 Directory: `tasks/taskB_mmlv_dms/`
-Status: **PARTIALLY ACQUIRED, BLOCKED ON ACTIVITY VALUES**
+Status: **BLOCKED AT ACQUISITION.** Re-attempted 2026-10-03 with four fresh routes,
+including the publisher's own structured metadata, which declares no supplementary
+material at all. The per-variant activity values are not publicly available anywhere, the
+preprint is still at version 1, and no journal version exists.
 
-The reference frame is resolved and verified. The activity values are not obtainable by
-script and are the reason this task cannot yet be built.
+What is ready and waiting: the task structure is confirmed verbatim against the preprint,
+the 1046 expected variant identifiers are derived and frozen, and the split regimes are
+written. What is missing is only the labels, and there is no acceptable substitute for
+them.
 
 ## Sources
 
@@ -51,6 +56,75 @@ are referenced in the text but are not in this file.
 | outcome | **not publicly deposited.** Four independent routes agree: the supplementary-material page lists nothing, the full-text page offers only the four supplementary figures, Europe PMC reports no supplementary material, and every legacy adjunct path returns 404. Tables S1 to S7 and Supplementary Sequences 1 to 5 are referenced by the preprint but were not deposited with version 1 |
 | only remaining route | the corresponding author, or a later version of the preprint, or the peer-reviewed publication when it appears |
 | note | the preprint has no Data Availability and no Code Availability statement; the strings "availability", "Data availability", and "Data Availability" do not appear anywhere in the PDF |
+
+### B2 revisited, 2026-10-03: re-attempted with four fresh routes, still not obtainable
+
+`data_acquisition/fetch_mmlv_dms.py` re-attempted acquisition with the routes the Task B
+brief specifies, three of which had not been tried before. Full log in
+`data_acquisition/fetch_mmlv_dms_attempts.json`.
+
+| route | what was tried | outcome |
+| --- | --- | --- |
+| bioRxiv API, details | `api.biorxiv.org/details/biorxiv/10.64898/2026.07.06.736660` | HTTP 200. **Still version 1**, posted 2026-07-07, licence `cc_by_nc`. No later version exists |
+| bioRxiv API, published version | `api.biorxiv.org/pubs/biorxiv/...` | HTTP 200, "no articles found for published version". **The work has not been published in a journal**, so the brief's routes 3 and 4 against a journal or PMC mirror have no target |
+| supplementary-material page, v1, v2 and current | three URLs | all HTTP 200, **no data-bearing supplementary link on any of them**. The v2 URL returns generic bioRxiv site chrome with no article content, confirming v2 does not exist |
+| JATS XML, the publisher's own structured record | `biorxiv.org/content/early/2026/07/07/2026.07.06.736660.source.xml` | HTTP 200, 77870 bytes, **zero `supplementary-material` blocks**. This is the strongest single piece of evidence: the publisher's structured metadata declares no supplementary material at all |
+| Zenodo | two queries, by enzyme and by assay | 0 results |
+| Dryad | one query | 0 results |
+| OSF | one query by title | 0 results |
+| GitHub repositories | two queries | 0 results |
+
+Conclusion unchanged and now better evidenced: **the per-variant activity values are not
+publicly available anywhere.** Task B remains blocked at acquisition.
+
+One defect in the fetcher, found and fixed during this attempt. Its first version matched
+`.txt` as a data-bearing extension, which made route 1 "succeed" by downloading bioRxiv's
+own full-text HTML page and storing it as a variant table. That is the same silent
+substitution the Task A fetcher had. `looks_like_data` now rejects any payload served as
+HTML or beginning with an HTML document, and requires either a zip or OLE container
+signature or at least ten delimiters in the first 4 KiB. The guard runs at every
+acceptance point and again before anything is written to `raw/`.
+
+### What the preprint PDF does establish, read directly from it
+
+The PDF cannot supply the labels, but it does confirm the task's structure exactly, and
+these quotations are what the frozen splits are built on.
+
+| fact | evidence, verbatim from `raw/preprint.pdf` |
+| --- | --- |
+| the construct | "we developed a compact prime editor, PE2dR, by deleting the RNase H domain of the MMLV reverse transcriptase (MMLV-RT)" |
+| the two stretches | "specific regions within the fingers domain- S60-Q84 and N95-D124- have been shown to directly interacts with the DNA template" |
+| the library sizes | "These libraries encoded all possible single-amino acid substitutions for the S60-Q84 and N95-D124 regions within the fingers domain, respectively, totalling 475 and 570 variants" |
+| the library sizes again, with wild types | "producing Library Stretch 1 (475 variants + WT) and Library Stretch 2 (570 variants + WT)" |
+| the label, before scaling | "log2((abundance of variant in GFP positive cells)/(abundance of variant in GFP negative cells)) was calculated for each variant and for the wild-type" |
+| the label, after scaling | "of all variants were then normalized and scaled between -1 to 1, with the wild-type sequence set as the baseline (effect=0)" |
+| the validated hits | the triple mutant is "PE2dR-I61R, V101R, S67W", referred to as PE2dRM3 |
+
+The arithmetic closes exactly: S60 to Q84 is 25 positions, N95 to D124 is 30, and 19
+non-wild-type substitutions per position gives 25 times 19 equals 475 and 30 times 19
+equals 570. So the brief's expected counts and the frozen split files agree with the
+primary source without any assumption.
+
+### Three questions the PDF leaves open
+
+1. **The construct's substitution content.** The strings `D200N`, `T306K`, `W313F`,
+   `T330P`, `L603W` and `pentamutant` appear **nowhere** in the PDF. The name PE2dR
+   implies a PE2 lineage, which conventionally carries that pentamutant, but the paper
+   describes the construct as deleting the RNase H domain of MMLV-RT without naming any
+   point substitution. So whether the parent RT is wild-type MMLV-RT truncated, or the
+   PE2 pentamutant truncated, is undetermined from the public record. Four positions of
+   difference across a 498-residue reference would silently corrupt every one of the 1045
+   variant sequences, which is why this is handled as a halt condition rather than a
+   guess.
+2. **Whether the scaling to the interval from -1 to 1 was computed within each library or
+   across both.** The Methods sentence does not say. This decides whether the headline
+   stretch-held-out result also crosses two normalizations, and it has to be stated when
+   that result is reported.
+3. **Whether there is one wild-type row or two.** The figure legend reads "475 variants +
+   WT" and "570 variants + WT", which admits two wild-type measurements, one per library.
+   The frozen split files carry a single `B_wt` row, giving 1046 identifiers. If the
+   tables arrive with a wild-type row per library the count is 1047 and the splits need
+   one row added. Recorded so the discrepancy is noticed rather than absorbed.
 
 ### B3, UniProt, obtained
 
