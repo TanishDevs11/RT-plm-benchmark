@@ -93,7 +93,7 @@ Supplementary Sequence 1.
 
 ## 2. Why identity and cluster splits are undefined here, and what replaced them
 
-Full argument in `reports/taskB/split_design.md`. In short:
+Full argument in `reports/taskB_mmlv_dms/split_design.md`. In short:
 
 Every row is a single amino acid substitution in the same 498-residue protein. Two
 variants differ at no more than two positions, so pairwise identity is at least 496 of 498,
@@ -143,7 +143,7 @@ identifiers, and a parser that will reconcile whatever arrives against them and 
 variant present in one and not the other.
 
 **One feature-space measurement was possible and was made.**
-`reports/taskB/degeneracy.md` quantifies what the brief asks to be stated explicitly: that
+`reports/taskB_mmlv_dms/degeneracy.md` quantifies what the brief asks to be stated explicitly: that
 k-mer frequencies and whole-sequence physicochemical descriptors are degenerate here by
 construction. Across 199809 sampled pairs, 4-mer frequency vectors have a median pairwise
 cosine similarity of 0.983968 and whole-sequence physicochemical vectors 0.999998, with

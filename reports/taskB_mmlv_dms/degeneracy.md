@@ -87,5 +87,5 @@ So this measurement stands regardless of how the reference question is resolved.
 ## What this does not measure
 
 Nothing about variant effects. There are no labels; see
-`reports/taskB/FINAL_REPORT.md`. This file quantifies the geometry of the feature
+`reports/taskB_mmlv_dms/FINAL_REPORT.md`. This file quantifies the geometry of the feature
 space and nothing else.

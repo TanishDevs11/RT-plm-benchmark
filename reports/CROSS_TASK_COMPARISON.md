@@ -66,7 +66,7 @@ It is blocked at acquisition. The per-variant activity values were not deposited
 with the preprint, which is still at version 1 after three months; no journal
 version exists; the publisher's own structured metadata declares zero
 supplementary-material blocks; and seven repository searches across Zenodo, Dryad,
-OSF and GitHub returned nothing. Detail in `reports/taskB/FINAL_REPORT.md`.
+OSF and GitHub returned nothing. Detail in `reports/taskB_mmlv_dms/FINAL_REPORT.md`.
 
 What is ready and waiting: the reference frame resolved and confirmed at seven
 residue positions, the 1046 expected variant identifiers derived and frozen, 4
