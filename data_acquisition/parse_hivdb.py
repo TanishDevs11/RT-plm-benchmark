@@ -480,6 +480,89 @@ def main() -> int:
         print("--check-reference-only: stopping, nothing written")
         return 0
 
+    # ---------------------------------------------------------------------------
+    # Right-censoring, detected distributionally rather than by marker.
+    #
+    # No label in any file carries a `>` or `<`. That is not the same as no censoring.
+    # The filtered datasets are truncated at a fold resistance of 100, and the truncation
+    # is reported as a point value: 45.2 percent of filtered 3TC values are exactly 100.0,
+    # against 1.0 percent in the unfiltered set, which reaches 5000.
+    #
+    # The evidence that this is truncation and not a real mode: of the 2196 isolate-drug
+    # pairs whose filtered value is exactly 100.0 and which also appear unfiltered, 2176
+    # have an unfiltered value above 100, with a median of 200. Only 16 are genuinely 100.
+    # Where the two are not capped they agree exactly 98.5 percent of the time, so these
+    # are the same measurements at different precision.
+    #
+    # Handling rule, stated once and applied uniformly:
+    #   1. a value equal to its dataset-and-drug maximum, where that maximum carries an
+    #      implausible share of the mass, is flagged `censored`
+    #   2. where the same isolate and drug has a higher value in the unfiltered set, that
+    #      value is recovered and the row is flagged `censoring_recovered`
+    #   3. a censored value that cannot be recovered is retained for rank-based metrics,
+    #      which tolerate ties, and excluded from RMSE and MAE, where squaring the distance
+    #      to a bound is meaningless
+    # Nothing is dropped and nothing is imputed.
+    CENSOR_CEILING = 100.0
+    CENSOR_MASS_THRESHOLD = 0.02
+
+    by_drug_dataset: dict[tuple[str, str], list[float]] = {}
+    for row in label_rows:
+        by_drug_dataset.setdefault((row["dataset"], row["drug"]), []).append(float(row["fold"]))
+    censored_drugs = set()
+    for key, values in by_drug_dataset.items():
+        if not values:
+            continue
+        at_ceiling = sum(1 for v in values if v == CENSOR_CEILING)
+        # Two conditions, both required. The mass condition alone produced a false
+        # positive: unfiltered DOR has 5.9 percent of its values at exactly 100 while its
+        # maximum is 50000, so 100 there is a round number people report rather than a
+        # bound. A truncation point must also be the maximum the dataset attains.
+        if max(values) != CENSOR_CEILING:
+            continue
+        if at_ceiling / len(values) >= CENSOR_MASS_THRESHOLD:
+            censored_drugs.add(key)
+
+    uncensored_lookup: dict[tuple[str, str], float] = {}
+    for row in label_rows:
+        if row["dataset"] == "unfiltered":
+            uncensored_lookup[(row["drug"], row["isolate_id"])] = float(row["fold"])
+
+    censoring_counts: Counter = Counter()
+    for row in label_rows:
+        fold = float(row["fold"])
+        key = (row["dataset"], row["drug"])
+        is_censored = key in censored_drugs and fold == CENSOR_CEILING
+        row["censored"] = "1" if is_censored else "0"
+        row["censoring_recovered"] = "0"
+        row["fold_original"] = row["fold"]
+        if not is_censored:
+            continue
+        censoring_counts[row["drug"] + "/" + row["dataset"]] += 1
+        recovered = uncensored_lookup.get((row["drug"], row["isolate_id"]))
+        if recovered is not None and recovered > fold:
+            row["fold"] = format(recovered, "g")
+            row["log10_fold"] = format(math.log10(recovered), ".6f")
+            row["censoring_recovered"] = "1"
+            censoring_counts[row["drug"] + "/" + row["dataset"] + "/recovered"] += 1
+    report["censoring"] = {
+        "ceiling": CENSOR_CEILING,
+        "mass_threshold": CENSOR_MASS_THRESHOLD,
+        "drugs_flagged": sorted(d + "/" + ds for ds, d in censored_drugs),
+        "counts": dict(censoring_counts),
+        "rule": (
+            "a value equal to the dataset-and-drug maximum carrying at least 2 percent of "
+            "the mass is flagged censored; where the unfiltered set holds a higher value "
+            "for the same isolate and drug it is recovered; an unrecovered censored value "
+            "is kept for rank metrics and excluded from RMSE and MAE"
+        ),
+    }
+    print("")
+    print("censoring: " + str(len(censored_drugs)) + " drug-dataset combinations truncated at "
+          + format(CENSOR_CEILING, "g"))
+    for key, count in sorted(censoring_counts.items()):
+        print("  " + key + ": " + str(count))
+
     isolate_columns = list(isolate_rows[0].keys())
     with ISOLATES.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=isolate_columns)

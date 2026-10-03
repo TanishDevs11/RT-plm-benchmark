@@ -1,0 +1,839 @@
+{
+  "censoring": {
+    "from_parse": {
+      "ceiling": 100.0,
+      "counts": {
+        "3TC/filtered": 831,
+        "3TC/filtered/recovered": 822,
+        "AZT/filtered": 253,
+        "AZT/filtered/recovered": 252,
+        "DOR/filtered": 26,
+        "DOR/filtered/recovered": 24,
+        "EFV/filtered": 370,
+        "EFV/filtered/recovered": 366,
+        "NVP/filtered": 678,
+        "NVP/filtered/recovered": 675,
+        "RPV/filtered": 12,
+        "RPV/filtered/recovered": 12
+      },
+      "drugs_flagged": [
+        "3TC/filtered",
+        "AZT/filtered",
+        "DOR/filtered",
+        "EFV/filtered",
+        "NVP/filtered",
+        "RPV/filtered"
+      ],
+      "mass_threshold": 0.02,
+      "rule": "a value equal to the dataset-and-drug maximum carrying at least 2 percent of the mass is flagged censored; where the unfiltered set holds a higher value for the same isolate and drug it is recovered; an unrecovered censored value is kept for rank metrics and excluded from RMSE and MAE"
+    },
+    "per_drug": {
+      "filtered/3TC": {
+        "censored": 831,
+        "censored_fraction": 0.4519,
+        "n": 1839,
+        "recovered": 822,
+        "unrecovered": 9
+      },
+      "filtered/AZT": {
+        "censored": 253,
+        "censored_fraction": 0.1365,
+        "n": 1853,
+        "recovered": 252,
+        "unrecovered": 1
+      },
+      "filtered/DOR": {
+        "censored": 26,
+        "censored_fraction": 0.2,
+        "n": 130,
+        "recovered": 24,
+        "unrecovered": 2
+      },
+      "filtered/EFV": {
+        "censored": 370,
+        "censored_fraction": 0.1707,
+        "n": 2168,
+        "recovered": 366,
+        "unrecovered": 4
+      },
+      "filtered/NVP": {
+        "censored": 678,
+        "censored_fraction": 0.3304,
+        "n": 2052,
+        "recovered": 675,
+        "unrecovered": 3
+      },
+      "filtered/RPV": {
+        "censored": 12,
+        "censored_fraction": 0.0386,
+        "n": 311,
+        "recovered": 12,
+        "unrecovered": 0
+      }
+    }
+  },
+  "curated_sha256": "556b48aaeadebd230910134636888bd56a185894b349eac49d2d47807bf08caf",
+  "duplicate_sequence_groups": {
+    "filtered": 52,
+    "unfiltered": 268
+  },
+  "filtering_effect": {
+    "NNRTI": {
+      "difference_in_median_log10": -0.5675364999999999,
+      "kept_median_log10": 0.255273,
+      "kept_results": 5974,
+      "removed_median_log10": 0.8228095,
+      "removed_results": 5566
+    },
+    "NRTI": {
+      "difference_in_median_log10": -0.09691000000000002,
+      "kept_median_log10": 0.20412,
+      "kept_results": 14819,
+      "removed_median_log10": 0.30103,
+      "removed_results": 14683
+    }
+  },
+  "isolate_types_unfiltered": {
+    "Clinical": 8949,
+    "Lab": 1333
+  },
+  "isolates_sha256": "ed2b769c1e59b1a833f86a6fe919d818eafb187cbbe19654f80dac8cde6bc3d0",
+  "isolates_unfiltered": 5277,
+  "label_scale": "log10 fold resistance",
+  "marker_censored_values": 0,
+  "methods_unfiltered": {
+    "Antivirogram": 3348,
+    "Biochemical": 10,
+    "Cell line": 36,
+    "Cell protection": 13,
+    "Gilead-MT2-Reporter": 42,
+    "HeLa-CD4 reporter gene": 43,
+    "MAGIC-5A single-cycle": 16,
+    "MT2/MT4 reporter gene": 71,
+    "Merck": 42,
+    "NCI": 32,
+    "PBMC": 135,
+    "PhenoSense": 5989,
+    "Phenoscript": 71,
+    "Plaque reduction": 128,
+    "Subtype C Pseudovirus": 124,
+    "TZM-McGill": 29,
+    "TZM-Sienna": 51,
+    "TZM-bl": 102
+  },
+  "mutations": {
+    "filtered": {
+      "exactly_one_mutation": 106,
+      "mutations": {
+        "max": 45.0,
+        "mean": 14.942981396472577,
+        "median": 15.0,
+        "min": 0.0,
+        "n": 4139,
+        "q1": 9.0,
+        "q3": 20.0,
+        "sd": 7.708195277391779
+      },
+      "unknown_positions": {
+        "max": 168.0,
+        "mean": 20.562454699202707,
+        "median": 7.0,
+        "min": 0.0,
+        "n": 4139,
+        "q1": 2.0,
+        "q3": 19.0,
+        "sd": 30.275090475524156
+      },
+      "zero_mutations": 5
+    },
+    "unfiltered": {
+      "exactly_one_mutation": 263,
+      "mutations": {
+        "max": 55.0,
+        "mean": 16.30830577708617,
+        "median": 16.0,
+        "min": 0.0,
+        "n": 10282,
+        "q1": 10.0,
+        "q3": 21.0,
+        "sd": 8.86587294145202
+      },
+      "unknown_positions": {
+        "max": 410.0,
+        "mean": 235.79099397004475,
+        "median": 258.0,
+        "min": 0.0,
+        "n": 10282,
+        "q1": 165.0,
+        "q3": 320.0,
+        "sd": 98.48924555372734
+      },
+      "zero_mutations": 10
+    }
+  },
+  "patients_unfiltered": 3539,
+  "per_drug": {
+    "filtered/3TC": {
+      "dataset": "filtered",
+      "drug": "3TC",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.30103,
+        "mean": 1.228776593257205,
+        "median": 1.079181,
+        "min": -0.39794,
+        "n": 1839,
+        "q1": 0.113943,
+        "q3": 2.30103,
+        "sd": 1.0294151018513844
+      },
+      "n": 1839,
+      "n_intermediate_3x_to_10x": 225,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 939,
+      "n_susceptible_below_3x": 675,
+      "raw_max": 200.0,
+      "raw_median": 12.0
+    },
+    "filtered/ABC": {
+      "dataset": "filtered",
+      "drug": "ABC",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.0,
+        "mean": 0.45947981860196424,
+        "median": 0.518514,
+        "min": -0.30103,
+        "n": 1731,
+        "q1": 0.041393,
+        "q3": 0.78533,
+        "sd": 0.4180984011804839
+      },
+      "n": 1731,
+      "n_intermediate_3x_to_10x": 797,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 130,
+      "n_susceptible_below_3x": 804,
+      "raw_max": 100.0,
+      "raw_median": 3.3
+    },
+    "filtered/AZT": {
+      "dataset": "filtered",
+      "drug": "AZT",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 3.380211,
+        "mean": 0.6488248024824609,
+        "median": 0.230449,
+        "min": -1.0,
+        "n": 1853,
+        "q1": -0.154902,
+        "q3": 1.39794,
+        "sd": 1.0455641569815601
+      },
+      "n": 1853,
+      "n_intermediate_3x_to_10x": 226,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 608,
+      "n_susceptible_below_3x": 1019,
+      "raw_max": 2400.0,
+      "raw_median": 1.7
+    },
+    "filtered/D4T": {
+      "dataset": "filtered",
+      "drug": "D4T",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.0,
+        "mean": 0.19792007529794148,
+        "median": 0.113943,
+        "min": -0.39794,
+        "n": 1846,
+        "q1": -0.045757,
+        "q3": 0.380211,
+        "sd": 0.32072171636807806
+      },
+      "n": 1846,
+      "n_intermediate_3x_to_10x": 296,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 42,
+      "n_susceptible_below_3x": 1508,
+      "raw_max": 100.0,
+      "raw_median": 1.3
+    },
+    "filtered/DDI": {
+      "dataset": "filtered",
+      "drug": "DDI",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.0,
+        "mean": 0.19920133315305572,
+        "median": 0.176091,
+        "min": -1.0,
+        "n": 1849,
+        "q1": 0.041393,
+        "q3": 0.322219,
+        "sd": 0.24366857241357953
+      },
+      "n": 1849,
+      "n_intermediate_3x_to_10x": 135,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 28,
+      "n_susceptible_below_3x": 1686,
+      "raw_max": 100.0,
+      "raw_median": 1.5
+    },
+    "filtered/DOR": {
+      "dataset": "filtered",
+      "drug": "DOR",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 2.323871,
+        "mean": 0.9172428076923076,
+        "median": 0.681241,
+        "min": -0.522879,
+        "n": 130,
+        "q1": 0.255273,
+        "q3": 1.977724,
+        "sd": 0.8133970527300833
+      },
+      "n": 130,
+      "n_intermediate_3x_to_10x": 35,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 49,
+      "n_susceptible_below_3x": 46,
+      "raw_max": 210.8,
+      "raw_median": 4.8
+    },
+    "filtered/EFV": {
+      "dataset": "filtered",
+      "drug": "EFV",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 3.176091,
+        "mean": 0.6358106918819189,
+        "median": 0.255273,
+        "min": -1.0,
+        "n": 2168,
+        "q1": -0.221849,
+        "q3": 1.5336915,
+        "sd": 1.015699899904201
+      },
+      "n": 2168,
+      "n_intermediate_3x_to_10x": 210,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 788,
+      "n_susceptible_below_3x": 1170,
+      "raw_max": 1500.0,
+      "raw_median": 1.8
+    },
+    "filtered/ETR": {
+      "dataset": "filtered",
+      "drug": "ETR",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 2.0,
+        "mean": 0.19966761923847695,
+        "median": 0.041393,
+        "min": -1.0,
+        "n": 998,
+        "q1": -0.221849,
+        "q3": 0.556303,
+        "sd": 0.6563733765390191
+      },
+      "n": 998,
+      "n_intermediate_3x_to_10x": 156,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 127,
+      "n_susceptible_below_3x": 715,
+      "raw_max": 100.0,
+      "raw_median": 1.1
+    },
+    "filtered/NVP": {
+      "dataset": "filtered",
+      "drug": "NVP",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 2.30103,
+        "mean": 0.9005500331384015,
+        "median": 0.5501855,
+        "min": -1.0,
+        "n": 2052,
+        "q1": -0.154902,
+        "q3": 2.30103,
+        "sd": 1.1561958505255345
+      },
+      "n": 2052,
+      "n_intermediate_3x_to_10x": 86,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 967,
+      "n_susceptible_below_3x": 999,
+      "raw_max": 200.0,
+      "raw_median": 3.55
+    },
+    "filtered/RPV": {
+      "dataset": "filtered",
+      "drug": "RPV",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 2.30103,
+        "mean": 0.4516136881028939,
+        "median": 0.30103,
+        "min": -0.69897,
+        "n": 311,
+        "q1": -0.045757,
+        "q3": 0.8450534999999999,
+        "sd": 0.6924526666599249
+      },
+      "n": 311,
+      "n_intermediate_3x_to_10x": 55,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 63,
+      "n_susceptible_below_3x": 193,
+      "raw_max": 200.0,
+      "raw_median": 2.0
+    },
+    "filtered/TDF": {
+      "dataset": "filtered",
+      "drug": "TDF",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 1.70757,
+        "mean": 0.08099147932816536,
+        "median": 0.0,
+        "min": -0.69897,
+        "n": 1548,
+        "q1": -0.09691,
+        "q3": 0.255273,
+        "sd": 0.3176874994292908
+      },
+      "n": 1548,
+      "n_intermediate_3x_to_10x": 150,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 22,
+      "n_susceptible_below_3x": 1376,
+      "raw_max": 51.0,
+      "raw_median": 1.0
+    },
+    "unfiltered/3TC": {
+      "dataset": "unfiltered",
+      "drug": "3TC",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 3.69897,
+        "mean": 1.321857614415811,
+        "median": 1.578639,
+        "min": -1.0,
+        "n": 5161,
+        "q1": 0.380211,
+        "q3": 2.30103,
+        "sd": 0.9373712125935941
+      },
+      "n": 5161,
+      "n_intermediate_3x_to_10x": 648,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 3107,
+      "n_susceptible_below_3x": 1406,
+      "raw_max": 5000.0,
+      "raw_median": 37.9
+    },
+    "unfiltered/ABC": {
+      "dataset": "unfiltered",
+      "drug": "ABC",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.30103,
+        "mean": 0.45901524846248465,
+        "median": 0.491362,
+        "min": -1.0,
+        "n": 4878,
+        "q1": 0.113943,
+        "q3": 0.755875,
+        "sd": 0.4299329850111914
+      },
+      "n": 4878,
+      "n_intermediate_3x_to_10x": 2088,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 428,
+      "n_susceptible_below_3x": 2362,
+      "raw_max": 200.0,
+      "raw_median": 3.1
+    },
+    "unfiltered/AZT": {
+      "dataset": "unfiltered",
+      "drug": "AZT",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 3.823865,
+        "mean": 0.6316775570141065,
+        "median": 0.414973,
+        "min": -1.0,
+        "n": 5104,
+        "q1": -0.09691,
+        "q3": 1.176091,
+        "sd": 0.9263225455732411
+      },
+      "n": 5104,
+      "n_intermediate_3x_to_10x": 995,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 1492,
+      "n_susceptible_below_3x": 2617,
+      "raw_max": 6666.0,
+      "raw_median": 2.6
+    },
+    "unfiltered/D4T": {
+      "dataset": "unfiltered",
+      "drug": "D4T",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.582063,
+        "mean": 0.15999401522130985,
+        "median": 0.113943,
+        "min": -1.0,
+        "n": 4993,
+        "q1": -0.09691,
+        "q3": 0.322219,
+        "sd": 0.36885919620942376
+      },
+      "n": 4993,
+      "n_intermediate_3x_to_10x": 696,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 145,
+      "n_susceptible_below_3x": 4152,
+      "raw_max": 382.0,
+      "raw_median": 1.3
+    },
+    "unfiltered/DDI": {
+      "dataset": "unfiltered",
+      "drug": "DDI",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.30103,
+        "mean": 0.21293930351120807,
+        "median": 0.176091,
+        "min": -1.0,
+        "n": 5041,
+        "q1": 0.0,
+        "q3": 0.342423,
+        "sd": 0.3277612874532413
+      },
+      "n": 5041,
+      "n_intermediate_3x_to_10x": 590,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 161,
+      "n_susceptible_below_3x": 4290,
+      "raw_max": 200.0,
+      "raw_median": 1.5
+    },
+    "unfiltered/DOR": {
+      "dataset": "unfiltered",
+      "drug": "DOR",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 4.69897,
+        "mean": 1.029695940993789,
+        "median": 0.755875,
+        "min": -0.69897,
+        "n": 322,
+        "q1": 0.26114325000000005,
+        "q3": 1.9532734999999999,
+        "sd": 0.9636020631742781
+      },
+      "n": 322,
+      "n_intermediate_3x_to_10x": 79,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 138,
+      "n_susceptible_below_3x": 105,
+      "raw_max": 50000.0,
+      "raw_median": 5.7
+    },
+    "unfiltered/EFV": {
+      "dataset": "unfiltered",
+      "drug": "EFV",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 4.39147,
+        "mean": 0.8597910063965885,
+        "median": 0.60206,
+        "min": -1.0,
+        "n": 4221,
+        "q1": -0.09691,
+        "q3": 1.770852,
+        "sd": 1.1057526220706702
+      },
+      "n": 4222,
+      "n_intermediate_3x_to_10x": 499,
+      "n_nonpositive_fold": 1,
+      "n_resistant_at_10x": 1759,
+      "n_susceptible_below_3x": 1964,
+      "raw_max": 24630.3,
+      "raw_median": 4.0
+    },
+    "unfiltered/ETR": {
+      "dataset": "unfiltered",
+      "drug": "ETR",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 3.868168,
+        "mean": 0.35542474712643674,
+        "median": 0.176091,
+        "min": -1.0,
+        "n": 2001,
+        "q1": -0.09691,
+        "q3": 0.724276,
+        "sd": 0.7349836448684379
+      },
+      "n": 2002,
+      "n_intermediate_3x_to_10x": 389,
+      "n_nonpositive_fold": 1,
+      "n_resistant_at_10x": 350,
+      "n_susceptible_below_3x": 1263,
+      "raw_max": 7381.9,
+      "raw_median": 1.5
+    },
+    "unfiltered/NVP": {
+      "dataset": "unfiltered",
+      "drug": "NVP",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 3.823409,
+        "mean": 1.0280355412470026,
+        "median": 1.2201,
+        "min": -1.0,
+        "n": 4170,
+        "q1": 0.0,
+        "q3": 2.03583,
+        "sd": 1.0740383717018185
+      },
+      "n": 4170,
+      "n_intermediate_3x_to_10x": 302,
+      "n_nonpositive_fold": 0,
+      "n_resistant_at_10x": 2179,
+      "n_susceptible_below_3x": 1689,
+      "raw_max": 6659.0,
+      "raw_median": 16.6
+    },
+    "unfiltered/RPV": {
+      "dataset": "unfiltered",
+      "drug": "RPV",
+      "drug_class": "NNRTI",
+      "log10": {
+        "max": 4.954677,
+        "mean": 0.5893714176755448,
+        "median": 0.39794,
+        "min": -1.0,
+        "n": 826,
+        "q1": 0.0,
+        "q3": 0.93322825,
+        "sd": 0.8644138872622766
+      },
+      "n": 829,
+      "n_intermediate_3x_to_10x": 189,
+      "n_nonpositive_fold": 3,
+      "n_resistant_at_10x": 191,
+      "n_susceptible_below_3x": 449,
+      "raw_max": 90090.0,
+      "raw_median": 2.5
+    },
+    "unfiltered/TDF": {
+      "dataset": "unfiltered",
+      "drug": "TDF",
+      "drug_class": "NRTI",
+      "log10": {
+        "max": 2.079181,
+        "mean": 0.08568088947976878,
+        "median": 0.0,
+        "min": -1.0,
+        "n": 4325,
+        "q1": -0.154902,
+        "q3": 0.278754,
+        "sd": 0.33919090367995103
+      },
+      "n": 4328,
+      "n_intermediate_3x_to_10x": 497,
+      "n_nonpositive_fold": 3,
+      "n_resistant_at_10x": 62,
+      "n_susceptible_below_3x": 3769,
+      "raw_max": 120.0,
+      "raw_median": 1.0
+    }
+  },
+  "reproducibility": {
+    "adopted": {
+      "mean_abs_difference_log10": 0.26479408219178086,
+      "n_groups": 292,
+      "n_pairs": 292,
+      "pearson": 0.8443116650242124,
+      "sd_of_difference_log10": 0.4744581398081499,
+      "spearman": 0.8621703277758683
+    },
+    "all_pairs_no_quality_filter": {
+      "mean_abs_difference_log10": 0.02595532125870798,
+      "n_groups": 6249,
+      "n_pairs": 306759,
+      "pearson": 0.9969831101110181,
+      "sd_of_difference_log10": 0.06534638751975386,
+      "spearman": 0.9761482947072311
+    },
+    "per_drug": {
+      "3TC": {
+        "mean_abs_difference_log10": 0.20602099999999998,
+        "n_pairs": 26,
+        "pearson": 0.8953045637879686,
+        "spearman": 0.926403799719995
+      },
+      "ABC": {
+        "mean_abs_difference_log10": 0.15268382352941173,
+        "n_pairs": 17,
+        "pearson": 0.9301027284222152,
+        "spearman": 0.9202453987730063
+      },
+      "AZT": {
+        "mean_abs_difference_log10": 0.29261066666666663,
+        "n_pairs": 27,
+        "pearson": 0.8743329213151537,
+        "spearman": 0.8645253026340302
+      },
+      "D4T": {
+        "mean_abs_difference_log10": 0.05273844444444445,
+        "n_pairs": 9,
+        "pearson": 0.7625554582053238,
+        "spearman": 0.8573437164215969
+      },
+      "DDI": {
+        "mean_abs_difference_log10": 0.2232770769230769,
+        "n_pairs": 13,
+        "pearson": 0.7667317588546577,
+        "spearman": 0.8151731892257569
+      },
+      "DOR": {
+        "mean_abs_difference_log10": 0.5094019565217391,
+        "n_pairs": 23,
+        "pearson": 0.7851560029149829,
+        "spearman": 0.7892136472108865
+      },
+      "EFV": {
+        "mean_abs_difference_log10": 0.254493829787234,
+        "n_pairs": 47,
+        "pearson": 0.7370741863315998,
+        "spearman": 0.8076846913633535
+      },
+      "ETR": {
+        "mean_abs_difference_log10": 0.18906468518518518,
+        "n_pairs": 54,
+        "pearson": 0.8957781111741241,
+        "spearman": 0.876924252241866
+      },
+      "NVP": {
+        "mean_abs_difference_log10": 0.17982041379310348,
+        "n_pairs": 29,
+        "pearson": 0.9564502808459241,
+        "spearman": 0.9317957572767636
+      },
+      "RPV": {
+        "mean_abs_difference_log10": 0.4918470689655173,
+        "n_pairs": 29,
+        "pearson": 0.6885481855959952,
+        "spearman": 0.6984949632790816
+      },
+      "TDF": {
+        "mean_abs_difference_log10": 0.26248111111111117,
+        "n_pairs": 18,
+        "pearson": 0.6149584835225927,
+        "spearman": 0.47226599362873356
+      }
+    },
+    "pooled": {
+      "mean_abs_difference_log10": 0.26479408219178086,
+      "n_groups": 292,
+      "n_pairs": 292,
+      "pearson": 0.8443116650242124,
+      "sd_of_difference_log10": 0.4744581398081499,
+      "spearman": 0.8621703277758683
+    },
+    "sensitivity": {
+      "max_unknown_0": {
+        "mean_abs_difference_log10": 0.26479408219178086,
+        "n_groups": 292,
+        "n_pairs": 292,
+        "pearson": 0.8443116650242124,
+        "sd_of_difference_log10": 0.4744581398081499,
+        "spearman": 0.8621703277758683
+      },
+      "max_unknown_100": {
+        "mean_abs_difference_log10": 0.23867647093023253,
+        "n_groups": 344,
+        "n_pairs": 344,
+        "pearson": 0.866482711334261,
+        "sd_of_difference_log10": 0.45577810643748135,
+        "spearman": 0.8849149350297578
+      },
+      "max_unknown_20": {
+        "mean_abs_difference_log10": 0.2473033313253012,
+        "n_groups": 332,
+        "n_pairs": 332,
+        "pearson": 0.8558363769327931,
+        "sd_of_difference_log10": 0.46376537456194056,
+        "spearman": 0.8768802902936188
+      },
+      "max_unknown_50": {
+        "mean_abs_difference_log10": 0.24291333136094673,
+        "n_groups": 338,
+        "n_pairs": 338,
+        "pearson": 0.8616109256023567,
+        "sd_of_difference_log10": 0.4597197468981273,
+        "spearman": 0.8810754599973316
+      },
+      "max_unknown_560": {
+        "mean_abs_difference_log10": 0.06333319587133941,
+        "n_groups": 6249,
+        "n_pairs": 6249,
+        "pearson": 0.9645114362502877,
+        "sd_of_difference_log10": 0.18805345444086455,
+        "spearman": 0.9603850765995356
+      }
+    }
+  },
+  "results_per_isolate": {
+    "filtered/NNRTI": {
+      "isolates": 2272,
+      "results": 5659,
+      "results_per_isolate": 2.4908
+    },
+    "filtered/NRTI": {
+      "isolates": 1844,
+      "results": 10666,
+      "results_per_isolate": 5.7842
+    },
+    "unfiltered/NNRTI": {
+      "isolates": 4804,
+      "results": 11545,
+      "results_per_isolate": 2.4032
+    },
+    "unfiltered/NRTI": {
+      "isolates": 3867,
+      "results": 29505,
+      "results_per_isolate": 7.6299
+    }
+  },
+  "sequence_lengths": {
+    "560": 14421
+  },
+  "subtypes_unfiltered": {
+    "A": 60,
+    "A1": 4,
+    "B": 9701,
+    "C": 153,
+    "CRF01_AE": 9,
+    "CRF02_AG": 89,
+    "CRF06_cpx": 12,
+    "CRF11_cpx": 9,
+    "CRF12_BF": 17,
+    "CRF45_cpx": 6,
+    "D": 40,
+    "F": 19,
+    "G": 53,
+    "U": 5,
+    "Unknown": 81
+  }
+}

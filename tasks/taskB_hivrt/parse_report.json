@@ -10,6 +10,33 @@
     "two or more letters": "a mixture, encoded as X, never coerced to one residue",
     "~": "a deletion, encoded as X"
   },
+  "censoring": {
+    "ceiling": 100.0,
+    "counts": {
+      "3TC/filtered": 831,
+      "3TC/filtered/recovered": 822,
+      "AZT/filtered": 253,
+      "AZT/filtered/recovered": 252,
+      "DOR/filtered": 26,
+      "DOR/filtered/recovered": 24,
+      "EFV/filtered": 370,
+      "EFV/filtered/recovered": 366,
+      "NVP/filtered": 678,
+      "NVP/filtered/recovered": 675,
+      "RPV/filtered": 12,
+      "RPV/filtered/recovered": 12
+    },
+    "drugs_flagged": [
+      "3TC/filtered",
+      "AZT/filtered",
+      "DOR/filtered",
+      "EFV/filtered",
+      "NVP/filtered",
+      "RPV/filtered"
+    ],
+    "mass_threshold": 0.02,
+    "rule": "a value equal to the dataset-and-drug maximum carrying at least 2 percent of the mass is flagged censored; where the unfiltered set holds a higher value for the same isolate and drug it is recovered; an unrecovered censored value is kept for rank metrics and excluded from RMSE and MAE"
+  },
   "citation": "Rhee 2003 NAR 31(1):298-303; Shafer 2006 JID 194 Suppl 1:S51-8",
   "curated_isolates_rows": 14421,
   "curated_rows": 57375,
