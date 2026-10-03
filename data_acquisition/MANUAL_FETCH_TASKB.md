@@ -6,10 +6,17 @@ reconstruct the values.
 
 ## What is needed
 
+One file, not two. Supplementary Sequence 1 was on this list until the reference
+was resolved from the parent plasmid instead; see `PROVENANCE.md`. The labels are
+the only thing still missing, and they are the one thing with no substitute.
+
 | file | why | destination |
 | --- | --- | --- |
 | Supplementary Tables S6 and S7 | the per-variant normalized editing efficiencies for libraries L1 and L2. Without these Task B has no labels at all | `tasks/taskB_mmlv_dms/raw/table_s6.xlsx`, `table_s7.xlsx` |
-| Supplementary Sequence 1 | the PE2dR construct protein sequence. Every one of the 1045 variants is built on it, and building them on a reference wrong at even one position would invalidate the whole task | `tasks/taskB_mmlv_dms/raw/supplementary_sequences.pdf` |
+
+Supplementary Sequence 1 would still be worth having, as a direct statement of
+the construct against the sequence now derived from Addgene 132775 and confirmed
+against Addgene 174820. It is a check on a settled answer rather than a blocker.
 
 ## The work
 
@@ -24,6 +31,11 @@ reconstruct the values.
 | corresponding author | Haojie Yu |
 
 ## Routes tried
+
+Routes 1 to 4 are the brief's. Routes 5 and 6 are additions: route 5 asks four
+literature indexes whether a journal version exists, rather than taking one
+API's word for it, since the brief's route 3 is conditional on that answer;
+route 6 asks the sequence archives, where a screen's reads would be deposited.
 
 | route | URL | status | outcome |
 | --- | --- | --- | --- |
@@ -40,6 +52,23 @@ reconstruct the values.
 | 4 | `https://api.osf.io/v2/nodes/?filter[title]=saturated%20mutagenesis%20reverse%20transcriptase` | 200 | 0 result(s), 0 plausibly relevant |
 | 4 | `https://api.github.com/search/repositories?q=M-MLV%20reverse%20transcriptase%20prime%20editing%20mutagenesis` | 200 | 0 result(s), 0 plausibly relevant |
 | 4 | `https://api.github.com/search/repositories?q=PE2%20reverse%20transcriptase%20saturation%20mutagenesis%20screen` | 200 | 0 result(s), 0 plausibly relevant |
+| 5 | `https://api.crossref.org/works?rows=5&query.bibliographic=Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase` | 200 | 5 record(s), 1 of them this work, 0 pointing at a journal version |
+| 5 | `https://api.crossref.org/works/10.64898/2026.07.06.736660` | 200 | 1 record(s), 1 of them this work, 0 pointing at a journal version |
+| 5 | `https://api.openalex.org/works?per-page=5&search=Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase` | 200 | 5 record(s), 1 of them this work, 0 pointing at a journal version |
+| 5 | `https://api.semanticscholar.org/graph/v1/paper/search?limit=5&fields=title,externalIds,venue,year&query=Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase` | 429 | non-200 |
+| 5 | `https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=5&query=TITLE%3A%22Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase%22` | 200 | 1 record(s), 1 of them this work, 0 pointing at a journal version |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=PE2dR` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=%22prime%20editing%22%20AND%20%22saturated%20mutagenesis%22` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=%22reverse%20transcriptase%22%20AND%20%22prime%20editor%22%20AND%20screen` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=%22PEmax%22%20AND%20%22RNase%20H%22` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=PE2dR` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=%22prime%20editing%22%20AND%20%22saturated%20mutagenesis%22` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=%22reverse%20transcriptase%22%20AND%20%22prime%20editor%22%20AND%20screen` | 200 | 3 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=%22PEmax%22%20AND%20%22RNase%20H%22` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=PE2dR` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=%22prime%20editing%22%20AND%20%22saturated%20mutagenesis%22` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=%22reverse%20transcriptase%22%20AND%20%22prime%20editor%22%20AND%20screen` | 200 | 0 record(s) |
+| 6 | `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=%22PEmax%22%20AND%20%22RNase%20H%22` | 200 | 0 record(s) |
 
 ## The remaining route is the corresponding author
 

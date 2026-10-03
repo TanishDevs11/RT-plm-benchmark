@@ -50,8 +50,8 @@
       "url": "https://www.biorxiv.org/content/10.64898/2026.07.06.736660v1.supplementary-material",
       "status": 200,
       "content_type": "text/html; charset=utf-8",
-      "bytes_received": 107026,
-      "sha256": "6facb5abb25756cc09491a4c86ec8d6b744817988d30a5c5bf8df2a7b5bd2017",
+      "bytes_received": 107089,
+      "sha256": "4d2a0b3e2c3cbab202b7d512da84c055df0f49c4bba5938d07c7e4bf5a888882",
       "outcome": "page served, no data-bearing supplementary link",
       "detail": "",
       "found": []
@@ -62,8 +62,8 @@
       "url": "https://www.biorxiv.org/content/10.64898/2026.07.06.736660v2.supplementary-material",
       "status": 200,
       "content_type": "text/html; charset=utf-8",
-      "bytes_received": 29964,
-      "sha256": "a32b722b28ea76d2c62ad483f1bbca6a3eb1996d0164f0b51fd426956f3259dc",
+      "bytes_received": 29954,
+      "sha256": "6a77e67cbfc9f10321ca5102c45acae76ea06054c99c7d95f1f699be7b5c27f2",
       "outcome": "page served, no data-bearing supplementary link",
       "detail": "",
       "found": []
@@ -74,8 +74,8 @@
       "url": "https://www.biorxiv.org/content/10.64898/2026.07.06.736660.supplementary-material",
       "status": 200,
       "content_type": "text/html; charset=utf-8",
-      "bytes_received": 107042,
-      "sha256": "a8835631ad76af763c31900c2a194a511e676946922219af6ee7799da7dffb61",
+      "bytes_received": 106819,
+      "sha256": "3bde63b5d299f20bf59ff69c3c7caa2e8d2c7b09704f1e4d7fdc5d00d9e13502",
       "outcome": "page served, no data-bearing supplementary link",
       "detail": "",
       "found": []
@@ -194,6 +194,230 @@
       "bytes_received": 55,
       "sha256": "4af480b8ee5b87b369a76c49bd22c9a783908272ebffbe97898f8ab0f0772a5f",
       "outcome": "0 result(s), 0 plausibly relevant",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 5,
+      "label": "Crossref, by title",
+      "url": "https://api.crossref.org/works?rows=5&query.bibliographic=Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase",
+      "status": 200,
+      "content_type": "application/json",
+      "bytes_received": 26634,
+      "sha256": "f9b6a92d82ec904cc36f6f28b759e80f7f325efa9ea77cf52c51b963f2792df4",
+      "outcome": "5 record(s), 1 of them this work, 0 pointing at a journal version",
+      "detail": "this work: 10.64898/2026.07.06.736660|posted-content||Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency",
+      "found": [
+        "10.64898/2026.07.06.736660|posted-content||Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency",
+        "10.33915/etd.1231|dissertation||Structural determinants of murine leukemia virus (MLV) reverse transcriptase (RT) important for fidelity and drug resistance in vivo",
+        "10.1093/jac/dkg387|journal-article|['Journal of Antimicrobial Chemotherapy']|Nucleoside reverse transcriptase inhibitors and HIV mutagenesis",
+        "10.1128/jvi.69.10.6563-6566.1995|journal-article|['Journal of Virology']|A screen in Escherichia coli for nucleoside analogs that target human immunodeficiency virus (HIV) reverse transcriptase: coexpression of HIV reverse transcriptase and herpes simplex virus thymidine kinase",
+        "10.1007/978-3-642-56408-6_5|book-chapter|['Genetic Library Construction and Screening']|Construction of cDNA Libraries from Small Quantities of Total RNA Using Template Switching Catalyzed by M-MLV Reverse Transcriptase"
+      ]
+    },
+    {
+      "route": 5,
+      "label": "Crossref, the record itself, for a link to a journal article",
+      "url": "https://api.crossref.org/works/10.64898/2026.07.06.736660",
+      "status": 200,
+      "content_type": "application/json",
+      "bytes_received": 10737,
+      "sha256": "4ccf39d7dbbb8bdd2264c677c5d626b3329d24da235cd030031e8a7da656aad7",
+      "outcome": "1 record(s), 1 of them this work, 0 pointing at a journal version",
+      "detail": "this work: 10.64898/2026.07.06.736660|posted-content|relations: |Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency",
+      "found": [
+        "10.64898/2026.07.06.736660|posted-content|relations: |Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency"
+      ]
+    },
+    {
+      "route": 5,
+      "label": "OpenAlex",
+      "url": "https://api.openalex.org/works?per-page=5&search=Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase",
+      "status": 200,
+      "content_type": "application/json",
+      "bytes_received": 156466,
+      "sha256": "17942ea7e8291c9370e120525f31d16758598a672b2ad2ec7d70f033df50a392",
+      "outcome": "5 record(s), 1 of them this work, 0 pointing at a journal version",
+      "detail": "this work: https://doi.org/10.64898/2026.07.06.736660|preprint|1 location(s)|Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency",
+      "found": [
+        "https://doi.org/10.64898/2026.07.06.736660|preprint|1 location(s)|Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency",
+        "https://doi.org/10.1186/1472-6750-13-91|article|4 location(s)|Patch cloning method for multiple site-directed and saturation mutagenesis",
+        "https://doi.org/10.1261/rna.2007310|article|4 location(s)|Genetic identification of potential RNA-binding regions in a group II intron-encoded reverse transcriptase",
+        "https://doi.org/10.1371/journal.pbio.0040332|article|7 location(s)|tRNAs Promote Nuclear Import of HIV-1 Intracellular Reverse Transcription Complexes",
+        "https://doi.org/10.3389/fbioe.2021.624838|article|5 location(s)|Application of Random Mutagenesis and Synthetic FadR Promoter for de novo Production of \u03c9-Hydroxy Fatty Acid in Yarrowia lipolytica"
+      ]
+    },
+    {
+      "route": 5,
+      "label": "Semantic Scholar",
+      "url": "https://api.semanticscholar.org/graph/v1/paper/search?limit=5&fields=title,externalIds,venue,year&query=Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase",
+      "status": 429,
+      "content_type": "application/json",
+      "bytes_received": 174,
+      "sha256": "65ab993d12c5c2cc9b68e6da2bb79b326930283e520363ffcdc145f88cd5a148",
+      "outcome": "non-200",
+      "detail": "first call was rate limited; retried once",
+      "found": []
+    },
+    {
+      "route": 5,
+      "label": "Europe PMC, by title",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json&resultType=core&pageSize=5&query=TITLE%3A%22Saturated%20mutagenesis%20screen%20of%20M-MLV%20reverse%20transcriptase%22",
+      "status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "bytes_received": 3940,
+      "sha256": "812c62cd1ac996094614ed8ef2066d014cac09cf5f471a0a5fb4d1497d79b95f",
+      "outcome": "1 record(s), 1 of them this work, 0 pointing at a journal version",
+      "detail": "this work: PPR1272147/PPR|hasSuppl=N|isOpenAccess=N|Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency",
+      "found": [
+        "PPR1272147/PPR|hasSuppl=N|isOpenAccess=N|Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency"
+      ]
+    },
+    {
+      "route": 6,
+      "label": "bioproject: PE2dR",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=PE2dR",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 339,
+      "sha256": "df9e5a305ad74ed5042e42c84ba831f5008e2d92373dbf9093d86b817386984d",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "bioproject: \"prime editing\" AND \"saturated mutagenesis\"",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=%22prime%20editing%22%20AND%20%22saturated%20mutagenesis%22",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 442,
+      "sha256": "927c3a1d5ef4e3565a1e7e7ebaf2da03394bbd06423b0cbe3352ea7eeb88a784",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "bioproject: \"reverse transcriptase\" AND \"prime editor\" AND screen",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=%22reverse%20transcriptase%22%20AND%20%22prime%20editor%22%20AND%20screen",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 550,
+      "sha256": "3be02a02ffaabf75bf8eac7552d48d62b12afb15ccc75cec2425a8d629a8ecb6",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "bioproject: \"PEmax\" AND \"RNase H\"",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=bioproject&retmode=json&retmax=10&term=%22PEmax%22%20AND%20%22RNase%20H%22",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 399,
+      "sha256": "a5805a0b92497fdbb3a46a0e78ff722628e09d6d3f18bbfb37e2fc18c57c9be7",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "gds: PE2dR",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=PE2dR",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 339,
+      "sha256": "df9e5a305ad74ed5042e42c84ba831f5008e2d92373dbf9093d86b817386984d",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "gds: \"prime editing\" AND \"saturated mutagenesis\"",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=%22prime%20editing%22%20AND%20%22saturated%20mutagenesis%22",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 444,
+      "sha256": "34ddc3c5b31b38d1f779b73356a5b0fba24d7efc420b113c7227ba3f8e168ba2",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "gds: \"reverse transcriptase\" AND \"prime editor\" AND screen",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=%22reverse%20transcriptase%22%20AND%20%22prime%20editor%22%20AND%20screen",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 807,
+      "sha256": "0370527329dd3e9ae2d0f1f10d9aae95e666b480c340e495bcd64dfdd29ac084",
+      "outcome": "3 record(s)",
+      "detail": "ids: 200291960, 200270854, 200270813",
+      "found": [
+        "200291960",
+        "200270854",
+        "200270813"
+      ]
+    },
+    {
+      "route": 6,
+      "label": "gds: \"PEmax\" AND \"RNase H\"",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gds&retmode=json&retmax=10&term=%22PEmax%22%20AND%20%22RNase%20H%22",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 401,
+      "sha256": "8255c65f8575877d420df16a4733b698f7d7390f56e9e0fbdfad4f7be4f80576",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "sra: PE2dR",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=PE2dR",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 339,
+      "sha256": "df9e5a305ad74ed5042e42c84ba831f5008e2d92373dbf9093d86b817386984d",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "sra: \"prime editing\" AND \"saturated mutagenesis\"",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=%22prime%20editing%22%20AND%20%22saturated%20mutagenesis%22",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 444,
+      "sha256": "e8e40e59e6ac1659e1cbd07494ffdf65d07c32e3ebfaa4a57142e5a408d26c34",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "sra: \"reverse transcriptase\" AND \"prime editor\" AND screen",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=%22reverse%20transcriptase%22%20AND%20%22prime%20editor%22%20AND%20screen",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 557,
+      "sha256": "7ef8b08e67fb1ed5b7e003e65c469bce59abe0e63edc03142dd0b84e66fb8a05",
+      "outcome": "0 record(s)",
+      "detail": "",
+      "found": []
+    },
+    {
+      "route": 6,
+      "label": "sra: \"PEmax\" AND \"RNase H\"",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&retmode=json&retmax=10&term=%22PEmax%22%20AND%20%22RNase%20H%22",
+      "status": 200,
+      "content_type": "application/json; charset=UTF-8",
+      "bytes_received": 403,
+      "sha256": "8ffaacc6b30e2b2390c8631670b195fea475d3d949766b9c73bd09070c4efd64",
+      "outcome": "0 record(s)",
       "detail": "",
       "found": []
     }

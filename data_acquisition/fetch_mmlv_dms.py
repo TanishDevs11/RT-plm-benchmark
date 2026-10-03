@@ -461,6 +461,193 @@ def route4() -> tuple[list[Attempt], dict[str, bytes]]:
     return attempts, found
 
 
+def route5() -> tuple[list[Attempt], dict[str, bytes]]:
+    """Literature indexes, asked whether a version exists that this pipeline has not seen.
+
+    Beyond the brief's four routes. The brief's route 3 is conditional on the work having
+    been published, and it takes the bioRxiv API's word for that. One API answering "NA"
+    is a single point of failure for a route that would otherwise open the supplement, so
+    four independent indexes are asked the same question. Crossref would also carry a
+    `relation` to a journal article if the preprint had been linked to one, and OpenAlex
+    would list a second location.
+
+    This route can return no data file by construction. What it returns is evidence about
+    whether route 3 has a target, and a disagreement between indexes would itself be the
+    finding.
+    """
+    attempts: list[Attempt] = []
+    queries = [
+        (
+            "Crossref, by title",
+            "https://api.crossref.org/works?rows=5&query.bibliographic="
+            + requests.utils.quote(TITLE_QUERY),
+            lambda d: [
+                (
+                    item.get("DOI", ""),
+                    item.get("type", ""),
+                    str(item.get("container-title") or ""),
+                    " ".join(item.get("title") or []),
+                )
+                for item in d.get("message", {}).get("items", [])
+            ],
+        ),
+        (
+            "Crossref, the record itself, for a link to a journal article",
+            "https://api.crossref.org/works/" + DOI,
+            lambda d: [
+                (
+                    d.get("message", {}).get("DOI", ""),
+                    d.get("message", {}).get("type", ""),
+                    "relations: " + ",".join(sorted(d.get("message", {}).get("relation", {}))),
+                    " ".join(d.get("message", {}).get("title") or []),
+                )
+            ],
+        ),
+        (
+            "OpenAlex",
+            "https://api.openalex.org/works?per-page=5&search=" + requests.utils.quote(TITLE_QUERY),
+            lambda d: [
+                (
+                    str(item.get("doi") or ""),
+                    str(item.get("type") or ""),
+                    str(len(item.get("locations") or [])) + " location(s)",
+                    str(item.get("display_name") or ""),
+                )
+                for item in d.get("results", [])
+            ],
+        ),
+        (
+            "Semantic Scholar",
+            "https://api.semanticscholar.org/graph/v1/paper/search?limit=5&fields="
+            + "title,externalIds,venue,year&query="
+            + requests.utils.quote(TITLE_QUERY),
+            lambda d: [
+                (
+                    str(item.get("externalIds") or ""),
+                    str(item.get("venue") or ""),
+                    str(item.get("year") or ""),
+                    str(item.get("title") or ""),
+                )
+                for item in d.get("data", [])
+            ],
+        ),
+        (
+            "Europe PMC, by title",
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?format=json"
+            + "&resultType=core&pageSize=5&query="
+            + requests.utils.quote('TITLE:"' + TITLE_QUERY + '"'),
+            lambda d: [
+                (
+                    str(item.get("id") or "") + "/" + str(item.get("source") or ""),
+                    "hasSuppl=" + str(item.get("hasSuppl")),
+                    "isOpenAccess=" + str(item.get("isOpenAccess")),
+                    str(item.get("title") or ""),
+                )
+                for item in d.get("resultList", {}).get("result", [])
+            ],
+        ),
+    ]
+    for label, url, extract in queries:
+        attempt = Attempt(5, label, url)
+        attempts.append(attempt)
+        payload = get(url, attempt)
+        time.sleep(PAUSE_SECONDS)
+        if payload is None and attempt.status == 429:
+            # One retry, once the window has passed. A rate limit is not an answer, and
+            # logging it as though it were would understate what is known.
+            time.sleep(PAUSE_SECONDS * 10)
+            attempt.detail = "first call was rate limited; retried once"
+            payload = get(url, attempt)
+        if payload is None:
+            continue
+        try:
+            data = json.loads(payload.decode("utf-8", "replace"))
+        except json.JSONDecodeError:
+            attempt.outcome = "response was not JSON"
+            continue
+        extracted = extract(data)
+        rows = ["|".join(str(field) for field in row) for row in extracted]
+        attempt.found = rows
+
+        # Which rows are this work at all. A fuzzy title search returns other papers
+        # about reverse transcriptase, and counting those as candidate journal versions
+        # would put a number in the provenance log that means nothing.
+        def is_this_work(row: tuple) -> bool:
+            joined = " ".join(str(field) for field in row).lower()
+            return DOI.lower() in joined or TITLE_QUERY.lower() in joined
+
+        mine = [row for row in extracted if is_this_work(row)]
+        journal = [
+            row
+            for row in mine
+            if any(
+                marker in str(field).lower()
+                for field in row
+                for marker in ("journal-article", "is-preprint-of", "has-version")
+            )
+        ]
+        attempt.outcome = (
+            str(len(rows))
+            + " record(s), "
+            + str(len(mine))
+            + " of them this work, "
+            + str(len(journal))
+            + " pointing at a journal version"
+        )
+        attempt.detail = "this work: " + ("; ".join(
+            "|".join(str(field) for field in row) for row in mine[:3]
+        ) or "not returned by this index")
+    return attempts, {}
+
+
+def route6() -> tuple[list[Attempt], dict[str, bytes]]:
+    """The sequence archives, where a screen's raw reads would be deposited.
+
+    Beyond the brief's four routes. The screen is read out by sequencing, so BioProject,
+    GEO and SRA are places the data could exist even though the supplementary tables do
+    not. A deposit here would not supply the published labels, which are normalized and
+    scaled, and recomputing them from reads would be a reconstruction rather than an
+    acquisition. It would, though, be a real route to the underlying counts and would
+    change what can be said about the task, so its absence is worth establishing rather
+    than assuming.
+    """
+    attempts: list[Attempt] = []
+    endpoint = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
+    terms = [
+        "PE2dR",
+        '"prime editing" AND "saturated mutagenesis"',
+        '"reverse transcriptase" AND "prime editor" AND screen',
+        '"PEmax" AND "RNase H"',
+    ]
+    for database in ("bioproject", "gds", "sra"):
+        for term in terms:
+            url = (
+                endpoint
+                + "?db="
+                + database
+                + "&retmode=json&retmax=10&term="
+                + requests.utils.quote(term)
+            )
+            attempt = Attempt(6, database + ": " + term, url)
+            attempts.append(attempt)
+            payload = get(url, attempt)
+            time.sleep(PAUSE_SECONDS)
+            if payload is None:
+                continue
+            try:
+                data = json.loads(payload.decode("utf-8", "replace"))
+            except json.JSONDecodeError:
+                attempt.outcome = "response was not JSON"
+                continue
+            result = data.get("esearchresult", {})
+            identifiers = result.get("idlist", [])
+            attempt.found = identifiers
+            attempt.outcome = str(result.get("count", "?")) + " record(s)"
+            if identifiers:
+                attempt.detail = "ids: " + ", ".join(identifiers)
+    return attempts, {}
+
+
 def write_manual_note(attempts: list[Attempt], details: dict) -> None:
     lines = [
         "# Manual fetch required: Task B, the M-MLV RT saturated mutagenesis screen",
@@ -471,10 +658,17 @@ def write_manual_note(attempts: list[Attempt], details: dict) -> None:
         "",
         "## What is needed",
         "",
+        "One file, not two. Supplementary Sequence 1 was on this list until the reference",
+        "was resolved from the parent plasmid instead; see `PROVENANCE.md`. The labels are",
+        "the only thing still missing, and they are the one thing with no substitute.",
+        "",
         "| file | why | destination |",
         "| --- | --- | --- |",
         "| Supplementary Tables S6 and S7 | the per-variant normalized editing efficiencies for libraries L1 and L2. Without these Task B has no labels at all | `tasks/taskB_mmlv_dms/raw/table_s6.xlsx`, `table_s7.xlsx` |",
-        "| Supplementary Sequence 1 | the PE2dR construct protein sequence. Every one of the 1045 variants is built on it, and building them on a reference wrong at even one position would invalidate the whole task | `tasks/taskB_mmlv_dms/raw/supplementary_sequences.pdf` |",
+        "",
+        "Supplementary Sequence 1 would still be worth having, as a direct statement of",
+        "the construct against the sequence now derived from Addgene 132775 and confirmed",
+        "against Addgene 174820. It is a check on a settled answer rather than a blocker.",
         "",
         "## The work",
         "",
@@ -489,6 +683,11 @@ def write_manual_note(attempts: list[Attempt], details: dict) -> None:
         "| corresponding author | " + str(details.get("author_corresponding", "Haojie Yu")) + " |",
         "",
         "## Routes tried",
+        "",
+        "Routes 1 to 4 are the brief's. Routes 5 and 6 are additions: route 5 asks four",
+        "literature indexes whether a journal version exists, rather than taking one",
+        "API's word for it, since the brief's route 3 is conditional on that answer;",
+        "route 6 asks the sequence archives, where a screen's reads would be deposited.",
         "",
         "| route | URL | status | outcome |",
         "| --- | --- | --- | --- |",
@@ -558,7 +757,7 @@ def store(found: dict[str, bytes], source: str) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--route", type=int, choices=(1, 2, 3, 4))
+    parser.add_argument("--route", type=int, choices=(1, 2, 3, 4, 5, 6))
     args = parser.parse_args()
 
     print_run_header("data_acquisition/fetch_mmlv_dms.py")
@@ -580,7 +779,7 @@ def main() -> int:
     attempts.extend(api_attempts)
     print("")
 
-    wanted = [args.route] if args.route else [1, 2, 3, 4]
+    wanted = [args.route] if args.route else [1, 2, 3, 4, 5, 6]
     for route in wanted:
         if route == 1:
             batch, got = route1(DOI)
@@ -588,8 +787,12 @@ def main() -> int:
             batch, got = route2b(details)
         elif route == 3:
             batch, got = route3(published_doi)
-        else:
+        elif route == 4:
             batch, got = route4()
+        elif route == 5:
+            batch, got = route5()
+        else:
+            batch, got = route6()
         for attempt in batch:
             attempt.log()
         attempts.extend(batch)
