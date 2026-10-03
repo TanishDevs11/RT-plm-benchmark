@@ -45,7 +45,7 @@ from schemas.task_schema import AA20, print_run_header, sha256_of  # noqa: E402
 
 TASK_DIR = REPO_ROOT / "tasks" / "taskB_mmlv_dms"
 RAW = TASK_DIR / "raw"
-REFERENCE = RAW / "reference.fasta"
+REFERENCE = TASK_DIR / "reference.fasta"
 REFERENCE_CANDIDATE = RAW / "reference_candidate_unconfirmed.fasta"
 CURATED = TASK_DIR / "curated.csv"
 
@@ -66,6 +66,21 @@ STRETCH_BOUNDARY_RESIDUES = {60: "S", 84: "Q", 95: "N", 124: "D"}
 # Every other residue identity the preprint states, from its reported mutations. Each is
 # an independent check on the frame.
 REPORTED_MUTATIONS = {61: "I", 101: "V", 67: "S"}
+
+# Residue identities that come from the parent plasmid rather than from the preprint, and
+# that pin down *which* RT this is rather than where its positions are. Four are the PE2
+# substitutions that fall inside the retained region, read out of Addgene 132775 by
+# resolve_pe2dr_reference.py; the fifth, at position 8, is the difference from UniProt
+# P03355 that neither the preprint nor Addgene's record names, and that a reference built
+# by applying the published substitutions to UniProt would have got wrong.
+#
+# They are asserted here for a specific reason: without them the parser would accept the
+# unmutated UniProt frame, which satisfies every preprint anchor above and is wrong at
+# five positions in all 1046 sequences.
+CONSTRUCT_RESIDUES = {8: "Y", 200: "N", 306: "K", 313: "F", 330: "P"}
+
+# The retained construct, from the preprint's "residues L499 to P677" deletion.
+REFERENCE_LENGTH = 498
 
 # Expected counts, from the preprint: "Library Stretch 1 (475 variants + WT) and Library
 # Stretch 2 (570 variants + WT)". 25 positions times 19 is 475; 30 times 19 is 570.
@@ -118,12 +133,25 @@ def expected_variants() -> list[dict]:
     return out
 
 
+def all_anchors() -> dict[int, str]:
+    """Every residue identity any source states about this reference."""
+    anchors = dict(STRETCH_BOUNDARY_RESIDUES)
+    anchors.update(REPORTED_MUTATIONS)
+    anchors.update(CONSTRUCT_RESIDUES)
+    return anchors
+
+
 def check_reference(sequence: str) -> list[str]:
     """Assert every residue identity the source states. Returns a list of mismatches."""
     mismatches: list[str] = []
-    anchors = dict(STRETCH_BOUNDARY_RESIDUES)
-    anchors.update(REPORTED_MUTATIONS)
-    for position, stated in sorted(anchors.items()):
+    if len(sequence) != REFERENCE_LENGTH:
+        mismatches.append(
+            "the reference is "
+            + str(len(sequence))
+            + " residues; the retained construct is "
+            + str(REFERENCE_LENGTH)
+        )
+    for position, stated in sorted(all_anchors().items()):
         if position > len(sequence):
             mismatches.append(
                 "position " + str(position) + " is beyond the reference, length "
@@ -168,9 +196,7 @@ def halt_on_mismatch(sequence: str, mismatches: list[str]) -> None:
         print("  " + line)
     if len(mismatches) > 10:
         print("  ... and " + str(len(mismatches) - 10) + " more")
-    anchors = dict(STRETCH_BOUNDARY_RESIDUES)
-    anchors.update(REPORTED_MUTATIONS)
-    offset = candidate_offset(sequence, anchors)
+    offset = candidate_offset(sequence, all_anchors())
     print("")
     if offset is None:
         print("No single constant offset in the range -10 to +10 resolves all of them.")
@@ -204,9 +230,8 @@ def main() -> int:
     print("reference length: " + str(len(sequence)) + " residues")
     print("")
 
-    anchors = dict(STRETCH_BOUNDARY_RESIDUES)
-    anchors.update(REPORTED_MUTATIONS)
-    print("asserting " + str(len(anchors)) + " residue identities the source states:")
+    anchors = all_anchors()
+    print("asserting " + str(len(anchors)) + " residue identities the sources state:")
     for position, stated in sorted(anchors.items()):
         found = sequence[position - 1] if position <= len(sequence) else "?"
         print(
@@ -255,11 +280,12 @@ def main() -> int:
         print("--check-reference: stopping here, as asked. No table was read and nothing")
         print("was written.")
         print("")
-        print("One question remains open and is a halt condition for the default mode:")
-        print("the construct's substitution content. The strings pentamutant, D200N,")
-        print("T306K, W313F, T330P and L603W appear nowhere in the preprint, so whether")
-        print("the parent RT is wild-type MMLV-RT truncated or the PE2 pentamutant")
-        print("truncated is undetermined. The reference above is the unmutated frame.")
+        print("The construct's substitution content is no longer open. It was resolved")
+        print("from the parent plasmid, Addgene 132775, by")
+        print("data_acquisition/resolve_pe2dr_reference.py, and confirmed against a")
+        print("second deposit, Addgene 174820, which encodes the same 498 residues from")
+        print("a differently codon-optimized open reading frame. What remains missing is")
+        print("only the labels.")
         return 0
 
     missing = [p.name for p in (TABLE_S6, TABLE_S7) if not p.is_file()]

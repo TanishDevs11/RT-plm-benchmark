@@ -155,6 +155,57 @@ def test_a_truncated_reference_halts_rather_than_indexing_past_the_end() -> None
     assert any("beyond the reference" in m for m in mismatches), mismatches
 
 
+def test_the_unmutated_uniprot_frame_is_rejected() -> None:
+    """The near miss that the construct-identity assertions exist to catch.
+
+    `raw/reference_candidate_unconfirmed.fasta` is the right frame, the right length and
+    the right positions: it satisfies every residue identity the preprint states. It is
+    also wrong at five positions, because it is UniProt P03355 with no substitution
+    applied rather than the RT the construct actually carries. Before the parent plasmid
+    was resolved this file was the best available candidate, and a pipeline that accepted
+    it would have produced 1046 sequences each wrong at five positions, with nothing
+    anywhere raising.
+    """
+    candidate = parser.REFERENCE_CANDIDATE
+    if not candidate.is_file():
+        print("    skipped: the unconfirmed candidate is not present")
+        return
+    lines = candidate.read_text(encoding="utf-8").splitlines()
+    sequence = "".join(
+        line.strip() for line in lines[1:] if line.strip() and not line.startswith(">")
+    ).upper()
+
+    # It passes every anchor the preprint pins down, which is exactly why it is dangerous.
+    preprint_only = dict(parser.STRETCH_BOUNDARY_RESIDUES)
+    preprint_only.update(parser.REPORTED_MUTATIONS)
+    assert all(
+        sequence[position - 1] == stated for position, stated in preprint_only.items()
+    ), "the candidate was expected to satisfy every preprint anchor"
+
+    # And it is still rejected, on the construct-identity assertions.
+    mismatches = parser.check_reference(sequence)
+    assert mismatches, "the unmutated UniProt frame was accepted as the reference"
+    for position in parser.CONSTRUCT_RESIDUES:
+        if sequence[position - 1] != parser.CONSTRUCT_RESIDUES[position]:
+            assert any("position " + str(position) in m for m in mismatches), mismatches
+
+    # Five wrong residues are not a frame shift and must not be reported as one.
+    assert parser.candidate_offset(sequence, parser.all_anchors()) is None, (
+        "the wrong construct was misreported as a resolvable offset"
+    )
+    with with_reference(sequence):
+        try:
+            parser.halt_on_mismatch(sequence, mismatches)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError("the parser did not halt on the unmutated frame")
+
+
+def test_the_reference_is_the_retained_construct_length() -> None:
+    assert len(real_reference()) == parser.REFERENCE_LENGTH, len(real_reference())
+
+
 def test_the_parser_refuses_to_build_without_the_activity_tables() -> None:
     """The tables are absent today, and absence must be a stop, not an empty table."""
     if parser.TABLE_S6.is_file() and parser.TABLE_S7.is_file():

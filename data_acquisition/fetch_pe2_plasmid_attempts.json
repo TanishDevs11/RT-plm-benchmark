@@ -1,0 +1,65 @@
+{
+ "plasmid": "132775",
+ "plasmid_name": "pCMV-PE2",
+ "access_date": "2026-10-03",
+ "sequence_id": "259720",
+ "insert_description": "Cas9(H840A)-M-MLVrt(D200N, T306K, W313F, T330P, L603W)",
+ "reconstructed_bp": 9753,
+ "viewer_urls": {
+  "genbank": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720.gbk",
+  "map": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-map.svg",
+  "sequence": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-sequence.svg",
+  "enzymes": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-enzymes.json",
+  "features": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-features.json",
+  "primers": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-primers.json",
+  "orfs": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-orfs.json",
+  "sequence_lines": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-sequence-lines.json"
+ },
+ "attempts": [
+  {
+   "label": "plasmid page",
+   "url": "https://www.addgene.org/132775/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes_received": 242991,
+   "sha256": "011f06ef78601f560d046f1008a51e2f0257880a180a1c55aca65c018df3c236",
+   "outcome": "ok"
+  },
+  {
+   "label": "sequences page",
+   "url": "https://www.addgene.org/132775/sequences/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes_received": 206328,
+   "sha256": "8f25314e6149387cd8822ee3bd0f19a4387e6147da004f17bcae89a0910d680d",
+   "outcome": "ok"
+  },
+  {
+   "label": "sequence analysis page",
+   "url": "https://www.addgene.org/browse/sequence/259720/",
+   "status": 200,
+   "content_type": "text/html; charset=utf-8",
+   "bytes_received": 222109,
+   "sha256": "80050cf9e6be06fc13d547275ab38f9ed3427c84ebb5ac72f1dd7ff7d9154dd3",
+   "outcome": "ok"
+  },
+  {
+   "label": "genbank",
+   "url": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720.gbk",
+   "status": 404,
+   "content_type": "text/plain;charset=UTF-8",
+   "bytes_received": 9,
+   "sha256": "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5",
+   "outcome": "non-200"
+  },
+  {
+   "label": "sequence lines",
+   "url": "https://sequences.addgene.org/snapgene-media/v3.101.0/sequences/259720/77be6b1b-d243-4c8c-bd5f-84f709c92280/addgene-plasmid-132775-sequence-259720-sequence-lines.json",
+   "status": 200,
+   "content_type": "application/json",
+   "bytes_received": 7537177,
+   "sha256": "8fdd715107ae5c27114e203403fe1b53e9ef2e801d4ae7c7c99696853ec30b36",
+   "outcome": "ok"
+  }
+ ]
+}

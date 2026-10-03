@@ -1,0 +1,23 @@
+# Checksums for the Task B source files, tasks/taskB_mmlv_dms/raw/
+#
+# Written by data_acquisition/fetch_pe2_plasmid.py over every file in the
+# directory. Each file is stored exactly as served or, where it is derived, with
+# the derivation named.
+#
+# access date: 2026-10-03
+#
+# The per-variant activity tables are absent and are not listed: the preprint
+# deposited no supplementary material. See MANUAL_FETCH_TASKB.md.
+
+ce5398da0c8a17cab569e0a66ba0bef08c3ae75341ef27573b659502da13cc32  addgene_132775_pCMV-PE2.fasta
+    bytes: 10213
+    source: Addgene 132775 verified full sequence 259720, reconstructed from the depositor's sequence-viewer payload
+5a13f7763987116c49f76c4aad9ce1aff6d78468a6b951b41cbbcc9609730cf3  preprint.pdf
+    bytes: 3620781
+    source: bioRxiv 10.64898/2026.07.06.736660 v1, CC-BY-NC 4.0
+61fdd3473f598a2e2b01e1527d9036ee0470c32246e17462604e003b465c050c  reference_candidate_unconfirmed.fasta
+    bytes: 619
+    source: derived, superseded: P03355 RT 1 to 498 with no substitution applied. Kept because the test suite uses it as the near miss that must be rejected
+418f1e426db315802f83b2653c6caf47cf2e78d438bee5f8be8f8cbc62ba2729  uniprot_P03355.fasta
+    bytes: 1891
+    source: https://rest.uniprot.org/uniprotkb/P03355.fasta, SV=5, CC-BY 4.0

@@ -1,0 +1,107 @@
+{
+ "resolved": "2026-10-03",
+ "source_doi": "10.64898/2026.07.06.736660",
+ "plasmid_fasta": "tasks/taskB_mmlv_dms/raw/addgene_132775_pCMV-PE2.fasta",
+ "plasmid_sha256": "ce5398da0c8a17cab569e0a66ba0bef08c3ae75341ef27573b659502da13cc32",
+ "uniprot_accession": "P03355.5",
+ "rt_location_in_plasmid": {
+  "strand": "forward",
+  "frame": 0,
+  "nucleotide_start_1based": 4915,
+  "nucleotide_end_1based": 6945,
+  "upstream_12_residues": "PESSGGSSGGSS",
+  "downstream_12_residues": "SGGSKRTADGSE"
+ },
+ "rt_frame": {
+  "gagpol_offset": 659,
+  "rt_length": 677,
+  "rnaseh_deleted": [
+   499,
+   677
+  ],
+  "pe2dr_length": 498
+ },
+ "addgene_named_substitutions": {
+  "200": "D200N",
+  "306": "T306K",
+  "313": "W313F",
+  "330": "T330P",
+  "603": "L603W"
+ },
+ "differences_from_uniprot": [
+  {
+   "position": 8,
+   "uniprot": "H",
+   "plasmid": "Y",
+   "accounted_for": "NOT named by Addgene; isolate difference or an error"
+  },
+  {
+   "position": 200,
+   "uniprot": "D",
+   "plasmid": "N",
+   "accounted_for": "named by Addgene 132775"
+  },
+  {
+   "position": 306,
+   "uniprot": "T",
+   "plasmid": "K",
+   "accounted_for": "named by Addgene 132775"
+  },
+  {
+   "position": 313,
+   "uniprot": "W",
+   "plasmid": "F",
+   "accounted_for": "named by Addgene 132775"
+  },
+  {
+   "position": 330,
+   "uniprot": "T",
+   "plasmid": "P",
+   "accounted_for": "named by Addgene 132775"
+  },
+  {
+   "position": 603,
+   "uniprot": "L",
+   "plasmid": "W",
+   "accounted_for": "named by Addgene 132775"
+  }
+ ],
+ "differences_not_named_by_addgene": [
+  {
+   "position": 8,
+   "uniprot": "H",
+   "plasmid": "Y",
+   "accounted_for": "NOT named by Addgene; isolate difference or an error"
+  }
+ ],
+ "preprint_anchors_checked": {
+  "60": "S",
+  "61": "I",
+  "67": "S",
+  "84": "Q",
+  "95": "N",
+  "101": "V",
+  "124": "D"
+ },
+ "deletion_anchors_checked": {
+  "499": "L",
+  "677": "P"
+ },
+ "stretch_sequences": {
+  "1": "SIKQYPMSQEARLGIKPHIQRLLDQ",
+  "2": "NTPLLPVKKPGTNDYRPVQDLREVNKRVED"
+ },
+ "independent_crosscheck": {
+  "plasmid": "174820",
+  "plasmid_name": "pCMV-PEmax",
+  "sequence_id": "406249",
+  "plasmid_bp": 9795,
+  "strand": "reverse",
+  "frame": 0,
+  "protein_identity_over_retained_region": "498/498",
+  "nucleotide_matches": 1206,
+  "nucleotide_compared": 1494
+ },
+ "reference_sha256": "070b5df7e3d6248f9dbd4213060f2d2cab9691a450a50e0de1281930f8f33cd7",
+ "reference_length": 498
+}
