@@ -45,11 +45,11 @@ Ordered by weighted Spearman, the component this head contributes.
 | `physicochemical` | 13 | 0.0821 | 0.3698 | 0.0462 | 0.0000 to 0.4170 | 6 |
 | `aa_composition` | 20 | 0.0159 | 0.3311 | 0.0081 | 0.0000 to 0.3744 | 6 |
 | `dipeptide` | 400 | 0.0000 | 0.3205 | 0.0000 | 0.0000 to 0.3304 | 6 |
-| `kmer3` | 6256 | 0.0000 | 0.2937 | 0.0000 | 0.0000 to 0.3767 | 6 |
-| `kmer4` | 20115 | 0.0000 | 0.2954 | 0.0000 | 0.0000 to 0.1684 | 6 |
 | `esm2_150M` | 640 | 0.0000 | 0.3391 | 0.0000 | 0.0000 to 0.1888 | 6 |
 | `esm2_650M` | 1280 | 0.0000 | 0.4067 | 0.0000 | 0.0000 to 0.3762 | 6 |
 | `handcrafted_plus_esm2_650M` | 2069 | 0.0000 | 0.3516 | 0.0000 | 0.0000 to 0.3767 | 6 |
+| `kmer3` | 6256 | 0.0000 | 0.2937 | 0.0000 | 0.0000 to 0.3767 | 6 |
+| `kmer4` | 20115 | 0.0000 | 0.2954 | 0.0000 | 0.0000 to 0.1684 | 6 |
 
 ## Two-head CLS
 
@@ -68,11 +68,11 @@ audit, which scored one vector on both components.
 | `physicochemical` | 0.3623 | 0.0462 | 0.0819 |
 | `aa_composition` | 0.2781 | 0.0081 | 0.0158 |
 | `dipeptide` | 0.3081 | 0.0000 | 0.0000 |
-| `kmer3` | 0.3137 | 0.0000 | 0.0000 |
-| `kmer4` | 0.6212 | 0.0000 | 0.0000 |
 | `esm2_150M` | 0.3056 | 0.0000 | 0.0000 |
 | `esm2_650M` | 0.4220 | 0.0000 | 0.0000 |
 | `handcrafted_plus_esm2_650M` | 0.3082 | 0.0000 | 0.0000 |
+| `kmer3` | 0.3137 | 0.0000 | 0.0000 |
+| `kmer4` | 0.6212 | 0.0000 | 0.0000 |
 
 ## Per-family breakdown
 
@@ -254,11 +254,29 @@ genuine negatives a model must not rank highly.
 | `physicochemical` | regression | Retroviral | 18 | 12 | 3.1506 | defined |
 | `physicochemical` | regression | Unclassified | 1 | 0 | 4.9648 | undefined, no active |
 
-## What this table is not
+## What this table is not, and what the nulls did to it
 
-It is not yet a finding. No score here has been compared against a
-dimensionality-matched noise control, a search-capacity null at matched free
-parameter count, or a label permutation, and no pairwise difference has been
-tested against the smallest difference this sample size can resolve. Those are
-Phase 7, in `reports/statistical_validation.md`, and until they are run the only
-honest reading of this table is as a set of raw numbers.
+**These are raw numbers. Read them with `reports/statistical_validation.md`.** No
+score here has, on its own, been compared against a dimensionality-matched noise
+control, a search-capacity null at matched free-parameter count, or a label
+permutation, and no pairwise difference here has been tested against the smallest
+difference this sample size can resolve.
+
+Once those controls are applied, the ordering above changes materially:
+
+- **No representation under either head clears the CLS gate.** The highest CLS,
+  0.3739, sits below the search-capacity null p95 of 0.4433 at the one free
+  parameter this benchmark uses, and every CLS bootstrap interval includes zero.
+- **The median minimum resolvable CLS difference is 0.4816**, larger than every
+  CLS in the table, so the CLS ordering is not resolvable on this panel at all.
+- **On PR-AUC, ESM-2 650M and 8M clear their noise controls and then fail label
+  permutation**, at 0.4220 against a permuted p95 of 0.5217 and 0.3706 against
+  0.5676 respectively.
+- **`kmer4` is the only representation surviving all three controls**, and its
+  attribution shows its signal is strongly associated with sequence length
+  (Spearman +0.5212 of its out-of-fold score against length) and with family
+  structure, rather than with any specific sequence motif. See
+  `reports/interpretation.md`.
+
+The one-sentence answer is in `reports/FINAL_REPORT.md`; the manuscript-style
+account is in `reports/MANUSCRIPT_SUMMARY.md`.

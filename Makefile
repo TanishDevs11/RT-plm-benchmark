@@ -2,7 +2,8 @@ PYTHON ?= python
 
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
-.PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret pipeline-taskA-report
+.PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret
+.PHONY: pipeline-taskA-figures pipeline-taskA-report
 .PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
 
 all: audit test null bench
@@ -131,11 +132,15 @@ pipeline-taskA-validate:
 pipeline-taskA-interpret:
 	$(PYTHON) bench/interpret_taskA.py
 
+pipeline-taskA-figures:
+	$(PYTHON) bench/figures_taskA.py
+
 pipeline-taskA-report:
 	$(PYTHON) reports/build_final_report.py
+	$(PYTHON) reports/build_manuscript_summary.py
 
 ## Everything from the curated table to the final report.
-taskA: pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret pipeline-taskA-report
+taskA: pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret pipeline-taskA-figures pipeline-taskA-report
 	@echo "Task A complete. Final report in reports/FINAL_REPORT.md."
 
 ## The whole pipeline, in dependency order. Stops early if a guard fails.

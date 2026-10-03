@@ -269,12 +269,25 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--representations", nargs="*", default=[])
     parser.add_argument(
+        "--markdown-only",
+        action="store_true",
+        help="rewrite the markdown table from the stored JSON without refitting anything",
+    )
+    parser.add_argument(
         "--heads", nargs="*", default=["classification", "regression"],
         choices=["classification", "regression"],
     )
     args = parser.parse_args()
 
     print_run_header("bench/representations_taskA.py", [CURATED])
+    if args.markdown_only:
+        stored = json.loads(
+            (RESULTS / "taskA_representations.json").read_text(encoding="utf-8")
+        )
+        write_markdown(stored["results"], stored["heads"])
+        print("rewrote bench/results/taskA_representations.md from the stored JSON")
+        return 0
+
     data = load_taskA_dataset()
     print("rows: " + str(len(data)) + ", actives: " + str(int(data["active"].sum())))
     print("curated.csv agrees with data/rt_sequences.csv on every label")
@@ -526,14 +539,32 @@ def write_markdown(results: dict, heads: list[str]) -> None:
 
     lines += [
         "",
-        "## What this table is not",
+        "## What this table is not, and what the nulls did to it",
         "",
-        "It is not yet a finding. No score here has been compared against a",
-        "dimensionality-matched noise control, a search-capacity null at matched free",
-        "parameter count, or a label permutation, and no pairwise difference has been",
-        "tested against the smallest difference this sample size can resolve. Those are",
-        "Phase 7, in `reports/statistical_validation.md`, and until they are run the only",
-        "honest reading of this table is as a set of raw numbers.",
+        "**These are raw numbers. Read them with `reports/statistical_validation.md`.** No",
+        "score here has, on its own, been compared against a dimensionality-matched noise",
+        "control, a search-capacity null at matched free-parameter count, or a label",
+        "permutation, and no pairwise difference here has been tested against the smallest",
+        "difference this sample size can resolve.",
+        "",
+        "Once those controls are applied, the ordering above changes materially:",
+        "",
+        "- **No representation under either head clears the CLS gate.** The highest CLS,",
+        "  0.3739, sits below the search-capacity null p95 of 0.4433 at the one free",
+        "  parameter this benchmark uses, and every CLS bootstrap interval includes zero.",
+        "- **The median minimum resolvable CLS difference is 0.4816**, larger than every",
+        "  CLS in the table, so the CLS ordering is not resolvable on this panel at all.",
+        "- **On PR-AUC, ESM-2 650M and 8M clear their noise controls and then fail label",
+        "  permutation**, at 0.4220 against a permuted p95 of 0.5217 and 0.3706 against",
+        "  0.5676 respectively.",
+        "- **`kmer4` is the only representation surviving all three controls**, and its",
+        "  attribution shows its signal is strongly associated with sequence length",
+        "  (Spearman +0.5212 of its out-of-fold score against length) and with family",
+        "  structure, rather than with any specific sequence motif. See",
+        "  `reports/interpretation.md`.",
+        "",
+        "The one-sentence answer is in `reports/FINAL_REPORT.md`; the manuscript-style",
+        "account is in `reports/MANUSCRIPT_SUMMARY.md`.",
     ]
     (RESULTS / "taskA_representations.md").write_text(
         "\n".join(lines) + "\n", encoding="utf-8"

@@ -60,8 +60,10 @@ simpler biological representations, under family-held-out evaluation? No.**
 
 Twelve representations, two model heads (regularized logistic regression and ridge, and
 nothing else), one free parameter selected in the inner loop of a nested
-leave-one-family-out protocol. Full report in
-[reports/FINAL_REPORT.md](reports/FINAL_REPORT.md).
+leave-one-family-out protocol.
+
+- [reports/MANUSCRIPT_SUMMARY.md](reports/MANUSCRIPT_SUMMARY.md) reads it as a paper would.
+- [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md) is the auditable version, by phase.
 
 | | classification PR-AUC | Gaussian noise control | permuted-label p95 | survives |
 | --- | --- | --- | --- | --- |
@@ -181,7 +183,8 @@ variants became the **most** lineage-predictive of all at 0.818 family accuracy.
 
 | Path | Contents |
 | --- | --- |
-| `reports/FINAL_REPORT.md` | **Task A final report**, generated from the result files |
+| `reports/MANUSCRIPT_SUMMARY.md` | **Task A, manuscript-style**, generated from the result files |
+| `reports/FINAL_REPORT.md` | **Task A final report**, phase by phase, generated from the result files |
 | `tasks/taskA_crossfamily/` | Task A: raw Table S1, curated table, frozen splits, provenance |
 | `audit/` | Leakage audit and metric properties of the inherited tree |
 | `bench/protocol.py` | The nested LOFO harness every experiment calls |
