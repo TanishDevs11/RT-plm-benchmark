@@ -285,6 +285,18 @@ open reading frames share only 1206 of 1494 nucleotides, 0.807. The two records 
 differently codon-optimized, so protein-level agreement cannot come from one payload or
 one rendering of it. Position 8 is Y in both.
 
+**Stop gate G1: confirmed.** Presented 2026-10-03 and endorsed by the repository owner
+on the same day: the reference resolution, the numbering outcome, 12 of 12 residue
+assertions passing, and the variant count reconciling at 475 and 570 against the
+preprint's stated counts.
+
+The ruling was to confirm the reference and **stop there**, rather than to go on and build
+the Phase 4 representations that need no labels. That is a deliberate decision and the
+reasoning is worth keeping: a zero-shot score or an embedding with no labels to correlate
+against is a column of numbers rather than a result, and computing one would look like
+progress without being any. Nothing in Phase 4 has been run. The task is prepared and
+blocked on Tables S6 and S7, and on nothing else.
+
 **Adopted reference.**
 
 | quantity | value |

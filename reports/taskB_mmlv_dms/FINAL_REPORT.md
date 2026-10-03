@@ -9,6 +9,10 @@ deposit, and all 1046 variant sequences are constructed. Section 1 records that,
 the one residue the published record does not name and that the obvious construction would
 have got wrong. The labels are still absent.
 
+**Stop gate G1 was presented on 2026-10-03 and the reference was confirmed.** The ruling
+was to confirm and stop there, not to go on and compute the Phase 4 representations that
+need no labels, so none were computed. Section 6 gives the reason.
+
 This report is written to the structure the Task B brief specifies. Sections 1, 2, 3 and 7
 are complete, because they concern the dataset's construction and the benchmark's design,
 both of which are now fully determined. Sections 4, 5, 6 and 8 state what they would
