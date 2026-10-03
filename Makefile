@@ -4,7 +4,7 @@ PYTHON ?= python
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
 .PHONY: pipeline-taskB-source pipeline-taskB-reference
 .PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret
-.PHONY: pipeline-taskA-figures pipeline-taskA-report
+.PHONY: pipeline-taskA-figures pipeline-taskA-report pipeline-cross-task
 .PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
 
 all: audit test null bench
@@ -151,8 +151,12 @@ pipeline-taskA-report:
 	$(PYTHON) reports/build_final_report.py
 	$(PYTHON) reports/build_manuscript_summary.py
 
+## The cross-task document. Regenerate whenever either task's status changes.
+pipeline-cross-task:
+	$(PYTHON) reports/build_cross_task_comparison.py
+
 ## Everything from the curated table to the final report.
-taskA: pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret pipeline-taskA-figures pipeline-taskA-report
+taskA: pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret pipeline-taskA-figures pipeline-taskA-report pipeline-cross-task
 	@echo "Task A complete. Final report in reports/FINAL_REPORT.md."
 
 ## The whole pipeline, in dependency order. Stops early if a guard fails.

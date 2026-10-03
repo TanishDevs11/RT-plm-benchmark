@@ -18,7 +18,7 @@ within-protein variant effect task. Progress is in
 | --- | --- | --- | --- |
 | **A** cross-family | does a representation transfer across RT families | prime editing, percent precise edits, HEK293T | **complete**, 57 sequences from Table S1, endorsed through Gate G2; see [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md) |
 | **A2** evolved | transfer onto selected variants, evaluation only | prime editing, evolved editors in their own scaffolds | not acquired |
-| **B** M-MLV DMS | within-protein variant effect | prime editing, normalized so wild type is zero | reference frame resolved; **blocked, labels not publicly deposited** |
+| **B** M-MLV DMS | within-protein variant effect | prime editing, normalized so wild type is zero | **blocked at acquisition**, re-attempted 2026-10-03 by eleven routes; splits and reference ready, labels never deposited. See [reports/taskB/FINAL_REPORT.md](reports/taskB/FINAL_REPORT.md) |
 | C retron, C DGR, C retroviral | breadth of representation analysis | msDNA, mutagenic homing, in vitro kinetics | **blocked**, no usable panel found |
 
 The scientific point of running A and B together is the contrast. Protein language models are
@@ -183,6 +183,8 @@ variants became the **most** lineage-predictive of all at 0.818 family accuracy.
 
 | Path | Contents |
 | --- | --- |
+| `reports/CROSS_TASK_COMPARISON.md` | **What the pair of tasks does and does not establish** |
+| `reports/taskB/` | Task B: split design, final report, both written against a blocked dataset |
 | `reports/MANUSCRIPT_SUMMARY.md` | **Task A, manuscript-style**, generated from the result files |
 | `reports/FINAL_REPORT.md` | **Task A final report**, phase by phase, generated from the result files |
 | `tasks/taskA_crossfamily/` | Task A: raw Table S1, curated table, frozen splits, provenance |
