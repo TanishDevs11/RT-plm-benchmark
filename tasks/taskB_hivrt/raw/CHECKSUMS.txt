@@ -1,0 +1,22 @@
+# Checksums for the Stanford HIVDB genotype-phenotype datasets
+#
+# Written by data_acquisition/fetch_hivdb.py. Each file is stored exactly as
+# served, byte for byte.
+#
+# source: https://hivdb.stanford.edu/download/GenoPhenoDatasets/
+# database release, as printed on the dataset page: 2026-4-22
+# access date: 2026-10-03
+# scope: NRTI and NNRTI only, the two reverse transcriptase drug classes
+#
+# counts the source page advertises for this release:
+#   NNRTI_filtered: 5659 results from 2272 isolates
+#   NNRTI_unfiltered: 11545 results from 4913 isolates
+#   NRTI_filtered: 10666 results from 1867 isolates
+#   NRTI_unfiltered: 29505 results from 5369 isolates
+
+filename	sha256	bytes	lines	source_url	description
+NRTI_DataSet.txt	459a4c49f49b7ef960fc8da1ed2fe1c2fec68b04cc78be675a1fa83de7295fa0	1155388	1868	https://hivdb.stanford.edu/download/GenoPhenoDatasets/NRTI_DataSet.txt	NRTI, high quality filtered, PhenoSense only
+NRTI_DataSet.Full.txt	3c9eceec29137799998b9928088cc9d7d57d9a783f5d26ba9e1a88fead134aeb	7053653	5370	https://hivdb.stanford.edu/download/GenoPhenoDatasets/NRTI_DataSet.Full.txt	NRTI, complete unfiltered, mixed assay methods
+NNRTI_DataSet.txt	753bf2da2b323735cc5b310d903590e01ef481cbbbee6c30a3177c9c6db57a66	1734850	2273	https://hivdb.stanford.edu/download/GenoPhenoDatasets/NNRTI_DataSet.txt	NNRTI, high quality filtered, PhenoSense only
+NNRTI_DataSet.Full.txt	5585977ab84f3602cde2af2a3ef44eb42502444b4712b2207f834d1057d524f6	6388693	4914	https://hivdb.stanford.edu/download/GenoPhenoDatasets/NNRTI_DataSet.Full.txt	NNRTI, complete unfiltered, mixed assay methods
+references.txt	97f92ee9aac211e486bbc65a415444d9166285300f711a66ee20901d7cf7a648	53870	295	https://hivdb.stanford.edu/download/GenoPhenoDatasets/references.txt	publication references for the isolates

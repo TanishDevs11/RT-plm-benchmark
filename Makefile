@@ -3,6 +3,7 @@ PYTHON ?= python
 .PHONY: all audit test null bench figures reproduce clean selfcheck scale
 .PHONY: pipeline-test pipeline-reference pipeline-accessions pipeline-taskA-source pipeline-taskA-parse
 .PHONY: pipeline-taskB-source pipeline-taskB-reference pipeline-taskB-degeneracy
+.PHONY: pipeline-hivrt-source pipeline-hivrt-parse
 .PHONY: taskA pipeline-taskA-bench pipeline-taskA-validate pipeline-taskA-interpret
 .PHONY: pipeline-taskA-figures pipeline-taskA-report pipeline-cross-task
 .PHONY: pipeline-taskA-embeddings pipeline-taskA-overview pipeline-clusters pipeline-splits pipeline-features pipeline-embeddings pipeline
@@ -63,6 +64,7 @@ pipeline-test:
 	$(PYTHON) data_acquisition/test_fetch_doman_s1.py
 	$(PYTHON) data_acquisition/test_parse_taskA.py
 	$(PYTHON) data_acquisition/test_parse_mmlv_dms.py
+	$(PYTHON) data_acquisition/test_parse_hivdb.py
 	$(PYTHON) curation/test_splits.py
 	$(PYTHON) data_acquisition/check_inputs.py --allow-missing
 
@@ -83,6 +85,20 @@ pipeline-taskB-reference:
 ## Task B feature-space degeneracy. Needs no activity values and no confirmed reference.
 pipeline-taskB-degeneracy:
 	$(PYTHON) features/taskB/quantify_degeneracy.py
+
+# ---------------------------------------------------------------------------
+# Task B, HIV-1 RT sequence to phenotype. The operative Task B; the M-MLV screen
+# above is retained as a blocked task.
+# ---------------------------------------------------------------------------
+
+## Acquire the Stanford HIVDB genotype-phenotype datasets, NRTI and NNRTI only.
+pipeline-hivrt-source:
+	$(PYTHON) data_acquisition/fetch_hivdb.py
+
+## Reconstruct sequences, asserting every stated wild-type residue against the reference.
+pipeline-hivrt-parse:
+	$(PYTHON) data_acquisition/parse_hivdb.py
+	$(PYTHON) data_acquisition/test_parse_hivdb.py
 
 ## Resolve Task A accessions from sequence; needs network, and is resumable
 pipeline-accessions:

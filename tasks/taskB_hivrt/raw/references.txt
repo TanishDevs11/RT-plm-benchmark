@@ -1,0 +1,295 @@
+RefID	Author	Title	Journal	RefYear	MedlineID	Published
+64	Condra, JH	Genetic correlates of in vivo viral resistance to indinavir, a human immunodeficiency virus type 1 protease inhibitor.	J Virol	1996	8970946	Yes
+67	Winters, MA	Human immunodeficiency virus type 1 reverse transcriptase genotype and drug susceptibility changes in infected individuals receiving dideoxyinosine monotherapy for 1 to 2 years.	AAC	1997	9087484	Yes
+69	Shafer, RW	Sequence and drug susceptibility of subtype C reverse transcriptase from human immunodeficiency virus type 1 seroconverters in Zimbabwe.	J Virol	1997	9188616	Yes
+72	Shafer, RW	Drug resistance and heterogeneous long-term virologic responses of human immunodeficiency virus type 1 - infected subjects to zidovudine and didanosine combination therapy.	J Infect Dis	1995	7541064	Yes
+113	Fitzgibbon, JE	Human immunodeficiency virus type 1 pol gene mutations which cause decreased susceptibility to 2',3'-dideoxycytidine.	AAC	1992	1317143	Yes
+141	Molla, A	Ordered accumulation of mutations in HIV protease confers resistance to ritonavir.	Nat Med	1996	8673921	Yes
+168	Shafer, RW	Multiple concurrent reverse transcriptase and protease mutations and multidrug resistance of HIV-1 isolates from heavily treated patients.	Ann Intern Med	1998	9634429	Yes
+173	Shafer, RW	Sequence and drug susceptibility of HIV-1 type C protease from human immunodeficiency virus type 1 seroconverters in Zimbabwe.	ARHR	1999	10024054	Yes
+176	Markowitz, M	A preliminary evaluation of nelfinavir mesylate, an inhibitor of human immunodeficiency virus (HIV)-1 protease, to treat HIV infection.	J Infect Dis	1998	9607830	Yes
+177	Winters, MA	Human immunodeficiency virus type 1 protease genotypes and in vitro protease inhibitor susceptibilities of isolates from individuals who were switched to other protease inhibitors after long-term saquinavir treatment.	J Virol	1998	9573309	Yes
+410	Dueweke, TJ	A mutation in reverse transcriptase of bis(heteroaryl)piperazine- resistant human immunodeficiency virus type 1 that confers increased sensitivity to other nonnucleoside inhibitors.	PNAS	1993	7685109	Yes
+483	Jacobsen, H	Characterization of human immunodeficiency virus type 1 mutants with decreased sensitivity to proteinase inhibitor Ro 31-8959.	Virology	1995	7831807	Yes
+497	Kellam, P	Zidovudine treatment results in the selection of human immunodeficiency virus type 1 variants whose genotypes confer increasing levels of drug resistance.	J Gen Virol	1994	7509370	Yes
+520	Lacey, SF	Novel mutation (V75T) in human immunodeficiency virus type 1 reverse transcriptase confers resistance to 2',3'-didehydro-2',3'- dideoxythymidine in cell culture.	AAC	1994	7522429	Yes
+524	Larder, BA	Convergent combination therapy can select viable multidrug-resistant HIV-1 in vitro.	Nature	1993	7692302	Yes
+555	Mellors, JW	Novel mutations in reverse transcriptase of human immunodeficiency virus type 1 reduce susceptibility to foscarnet in laboratory and clinical isolates.	AAC	1995	7542860	Yes
+580	Patick, AK	Antiviral and resistance studies of AG1343, an orally bioavailable inhibitor of human immunodeficiency virus protease.	AAC	1996	8834868	Yes
+631	Shirasaka, T	Emergence of human immunodeficiency virus type 1 variants with resistance to multiple dideoxynucleosides in patients receiving therapy with dideoxynucleosides.	PNAS	1995	7534421	Yes
+640	St Clair, MH	Resistance to ddI and sensitivity to AZT induced by a mutation in HIV-1 reverse transcriptase.	Science	1991	1716788	Yes
+649	Tisdale, M	Rapid in vitro selection of human immunodeficiency virus type 1 resistant to 3'-thiacytidine inhibitors due to a mutation in the YMDD region of reverse transcriptase.	PNAS	1993	7685907	Yes
+705	Patick, AK	Genotypic and phenotypic characterization of human immunodeficiency virus type 1 variants isolated from patients treated with the protease inhibitor nelfinavir.	AAC	1998	9756769	Yes
+718	Winters, MA	A 6-basepair insert in the reverse transcriptase gene of human immunodeficiency virus type 1 confers resistance to multiple nucleoside inhibitors.	J Clin Invest	1998	9819361	Yes
+726	Tisdale, M	Combination of mutations in human immunodeficiency virus type 1 reverse transcriptase required for resistance to the carbocyclic nucleoside 1592U89.	AAC	1997	9145875	Yes
+728	Young, SD	L-743,726 (DMP-266): a novel, highly potent nonnucleoside inhibitor of the human immunodeficiency virus type 1 reverse transcriptase.	AAC	1995	8592986	Yes
+730	Larder, BA	3'-Azido-3'-Deoxythymidine resistance suppressed by a mutation conferring human immunodeficiency virus type 1 resistance to nonnucleoside reverse transcriptase inhibitors.	AAC	1992	1282792	Yes
+732	Richman, DD	Human immunodeficiency virus type 1 mutants resistant to nonnucleoside inhibitors of reverse transcriptase arise in tissue culture.	PNAS	1991	1722324	Yes
+738	Kellam, P	Fifth mutation in human immunodeficiency virus type 1 reverse transcriptase contributes to the development of high-level resistance to zidovudine.	PNAS	1992	1371886	Yes
+742	Palmer, S	Highly drug-resistant HIV-1 clinical isolates are cross-resistant to many antiretroviral compounds in current clinical development.	AIDS	1999	10397560	Yes
+746	Carrillo, A	In vitro selection and characterization of human immunodeficiency virus type 1 variants with increased resistance to ABT-378.	J Virol	1998	9696850	Yes
+751	Partaledis, JA	In vitro selection and characterization of human immunodeficiency virus type 1 (HIV-1) isolates with reduced sensitivity to hydroxyethylamino sulfonamide inhibitors of HIV-1 aspartyl protease.	J Virol	1995	7636964	Yes
+755	Zolopa, AR	HIV-1 genotypic resistance patterns predict response to saquinavir/ritonavir in patients in whom previous protease inhibitor therapy failed.	Ann Intern Med	1999	10610625	Yes
+756	Shulman, NS	Efavirenz- and adefovir dipivoxil-based salvage therapy in highly treatment-experienced patients: Clinical and genotypic predictors of virologic response.	JAIDS	2000	10839657	Yes
+758	Tisdale, M	Cross-resistance analysis of human immunodeficiency virus type 1 variants individually selected for resistance to five different protease inhibitors.	AAC	1995	7486905	Yes
+763	Deeks, SG	Novel four-drug salvage treatment regimens after failure of a human immunodeficiency virus type 1 protease inhibitor-containing regimen: antiviral activity and correlation of baseline phenotypic drug susceptibility with virologic outcome.	J Infect Dis	1999	10228057	Yes
+768	Larder, BA	A family of insertion mutations between codons 67 and 70 of human immunodeficiency virus type 1 reverse transcriptase confer multinucleoside analog resistance.	AAC	1999	10428920	Yes
+782	Fujiwara, T	S-1153 inhibits replication of known drug-resistant strains of human immunodeficiency virus type 1.	AAC	1998	9624472	Yes
+789	Imamichi, T	High-level resistance to 3'-azido-3'-deoxythymidine due to a deletion in the reverse transcriptase gene of human immunodeficiency virus type 1.	J Virol	2000	10623768	Yes
+792	Pellegrin, I	Emergence of zidovudine and multidrug-resistance mutations in the HIV-1 reverse transcriptase gene in therapy-naive patients receiving stavudine plus didanosine combination therapy.	AIDS	1999	10509572	Yes
+807	Petropoulos, CJ	A novel phenotypic drug susceptibility assay for human immunodeficiency virus type 1.	AAC	2000	10722492	Yes
+808	Falloon, J	Combination therapy with amprenavir, abacavir, and efavirenz in human immunodeficiency virus (HIV)-infected patients failing a protease-inhibitor regimen: pharmacokinetic drug interactions and antiviral activity.	Clin Infect Dis	2000	10671334	Yes
+810	Hertogs, K	A novel human immunodeficiency virus type 1 reverse transcriptase mutational pattern confers phenotypic lamivudine resistance in the absence of mutation 184V.	AAC	2000	10681319	Yes
+813	Ziermann, R	A mutation in human immunodeficiency virus type 1 protease, N88S, that causes in vitro hypersensitivity to amprenavir.	J Virol	2000	10756056	Yes
+817	Miller, V	HIV-1 reverse transcriptase (RT) genotype and susceptibility to RT inhibitors during abacavir monotherapy and combination therapy.	AIDS	2000	10708287	Yes
+822	Lennerstrand, J	Biochemical mechanism of human immunodeficiency virus type 1 reverse transcriptase resistance to stavudine.	AAC	2001	11408240	Yes
+825	Huang, W	A novel HIV-1 RT mutation (M230L) confers NNRTI resistance and dose-dependent stimulation of replication.	Antivir Ther	2000		Yes
+840	Huang, W	Amino acid substitutions at position 190 of human immunodeficiency virus type 1 reverse transcriptase increase susceptibility to delavirdine and impair virus replication.	J Virol	2003	12502865	Yes
+845	Gong, YF	In vitro resistance profile of the human immunodeficiency virus type 1 protease inhibitor BMS-232632.	AAC	2000	10952574	Yes
+848	Huang, W	Complex interactions involving multiple amino acid substitutions alter NNRTI susceptibility.	Antivir Ther	1999		Yes
+850	Whitcomb, J	Hypersusceptibility to non-nucleoside reverse transcriptase inhibitors in HIV-1: Clinical, phenotypic and genotypic correlates.	AIDS	2002	12370521	Yes
+852	Jorgensen, LB	Genotypic and phenotypic nevirapine resistance correlates with virological failure during salvage therapy including abacavir and nevirapine.	Antivir Ther	2000	11075938	Yes
+853	Vergne, L	Genetic diversity of protease and reverse transcriptase sequences in non-subtype-B human immunodeficiency virus type 1 strains: evidence of many minor drug resistance mutations in treatment-naive patients.	J Clin Microbiol	2000	11060045	Yes
+857	Parkin, NT	Loss of antiretroviral drug susceptibility at low viral load during early virological failure in treatment-experienced patients.	AIDS	2000	11153669	Yes
+864	Parkin, NT	Discordance between genotype-based predictions of protease inhibitor susceptibility and actual phenotype in HIV-1 isolates containing mutations at positions 82 and 90: Modulatory effects of mutations at secondary positions.	ICAAC 2000	2001		Yes
+865	Brun, S	Patterns of protease inhibitor cross resistance in viral isolates with reduced susceptibility to lopinavir.	CROI 2001	2001		Yes
+869	Maguire, M	Emergence of resistance to protease inhibitor amprenavir in human immunodeficiency virus type 1-infected patients: Selection of four alternative viral protease genotypes and influence of viral susceptibility to coadministered reverse transcriptase nucleoside inhibitors.	AAC	2002	11850255	Yes
+870	Gonzales, MJ	HIV-1 reverse transcriptase and protease subtypes: Classification, amino acid mutation patterns, and prevalence in a northern California clinic-based population.	J Infect Dis	2001	11574914	Yes
+874	Walter, H	Phenotypic HIV-1 resistance correlates with treatment outcome of nelfinavir salvage therapy.	Antivir Ther	2000	11142619	Yes
+879	Bacheler, LT	Genotypic correlates of phenotypic resistance to efavirenz in virus isolates from patients failing nonnucleoside reverse transcriptase inhibitor therapy.	J Virol	2001	11333879	Yes
+891	Van Laethem, K	Patient HIV strains carrying the multiple nucleoside resistance mutations are cross-resistant to abacavir.	AIDS	2000	10770556	Yes
+893	Parkin, NT	Genotypic and phenotypic analysis of a large database of patient samples reveals distinct patterns of protease inhibitor cross-resistance.	Antivir Ther	2001		Yes
+906	Kempf, DJ	Identification of genotypic changes in human immunodeficiency virus protease that correlate with reduced susceptibility to the protease inhibitor lopinavir among viral isolates from protease inhibitor-experienced patients.	J Virol	2001	11462018	Yes
+913	Zachary, KC	Human immunodeficiency virus type 1 hypersusceptibility to amprenavir in vitro can be associated with virus load response to treatment in vivo.	Clin Infect Dis	2001	11700580	Yes
+948	Qari, SH	Comparative analysis of two commercial phenotypic assays for drug susceptibility testing of human immunodeficiency virus type 1.	J Clin Microbiol.	2002	11773089	Yes
+951	Gonzales, MJ	Extended spectrum of HIV-1 reverse transcriptase mutations in patients receiving multiple nucleoside analog inhibitors.	AIDS	2003	12660525	Yes
+952	Colonno, RJ	Identification of I50L as the signature atazanavir (ATV)-resistance mutation in treatment-naive HIV-1-infected patients receiving ATV-containing regimens.	J Infect Dis	2004	15122516	Yes
+953	Margot, NA	Genotypic and phenotypic analyses of HIV-1 in antiretroviral-experienced patients treated with tenofovir DF.	AIDS	2002	12045487	Yes
+960	Wu, TD	Mutation patterns and structural correlates in human immunodeficiency virus type 1 protease following different protease inhibitor treatments.	J Virol	2003	12663790	Yes
+967	Dunne, AL	Comparison of genotyping and phenotyping methods for determining susceptibility of HIV-1 to antiretroviral drugs.	AIDS	2001	11504978	Yes
+968	Ait-Khaled, M	Mutations in HIV-1 reverse transcriptase during therapy with abacavir, lamivudine, zidovudine in HIV-1 infected adults with no prior antiretroviral therapy.	Antivir Ther	2002	12008787	Yes
+984	Novitsky, V	Human immunodeficiency virus type 1 subtype C molecular phylogeny: consensus sequence for an AIDS vaccine design?	J Virol	2002	11991972	Yes
+998	Parkin, NT	Natural variation of drug susceptibility in wild-type human immunodeficiency virus type 1.	AAC	2003	14742192	Yes
+1024	Roge, BT	K65R with and without S68: A new resistance profile in vivo detected in most patients failing abacavir, didanosine and stavudine.	Antivir Ther	2003	12741630	Yes
+1027	Gonzales, MJ	Protease and reverse transcriptase mutation patterns in HIV-1 isolates from heavily treated persons: Comparison of isolates from northern California with isolates from other regions.	ARHR	2003	14601580	Yes
+1028	Condra, JH	In vivo emergence of HIV-1 variants resistant to multiple protease inhibitors.	Nature	1995	7700387	Yes
+1029	Johnston, E	Association of a novel human immunodeficiency virus type 1 protease substrate cleft mutation, L23I, with protease inhibitor therapy and in vitro drug resistance.	AAC	2004	15561868	Yes
+1031	Harrigan, PR	A mutation in the 3' region of the human immunodeficiency virus type 1 reverse transcriptase (Y318F) associated with nonnucleoside reverse transcriptase inhibitor resistance.	J Virol	2002	12050397	Yes
+1033	Dumans, AT	Prevalence of protease and reverse transcriptase drug resistance mutations over time in drug-naive human immunodeficiency virus type 1-positive individuals in Rio de Janeiro, Brazil.	AAC	2002	12183276	Yes
+1035	Mo, H	Identification and structural characterization of I84C and I84A mutations that are associated with high-level resistance to HIV protease inhibitors and impair viral replication.	AAC	2006	17101675	Yes
+1036	Miller, MD	Characterization of resistance mutation patterns emerging over 2 years during first-line antiretroviral treatment with tenofovir DF or stavudine and efavirenz.	Antivir Ther	2003		Yes
+1039	Romano, L	Broad nucleoside-analogue resistance implications for human immunodeficiency virus type 1 reverse-transcriptase mutations at codons 44 and 118.	J Infect Dis	2002	11920313	Yes
+1040	Dauber, DS	Altered substrate specificity of drug-resistant human immunodeficiency virus type 1 protease.	J Virol	2002	11773410	Yes
+1042	Winters, MA	Variants other than aspartic acid at codon 69 of the human immunodeficiency virus type 1 reverse transcriptase gene affect susceptibility to nucleoside analogs.	AAC	2001	11451685	Yes
+1044	Harrigan, PR	Rare mutations at codon 103 of HIV-1 reverse transcriptase can confer resistance to non-nucleoside reverse transcriptase inhibitors.	AIDS	2005	15802972	Yes
+1053	Sevigny, G	Antiviral activity and cross-resistance profile of P-1946, a novel human immunodeficiency virus type 1 protease inhibitor.	Antiviral Res	2006	16473417	Yes
+1054	Parkin, NT	HIV-1 reverse transcriptase mutations that suppress zidovudine resistance also increase in vitro susceptibility to tenofovir, but not stavudine.	IHDRW 2003	2003		Yes
+1056	Prado, JG	Amprenavir-resistant HIV-1 exhibits lopinavir cross-resistance and reduced replication capacity.	AIDS	2002	11953467	Yes
+1058	Masquelier, B	Genotypic and phenotypic resistance patterns of human immunodeficiency virus type 1 variants with insertions or deletions in the reverse transcriptase (RT): multicenter study of patients treated with RT inhibitors.	AAC	2001	11353634	Yes
+1062	Kagan, RM	Structural analysis of an HIV-1 protease I47A mutant resistant to the protease inhibitor lopinavir.	Protein Sci	2005	15937277	Yes
+1063	Srinivas, RV	Antiviral activities of 9-R-2-phosphonomethoxypropyl adenine (PMPA) and bis(isopropyloxymethylcarbonyl)PMPA against various drug-resistant human immunodeficiency virus strains.	AAC	1998	9624498	Yes
+1064	Harrigan, PR	Significance of amino acid variation at human immunodeficiency virus type 1 reverse transcriptase residue 210 for zidovudine susceptibility.	J Virol	1996	8709214	Yes
+1065	Wainberg, MA	In vitro selection and characterization of HIV-1 with reduced susceptibility to PMPA.	Antivir Ther	1999	10682153	Yes
+1066	Foli, A	In vitro selection and molecular characterization of human immunodeficiency virus type 1 with reduced sensitivity to 9-{2-(phosphonomethoxy)ethyl}adenine (PMEA).	Antiviral Res	1996	8891168	Yes
+1079	Bellosillo, N	G190A substitution is associated with delavirdine(DLV) hypersusceptibility in vitro and clinical response with DLV intensification.	Antivir Ther	2003		Yes
+1091	Vidal, C	Genotypic and phenotypic resistance patterns in early-stage HIV-1-infected patients failing initial therapy with stavudine, didanosine and nevirapine.	Antivir Ther	2002	12553483	Yes
+1092	Monno, L	HIV-1 phenotypic susceptibility to lopinavir(LPV) and genotypic analysis in LPV/r-naive subjects with prior protease inhibitor experience.	JAIDS	2003	12869832	Yes
+1102	Lanier, ER	Effect of concurrent zidovudine use on the resistance pathway selected by abacavir-containing regimens.	HIV Med	2004	15544690	Yes
+1123	Kuritzkes, DR	Rate of thymidine analogue resistance mutation accumulation with zidovudine- or stavudine-based regimens.	JAIDS	2004	15097303	Yes
+1127	Grossman, Z	Mutation D30N is not preferentially selected by human immunodeficiency virus type 1 subtype C in the development of resistance to nelfinavir.	AAC	2004	15155216	Yes
+1129	Gonzales, MJ	Colinearity of reverse transcriptase inhibitor resistance mutations detected by population-based sequencing.	JAIDS	2003	14615657	Yes
+1130	Mueller, SM	Susceptibility to saquinavir and atazanavir in highly protease inhibitor(PI) resistant HIV-1 is caused by lopinavir-induced drug resistance mutation L76V.	Antivir Ther	2004		Yes
+1131	Sevigny, G	Cross-resistance profile of the novel lysine-containing HIV-1 protease inhibitor PL-100.	IHDRW 2004	2004		Yes
+1132	Vergne, L	Low rate of genotypic HIV-1 drug-resistant strains in the Senegalese government initiative of access to antiretroviral therapy.	AIDS	2003	14565607	Yes
+1133	Yates, PJ	In vitro development of resistance to human immunodeficiency virus protease inhibitor GW640385.	AAC	2006	16495277	Yes
+1134	Delgado, J	Genotypic (and phenotypic) predictors of a response to DDI monotherapy in ZDV-experienced patients.	Antivir Ther	2004		Yes
+1148	Murphy, MD	HIV protease mutations associated with amprenavir resistance during salvage therapy: Importance of I54M.	J Clin Virol	2004	15072756	Yes
+1150	Lam, E	Amprenavir resistance imparted by the I50V mutation in HIV-1 protease can be suppressed by the N88S mutation.	Clin Infect Dis	2003	14557976	Yes
+1151	Friend, J	Isolated lopinavir resistance after virological rebound of a ritonavir/lopinavir-based regimen.	AIDS	2004	15353986	Yes
+1153	Rhee, SY	Distribution of human immunodeficiency virus type 1 protease and reverse transcriptase mutation patterns in 4,183 persons undergoing genotypic resistance testing.	AAC	2004	15273130	Yes
+1155	Holguin, A	Impact of frequent natural polymorphisms at the protease gene on the in vitro susceptibility to protease inhibitors in HIV-1 non-B subtypes.	J Clin Virol	2004	15465415	Yes
+1166	Winters, MA	Genotypic, phenotypic, and modeling studies of a deletion in the beta3-beta4 region of the human immunodeficiency virus type 1 reverse transcriptase gene that is associated with resistance to nucleoside reverse transcriptase inhibitors.	J Virol	2000	11044115	Yes
+1167	Rhee, SY	HIV-1 protease and reverse transcriptase mutations: Correlations with antiretroviral therapy in subtype B isolates and implications for drug-resistance surveillance.	J Infect Dis	2005	15995959	Yes
+1168	Johnston, E	Panel of prototypical infectious molecular HIV-1 clones containing multiple nucleoside reverse transcriptase inhibitor resistance mutations.	AIDS	2005	15821401	Yes
+1202	Coakley, E	Atazanavir resistance in a protease inhibitor-naive patient treated with atazanavir/ritonavir associated with development of high-level atazanavir resistance and the N88S mutation in protease.	CROI 2007	2005		Yes
+1210	Mo, H	Selection of resistance in protease inhibitor-experienced, human immunodeficiency virus type 1-infected subjects failing lopinavir- and ritonavir-based therapy: mutation patterns and baseline correlates.	J Virol	2005	15731227	Yes
+1251	Vidal, N	HIV type 1 pol gene diversity and antiretroviral drug resistance mutations in the Democratic Republic of Congo (DRC).	ARHR	2006	16478404	Yes
+1253	Agwale, SM	Genotypic and phenotypic analyses of human immunodeficiency virus type 1 in antiretroviral drug-naive Nigerian patients.	ARHR	2006	16438641	Yes
+1259	Parkin, NT	The K101P and K103R/V179D mutations in human immunodeficiency virus type 1 reverse transcriptase confer resistance to nonnucleoside reverse transcriptase inhibitors.	AAC	2006	16377709	Yes
+1263	Doyon, L	Selection and characterization of HIV-1 showing reduced susceptibility to the non-peptidic protease inhibitor tipranavir.	Antiviral Res	2005	16122817	Yes
+1265	Ross, LL	A rare HIV reverse transcriptase mutation, K65N, confers reduced susceptibility to tenofovir, lamivudine and didanosine.	AIDS	2006	16514317	Yes
+1266	Resch, W	Evolution of human immunodeficiency virus type 1 protease genotypes and phenotypes in vivo under selective pressure of the protease inhibitor ritonavir.	J Virol	2005	16051856	Yes
+1278	Vergne, L	Natural polymorphism in protease and reverse transcriptase genes and in vitro antiretroviral drug susceptibilities of non-B HIV-1 strains from treatment-naive patients.	J Clin Virol	2006	16563858	Yes
+1280	Rousseau, CM	Large-scale amplification, cloning and sequencing of near full-length HIV-1 subtype C genomes.	J Virol Methods	2006	16701907	Yes
+1285	Rhee, SY	Genotypic predictors of human immunodeficiency virus type 1 drug resistance.	PNAS	2006	17065321	Yes
+1309	Arroyo, MA	HIV type 1 subtypes among blood donors in the Mbeya region of southwest Tanzania.	ARHR	2004	15320994	Yes
+1321	Arroyo, MA	HIV-1 diversity and prevalence differ between urban and rural areas in the Mbeya region of Tanzania.	AIDS	2005	16135906	Yes
+1485	Baxter, JD	Genotypic changes in human immunodeficiency virus type 1 protease associated with reduced susceptibility and virologic response to the protease inhibitor tipranavir.	J Virol	2006	16928764	Yes
+1495	Ochoa de Echaguen, A	Genotypic and phenotypic resistance patterns at virological failure in a simplification trial with nevirapine, efavirenz or abacavir.	AIDS	2005	16103769	Yes
+1497	Jones, G	In Vitro Resistance Profile of HIV-1 Mutants Selected by the HIV-1 Integrase Inhibitor, GS-9137 (JTK-303)	CROI 2007	2007		Yes
+1513	Malan, DR	96-week efficacy and safety of atazanavir, with and without ritonavir, in a HAART regimen in treatment-naive patients.	J Int Assoc Physicians AIDS Care	2010	20071596	Yes
+1514	Zolopa, A	Resistance profile after viral rebound on atazanavir-containing therapy: focus on protease inhibitor naive subjects in the IMPACT study (BMS AI424-128).	IHDRW 2007	2007		Yes
+1516	Andries, K	TMC125, a novel next-generation nonnucleoside reverse transcriptase inhibitor active against nonnucleoside reverse transcriptase inhibitor-resistant human immunodeficiency virus type 1.	AAC	2004	15561844	Yes
+1517	Das, K	Roles of conformational and positional adaptability in structure-based design of TMC125-R165335 (etravirine) and related non-nucleoside reverse transcriptase inhibitors that are highly potent and effective against wild-type and drug-resistant HIV-1 variants.	J Med Chem	2004	15115397	Yes
+1518	Vingerhoets, J	TMC125 displays a high genetic barrier to the development of resistance: evidence from in vitro selection experiments.	J Virol	2005	16188980	Yes
+1519	Su, G	In vitro selection and characterization of viruses resistant to R1206, a novel nonnucleoside reverse transcriptase inhibitor.	IHDRW 2007	2007		Yes
+1539	King, M	Phenotypic susceptibility to TMC-114 and tipranavir before and after lopinavir/ritonavir-based treatment in subjects demonstrating evolution of lopinavir resistance.	IHDRW 2006	2006		Yes
+1542	Bradshaw, D	Characterization of a novel drug-resistance pattern associated with the mutations K70G and M184V in HIV-1 reverse transcriptase.	AAC	2007	17876005	Yes
+1578	Shimura, K	Broad anti-retroviral activity and resistance profile of a novel human immunodeficiency virus integrase inhibitor, Elvitegravir (JTK-303/GS-9137).	J Virol	2007	17977962	Yes
+1581	Eshleman, SH	Phenotypic drug resistance patterns in subtype A HIV-1 clones with nonnucleoside reverse transcriptase resistance mutations.	ARHR	2006	16545016	Yes
+1604	Ren, C	In vitro cross-resistance studies of five different classes of integrase inhibitors in recombinant HIV-1.	Antivir Ther	2007		Yes
+1605	Rowley, M	The discovery of raltegravir, an integrase inhibitor for the treatment of HIV infection.	Prog Med Chem	2008	18381123	Yes
+1610	Hombrouck, A	Mutations in human immunodeficiency virus type 1 integrase confer resistance to the naphthyridine L-870,810 and cross-resistance to the clinical trial drug GS-9137.	AAC	2008	18378713	Yes
+1620	Poveda, E	Evidence for different susceptibility to tipranavir and darunavir in patients infected with distinct HIV-1 subtypes.	AIDS	2008	18317002	Yes
+1643	Goethals, O	Resistance mutations in HIV-1 integrase selected with elvitegravir confer reduced susceptibility to a wide range of integrase inhibitors.	J Virol	2008	18715920	Yes
+1645	Vingerhoets, J	An update of the list of NNRTI mutations associated with decreased virologic response to etravirine (ETR): Multivariate analyses on the pooled DUET-1 and DUET-2 clinical trial data.	IHDRW 2008	2008		Yes
+1646	De Meyer, S	Characterization of virologic failure patients on darunavir/ritonavir in treatment-experienced patients.	AIDS	2009	19474650	Yes
+1649	Das, K	High-resolution structures of HIV-1 reverse transcriptase/TMC278 complexes: Strategic flexibility explains potency against resistance mutations.	PNAS	2008	18230722	Yes
+1664	Poveda, E	Phenotypic impact of resistance mutations on etravirine susceptibility in HIV patients with prior failure to nonnucleoside analogues.	AIDS	2008	18981781	Yes
+1665	Jones, GS	Preclinical evaluation of GS-9160, a novel inhibitor of human immunodeficiency virus type 1 integrase.	AAC	2009	19104010	Yes
+1672	Eshleman, SH	Antiretroviral drug susceptibility among drug-naive adults with recent HIV infection in Rakai, Uganda.	AIDS	2009	19276794	Yes
+1684	Van Baelen, K	A combined genotypic and phenotypic human immunodeficiency virus type 1 recombinant virus assay for the reverse transcriptase and integrase genes.	J Virol Methods	2009	19559730	Yes
+1692	Fransen, S	HIV-1 mutations at positions 143, 148, and 155 of integrase define different genetic barriers to raltegravir resistance in vivo.	Journal of Virology	2012	22553340	Yes
+1718	Vingerhoets, J	Resistance profile of etravirine: combined analysis of baseline genotypic and phenotypic data from the randomized, controlled Phase III clinical studies.	AIDS	2010	20051805	Yes
+1719	Reuman, EC	Panel of prototypical raltegravir-resistant infectious molecular clones in a novel integrase-deleted cloning vector.	AAC	2010	19917747	Yes
+1745	Azijn, H	TMC278, a next-generation NNRTI, active against wild-type and NNRTI-resistant HIV-1.	AAC	2010	19933797	Yes
+1746	Saskova, KG	Molecular characterization of clinical isolates of human immunodeficiency virus resistant to the protease inhibitor darunavir.	J Virol	2009	19535439	Yes
+1752	Kagan, RM	Molecular basis of antagonism between K70E and K65R tenofovir-associated mutations in HIV-1 reverse transcriptase.	Antiviral Res	2007	17442410	Yes
+1757	Maiga, AI	Resistance-associated mutations to etravirine (TMC-125) in antiretroviral-naive patients infected with non-B HIV-1 subtypes.	AAC	2010	20008779	Yes
+1763	Low, A	Natural polymorphisms of human immunodeficiency virus type 1 integrase and inherent susceptibilities to a panel of integrase inhibitors.	AAC	2009	19651917	Yes
+1790	Rhee, SY	HIV-1 protease mutations and protease inhibitor cross resistance.	AAC	2010	20660676	Yes
+1793	Goethals, O	Primary mutations selected in vitro with raltegravir confer large fold changes in susceptibility to first-generation integrase inhibitors, but minor fold changes to inhibitors with second-generation resistance profiles.	Virology	2010	20421122	Yes
+1795	Underwood, M	The activity of the integrase inhibitor dolutegravir against HIV-1 variants isolated from raltegravir-treated adults.	JAIDS	2012	22878423	Yes
+1796	da Silva, D	HIV-1 resistance patterns to integrase inhibitors in antiretroviral-experienced patients with virological failure on raltegravir-containing regimens.	J Antimicrob Chemother	2010	20388636	Yes
+1800	Fransen, S	Loss of raltegravir susceptibility by human immunodeficiency virus type 1 is conferred via multiple nonoverlapping genetic pathways.	J Virol	2009	19759152	Yes
+1950	Kagan, RM	Additional HIV-1 mutation patterns associated with reduced phenotypic susceptibility to etravirine in clinical samples.	AIDS	2009	19474648	Yes
+1954	Matthews, PC	Central role of reverting mutations in HLA associations with human immunodeficiency virus set point.	J Virol	2008	18596105	Yes
+1957	Tambuyzer, L	Compilation and prevalence of mutations associated with resistance to non-nucleoside reverse transcriptase inhibitors.	Antivir Ther	2009	19320243	Yes
+1958	Balamane, M	Panel of prototypical recombinant infectious molecular clones resistant to nevirapine, efavirenz, etravirine, and rilpivirine.	AAC	2012	22664973	Yes
+1960	Hu, Z	Virologic characterization of HIV type 1 with a codon 70 deletion in reverse transcriptase.	JAIDS	2007	17496561	Yes
+1961	Kulkarni, R	The HIV-1 reverse transcriptase M184I mutation enhances the E138K-associated resistance to rilpivirine and decreases viral fitness.	JAIDS	2012	21997204	Yes
+1963	Varghese, V	Phenotypic evidence for NRTI resistance in HIV-1 isolates with the RT mutation K64H.	Unpublished	2011		Yes
+1995	Gupta, S	Connection domain mutations in HIV-1 reverse transcriptase do not impact etravirine susceptibility and virologic responses to etravirine-containing regimens	AAC	2011	21464253	Yes
+1997	Melikian, GL	Standardized comparison of the relative impacts of HIV-1 reverse transcriptase (RT) mutations on nucleoside RT inhibitor susceptibility.	AAC	2012	22330916	Yes
+2001	Margot, NA	In vitro resistance selections using elvitegravir, raltegravir, and two metabolites of elvitegravir M1 and M4	Antiviral Res	2012	22197635	Yes
+2004	Haddad, M	Mutation Y188L of HIV-1 reverse transcriptase is strongly associated with reduced susceptibility to rilpivirine	CROI 2012	2011		Yes
+2006	Li, Z	The in vitro cross-resistance profile of the NRTI BMS-986001 against known NRTI resistance mutations	Antimicrob Agents Chemother	2013	23979732	Yes
+2007	Abram, ME	Impact of primary elvitegravir resistance-associated mutations in HIV-1 integrase on drug susceptibility and viral replication fitness.	AAC	2013	23529738	Yes
+2008	Garrido, C	Broad phenotypic cross-resistance to elvitegravir in HIV-infected patients failing on raltegravir-containing regimens.	AAC	2012	22450969	Yes
+2025	Varghese, V	Panel of Prototypical Recombinant Multi-Protease Inhibitor Resistant Infectious Molecular Clones	Antimicrob Agents Chemother	2013	23796938	Yes
+2041	Villena, C	Relative fitness and replication capacity of a multinucleoside analogue-resistant clinical human immunodeficiency virus type 1 isolate with a deletion of codon 69 in the reverse transcriptase coding region.	J Virol	2007	17314158	Yes
+2045	Sato, A	In vitro selection of mutations in human immunodeficiency virus type 1 reverse transcriptase that confer resistance to capravirine, a novel nonnucleoside reverse transcriptase inhibitor.	Antiviral Res	2006	16472877	Yes
+2087	Gatanaga, H	Combination of V106I and V179D polymorphic mutations in human immunodeficiency virus type 1 reverse transcriptase confers resistance to efavirenz and nevirapine but not etravirine.	AAC	2010	20124001	Yes
+2090	Van Wesenbeeck, L	Cross-resistance profile determination of two second-generation HIV-1 integrase inhibitors using a panel of recombinant viruses derived from raltegravir-treated clinical isolates.	AAC	2011	20956600	Yes
+2092	Canducci, F	Cross-resistance profile of the novel integrase inhibitor Dolutegravir (S/GSK1349572) using clonal viral variants selected in patients failing raltegravir.	J Infect Dis	2011	21984737	Yes
+2099	Mesplede, T	Viral fitness cost prevents HIV-1 from evading dolutegravir drug pressure.	Retrovirology	2013	23432922	Yes
+2100	Malet, I	The HIV-1 integrase G118R mutation confers raltegravir resistance to the CRF02_AG HIV-1 subtype.	J Antimicrob Chemother	2011	21933786	Yes
+2105	McColl, DJ	Strand transfer inhibitors of HIV-1 integrase: Bringing IN a new era of antiretroviral therapy.	Antiviral Res	2010	19925830	Yes
+2110	Van Eygen, V	Comparison of the Antivirogram and PhenoSense assays to determine phenotypic susceptibility to rilpivirine in patient samples from the Phase III ECHO and THRIVE trials.	International Workshop on HIV & Hepatitis Virus	2012		Yes
+2113	Armenia, D	Study of genotypic and phenotypic HIV-1 dynamics of integrase mutations during raltegravir treatment: A refined analysis by ultra-deep 454 pyrosequencing.	J Infect Dis	2012	22238474	Yes
+2114	Melikian, GL	Nonnucleoside RT inhibitor (NNRTI) cross-resistance: implications for preclinical evaluation of novel NNRTIs and clinical genotypic resistance testing.	J Antimicrob Chemother	2013	23934770	Yes
+2117	Porter, DP	Characterization of HIV-1 drug resistance development through week 48 in antiretroviral naive subjects on rilpivirine/emtricitabine/tenofovir DF or efavirenz/emtricitabine/tenofovir DF in the STaR study (GS-US-264-0110)	JAIDS	2014	24525469	Yes
+2119	Huang, W	Multiple genetic pathways involving amino acid position 143 of HIV-1 integrase are preferentially associated with specific secondary amino acid substitutions and confer resistance to raltegravir and cross-resistance to elvitegravir.	AAC	2013	23733474	Yes
+2131	Haddad, M	Combinations of HIV-1 reverse transcriptase mutations L100I+K103N/S and L100I+K103R+V179D reduce susceptibility to rilpivirine.	Interscience Conference on Antimicrobial Agents an	2013		Yes
+2137	Xu, HT	Role of the K101E substitution in HIV-1 reverse transcriptase in resistance to rilpivirine and other nonnucleoside reverse transcriptase inhibitors.	AAC	2013	24002090	Yes
+2214	Hardy, I	Evolution of a novel pathway leading to dolutegravir resistance in a patient harbouring N155H and multiclass drug resistance.	J Antimicrob Chemother	2015	25281399	Yes
+2226	Molina, JM	Efficacy and safety of once daily elvitegravir versus twice daily raltegravir in treatment-experienced patients with HIV-1 receiving a ritonavir-boosted protease inhibitor: randomised, double-blind, phase 3, non-inferiority study.	Lancet Infect Dis	2012	22015077	Yes
+2227	Sax, PE	Co-formulated elvitegravir, cobicistat, emtricitabine, and tenofovir versus co-formulated efavirenz, emtricitabine, and tenofovir for initial treatment of HIV-1 infection: a randomised, double-blind, phase 3 trial, analysis of results after 48 weeks.	Lancet	2012	22748591	Yes
+2228	DeJesus, E	Co-formulated elvitegravir, cobicistat, emtricitabine, and tenofovir disoproxil fumarate versus ritonavir-boosted atazanavir plus co-formulated emtricitabine and tenofovir disoproxil fumarate for initial treatment of HIV-1 infection: a randomised, double-blind, phase 3, non-inferiority trial.	Lancet	2012	22748590	Yes
+2262	Anstett, K	Dolutegravir resistance mutation R263K cannot coexist in combination with many classical integrase inhibitor resistance substitutions.	J Virol	2015	25653436	Yes
+2263	Anstett, K	Dolutegravir-selected HIV-1 containing the N155H and R263K resistance substitutions does not acquire additional compensatory mutations under drug pressure that lead to higher-level resistance and increased replicative capacity.	J Virol	2015	26246578	Yes
+2264	Yoshinaga, T	Antiviral characteristics of GSK1265744, an HIV integrase inhibitor dosed orally or by long-acting injection.	AAC	2015	25367908	Yes
+2265	Cutillas, V	The R262K substitution combined with H51Y in HIV-1 subtype B integrase confers low-level resistance against dolutegravir.	AAC	2015	25348535	Yes
+2266	Liang, J	The combination of the R263K and T66I resistance substitutions in HIV-1 integrase is incompatible with high-level viral replication and the development of high-level drug resistance.	J Virol	2015	26311878	Yes
+2267	Mesplede, T	Addition of E138K to R263K in HIV integrase increases resistance to dolutegravir, but fails to restore activity of the HIV integrase enzyme and viral replication capacity.	J Antimicrob Chemother	2014	24917583	Yes
+2304	Hachiya, A	Natural polymorphism S119R of HIV-1 integrase enhances primary INSTI resistance.	Antiviral Res	2015	25956162	Yes
+2470	Abram, ME	Pre-existing HIV-1 integrase polymorphisms do not impact treatment response to elvitegravir-containing fixed-dose combination regimens in treatment-naive patients.	HIV Drug Therapy 2016 Glasgow	2016		Yes
+2479	Brenner, BG	Development of a G118R mutation in HIV-1 integrase following a switch to dolutegravir monotherapy leading to cross-resistance to integrase inhibitors.	J Antimicrob Chemother	2016	27029845	Yes
+2591	Andreatta, K	Integrase Inhibitor Resistance Selections Initiated with Drug Resistant HIV-1.	CROI	2018		Yes
+2592	Tsiang, M	Antiviral Activity of Bictegravir (GS-9883), a Novel Potent HIV-1 Integrase Strand Transfer Inhibitor with an Improved Resistance Profile.	Antimicrob Agents Chemother	2016	27645238	Yes
+2593	Hassounah, SA	Antiviral Activity of Bictegravir and Cabotegravir against Integrase Inhibitor-Resistant SIVmac239 and HIV-1.	Antimicrob Agents Chemother	2017	28923862	Yes
+2596	Smith, SJ	Efficacies of Cabotegravir and Bictegravir against drug-resistant HIV-1 integrase mutants.	Retrovirology	2018	29769116	Yes
+2598	White, K	Bictegravir Resistance Profile: Data for External Experts.	Unpublished	2018		Yes
+2599	Hachiya, A	Impact of HIV-1 Integrase L74F and V75I Mutations in a Clinical Isolate on Resistance to Second-Generation Integrase Strand Transfer Inhibitors.	Antimicrob Agents Chemother	2017	28533248	Yes
+2600	Yoshinaga, T	Novel secondary mutations C56S and G149A confer resistance to HIV-1 integrase strand transfer inhibitors.	Antiviral Res	2018	29410019	Yes
+2601	Vavro, C	Prevalent polymorphisms in wild-type HIV-1 integrase are unlikely to engender drug resistance to dolutegravir (S/GSK1349572).	Antimicrob Agents Chemother	2013	23295935	Yes
+2602	Anstett, K	Polymorphic substitution E157Q in HIV-1 integrase increases R263K-mediated dolutegravir resistance and decreases DNA binding activity.	J Antimicrob Chemother	2016	27084918	Yes
+2603	Quashie, PK	Differential effects of the G118R, H51Y, and E138K resistance substitutions in different subtypes of HIV integrase.	J Virol	2015	25552724	Yes
+2604	Malet, I	Pathway involving the N155H mutation in HIV-1 integrase leads to dolutegravir resistance.	J Antimicrob Chemother	2018	29373677	Yes
+2605	Malet, I	New raltegravir resistance pathways induce broad cross-resistance to all currently used integrase inhibitors.	J Antimicrob Chemother	2014	24710029	Yes
+2607	Wares, M	The M50I polymorphic substitution in association with the R263K mutation in HIV-1 subtype B integrase increases drug resistance but does not restore viral replicative fitness.	Retrovirology	2014	24433497	Yes
+2608	Quashie, PK	Characterization of the R263K mutation in HIV-1 integrase that confers low-level resistance to the second-generation integrase strand transfer inhibitor dolutegravir.	J Virol	2012	22205735	Yes
+2609	Pham, HT	The S230R Integrase Substitution Associated with Viral Rebound during DTG Monotherapy Confers Low Levels INSTI Drug Resistance.	J Infect Dis	2018	29617824	Yes
+2610	Malet, I	Combination of two pathways involved in raltegravir resistance confers dolutegravir resistance.	J Antimicrob Chemother	2015	26205139	Yes
+2613	Munir, S	G118R and F121Y mutations identified in patients failing raltegravir treatment confer dolutegravir resistance.	J Antimicrob Chemother	2015	25414202	Yes
+2616	Zhang, WW	Accumulation of multiple mutations in vivo confers cross-resistance to new and existing integrase inhibitors.	J Infect Dis	2018	30010985	Yes
+2617	Charpentier, C	Phenotypic analysis of HIV-1 E157Q integrase polymorphism and impact on virological outcome in patients initiating an integrase inhibitor-based regimen.	J Antimicrob Chemother	2018	29342281	Yes
+2618	Seki, T	Effects of raltegravir or elvitegravir resistance signature mutations on the barrier to dolutegravir resistance in vitro.	Antimicrob Agents Chemother	2015	25691633	Yes
+2619	Saladini, F	The HIV-1 integrase E157Q polymorphism per se does not alter susceptibility to raltegravir and dolutegravir in vitro.	AIDS	2017	28832412	Yes
+2620	Mesplede, T	The R263K substitution in HIV-1 subtype C is more deleterious for integrase enzymatic function and viral replication than in subtype B.	AIDS	2015	26244385	Yes
+2621	Varghese, V	Q148N, a Novel Integrase Inhibitor Resistance Mutation Associated with Low-Level Reduction in Elvitegravir Susceptibility.	ARHR	2016	27009474	Yes
+2622	George, JM	Rapid development of high level resistance to dolutegravir with emergence of T97A mutation in two treatment experienced individuals with baseline partial sensitivity to dolutegravir.	Open Forum Infect Dis	2018	30568974	Yes
+2623	Oliveira, M	Selective resistance profiles emerging in patient-derived clinical isolates with cabotegravir, bictegravir, dolutegravir, and elvitegravir.	Retrovirology	2018	30119633	Yes
+2628	Lai, MT	In vitro characterization of MK-1439, a novel HIV-1 nonnucleoside reverse transcriptase inhibitor.	Antimicrob Agents Chemother	2014	24379202	Yes
+2629	Lai, MT	Characterization of Doravirine-Selected Resistance Patterns From Participants in Treatment-Naive Phase 3 Clinical Trials.	IAC	2018		Yes
+2642	Shahid, A	Systematic determination of in vitro phenotypic resistance to HIV-1 integrase strand transfer inhibitors from clinical samples	bioRxiv	2019		Yes
+2809	Feng, M	In vitro resistance selection with doravirine (MK-1439), a novel nonnucleoside reverse transcriptase inhibitor with distinct mutation development pathways.	Antimicrob Agents Chemother	2015	25385110	Yes
+2810	Feng, M	Doravirine Suppresses Common Nonnucleoside Reverse Transcriptase Inhibitor-Associated Mutants at Clinically Relevant Concentrations.	Antimicrob Agents Chemother	2016	26833152	Yes
+2811	Smith, SJ	Rilpivirine and Doravirine Have Complementary Efficacies Against NNRTI-Resistant HIV-1 Mutants.	JAIDS	2016	27124362	Yes
+2812	Hazuda, DJ	Understanding the Resistance Profile of the HIV-1 NNRTI Doravirine in Combination With the Novel NRTTI MK-8591.	IAC	2018		Yes
+2815	Saladini, F	In vitro analysis of doravirine activity on HIV-1 clones harboring multiple NNRTI resistance mutations.	J Antimicrob Chemother	2021	32974670	Yes
+2853	Margot, NA	Antiviral activity of HIV-1 integrase strand-transfer inhibitors against mutants with integrase resistance-associated mutations and their frequency in treatment-naive individuals.	J Med Virol	2019	31389026	Yes
+2859	Saladini, F	Comparable in vitro activity of second-generation HIV-1 integrase strand transfer inhibitors (INSTIs) on HIV-1 clinical isolates with INSTI resistance mutations.	Antimicrob Agents Chemother	2019	31611362	Yes
+2974	Grobler, JA	Efficacy of MK-8591 against diverse HIV-1 subtypes and NRTI-resistant clinical isolates.	HIV Glasgow Conference	2018		Yes
+3010	Rizzardini, G	Long-Acting Injectable Cabotegravir + Rilpivirine for HIV Maintenance Therapy: Week 48 Pooled Analysis of Phase 3 ATLAS and FLAIR Trials.	J Acquir Immune Defic Syndr	2020	33136751	Yes
+3011	Smith, SJ	HIV-1 Integrase Inhibitors That Are Active against Drug-Resistant Integrase Mutants.	Antimicrob Agents Chemother	2020	32601157	Yes
+3013	Ndashimye, E	Accumulation of integrase strand transfer inhibitor resistance mutations confers high-level resistance to dolutegravir in non-B subtype HIV-1 strains from patients failing raltegravir in Uganda.	J Antimicrob Chemother	2020	32853364	Yes
+3014	Santoro, MM	Susceptibility to HIV-1 integrase strand transfer inhibitors (INSTIs) in highly treatment-experienced patients who failed an INSTI-based regimen.	Int J Antimicrob Agents	2020	32450199	Yes
+3025	Overton, ET	Long-acting cabotegravir and rilpivirine dosed every 2 months in adults with HIV-1 infection (ATLAS-2M), 48-week results: a randomised, multicentre, open-label, phase 3b, non-inferiority study.	Lancet	2021	33308425	Yes
+3029	van Wyk, J	Brief Report: Durable Suppression and Low Rate of Virologic Failure 3 Years After Switch to Dolutegravir + Rilpivirine 2-Drug Regimen: 148-Week Results From the SWORD-1 and SWORD-2 Randomized Clinical Trials.	J Acquir Immune Defic Syndr	2020	32675772	Yes
+3033	Gandhi, RT	Long-term Outcomes in a Large Randomized Trial of HIV-1 Salvage Therapy: 96-Week Results of AIDS Clinical Trials Group A5241 (OPTIONS).	J Infect Dis	2020	31135883	Yes
+3037	Ndashimye, E	High-level resistance to bictegravir and cabotegravir in subtype A- and D-infected HIV-1 patients failing raltegravir with multiple resistance mutations.	J Antimicrob Chemother	2021	34453542	Yes
+3055	Cheung, PK	Impact of combinations of clinically observed HIV integrase mutations on phenotypic resistance to integrase strand transfer inhibitors (INSTIs): a molecular study.	J Antimicrob Chemother	2022	35061879	Yes
+3063	Jeffrey, JL	Impact of Integrase Sequences from HIV-1 Subtypes A6/A1 on the In Vitro Potency of Cabotegravir or Rilpivirine.	Antimicrob Agents Chemother	2022	34978890	Yes
+3083	Brenner, BG	Cell culture selections reveal favourable drug resistance profiles for doravirine and islatravir.	J Antimicrob Chemother	2021	33855437	Yes
+3102	Underwood, M	Integrase Inhibitor Resistance Mechanisms and Structural Characteristics in Antiretroviral Therapy-Experienced, Integrase Inhibitor-Naive Adults with HIV-1 Infection Treated with Dolutegravir plus Two Nucleoside Reverse Transcriptase Inhibitors in the DAWNING Study.	Antimicrob Agents Chemother	2022	34694877	Yes
+3106	Smith, RA	Spectrum of Activity of Raltegravir and Dolutegravir Against Novel Treatment-Associated Mutations in HIV-2 Integrase: A Phenotypic Analysis Using an Expanded Panel of Site-Directed Mutants.	J Infect Dis	2022	35134180	Yes
+3113	Vavro, C	Emergence of Resistance in HIV-1 Integrase with Dolutegravir Treatment in a Pediatric Population from the IMPAACT P1093 Study.	Antimicrob Agents Chemother	2022	34694878	Yes
+3122	Rimsky, L	Genotypic and phenotypic characterization of HIV-1 isolates obtained from patients on rilpivirine therapy experiencing virologic failure in the phase 3 ECHO and THRIVE studies: 48-week analysis.	J Acquir Immune Defic Syndr	2012	22067667	Yes
+3135	Puertas, MC	Pan-resistant HIV-1 emergence in the era of integrase strand-transfer inhibitors: a case report.	Lancet Microbe	2020	35544263	Yes
+3197	van Kampen, JJA	HIV-1 resistance against dolutegravir fluctuates rapidly alongside erratic treatment adherence: a case report.	J Glob Antimicrob Resist	2022	36347497	Yes
+3230	Diamond, TL	Islatravir Has a High Barrier to Resistance and Exhibits a Differentiated Resistance Profile from Approved Nucleoside Reverse Transcriptase Inhibitors (NRTIs).	Antimicrob Agents Chemother	2022	35546110	Yes
+3267	Brenner, BG	Doravirine responses to HIV-1 viruses bearing mutations to NRTIs and NNRTIs under in vitro selective drug pressure.	J Antimicrob Chemother	2023	37303226	Yes
+3279	Orkin, C	Doravirine resistance patterns identified through week 192 in the DRIVE-FORWARD and DRIVE-AHEAD phase 3 clinical trials	J Acquir Immune Defic Syndr	2025	41129125	Yes
+3286	Saladini, F	Residual phenotypic susceptibility to doravirine in multidrug-resistant HIV-1 from subjects enrolled in the PRESTIGIO Registry.	Int J Antimicrob Agents	2023	36708743	Yes
+3287	Cox, S	Antiviral activity of tenofovir alafenamide (TAF) against HIV-1 clinical isolates harboring K65R.	J Med Virol	2023	37185867	Yes
+3376	Link, JO	Clinical targeting of HIV capsid protein with a long-acting small molecule.	Nature	2020	32612233	Yes
+3395	Martinez-Cajas, JL	The role of polymorphisms at position 89 in the HIV-1 protease gene in the development of drug resistance to HIV-1 protease inhibitors.	J Antimicrob Chemother	2012	22315096	Yes
+3398	Lai, MT	Doravirine and Islatravir Have Complementary Resistance Profiles and Create a Combination with a High Barrier to Resistance.	Antimicrob Agents Chemother	2022	35491829	Yes
+3399	Svarovskaia, ES	The A62V and S68G mutations in HIV-1 reverse transcriptase partially restore the replication defect associated with the K65R mutation.	J Acquir Immune Defic Syndr	2008	18614922	Yes
+3400	Lai, MT	Antiviral activity of MK-4965, a novel nonnucleoside reverse transcriptase inhibitor.	Antimicrob Agents Chemother	2009	19289522	Yes
+3401	Hachiya, A	K70Q adds high-level tenofovir resistance to "Q151M complex" HIV reverse transcriptase through the enhanced discrimination mechanism.	PLoS One	2011	21249155	Yes
+3404	Xu, HT	Effect of mutations at position E138 in HIV-1 reverse transcriptase and their interactions with the M184I mutation on defining patterns of resistance to nonnucleoside reverse transcriptase inhibitors rilpivirine and etravirine.	Antimicrob Agents Chemother	2013	23612196	Yes
+3405	Zhang, XM	A novel mutation, D404N, in the connection subdomain of reverse transcriptase of HIV-1 CRF08_BC subtype confers cross-resistance to NNRTIs.	J Antimicrob Chemother	2015	25637519	Yes
+3406	Njenda, DT	Antiretroviral potency of 4'-ethnyl-2'-fluoro-2'-deoxyadenosine, tenofovir alafenamide and second-generation NNRTIs across diverse HIV-1 subtypes.	J Antimicrob Chemother	2018	30053052	Yes
+3409	Cilento, ME	HIV-1 Resistance to Islatravir/Tenofovir Combination Therapy in Wild-Type or NRTI-Resistant Strains of Diverse HIV-1 Subtypes.	Viruses	2023	37896768	Yes
+3413	Arien, KK	Resistance and cross-resistance profile of the diaryltriazine NNRTI and candidate microbicide UAMC01398.	J Antimicrob Chemother	2016	26850721	Yes
+3414	Giacobbi, NS	In Vitro Cross-Resistance Profiles of Rilpivirine, Dapivirine, and MIV-150, Nonnucleoside Reverse Transcriptase Inhibitor Microbicides in Clinical Development for the Prevention of HIV-1 Infection.	Antimicrob Agents Chemother	2017	28507107	Yes
+3417	Schader, SM	In vitro resistance profile of the candidate HIV-1 microbicide drug dapivirine.	Antimicrob Agents Chemother	2012	22123692	Yes
+3418	Tambuyzer, L	Effect of mutations at position E138 in HIV-1 reverse transcriptase on phenotypic susceptibility and virologic response to etravirine.	J Acquir Immune Defic Syndr	2011	21637112	Yes
+3448	Gupta, SK	Lenacapavir administered every 26 weeks or daily in combination with oral daily antiretroviral therapy for initial treatment of HIV: a randomised, open-label, active-controlled, phase 2 trial.	Lancet HIV	2023	36566079	Yes
+3455	Margot, N	Phenotypic resistance to lenacapavir and monotherapy efficacy in a proof-of-concept clinical study.	J Antimicrob Chemother	2022	35028668	Yes
+3476	Margot, NA	Resistance Analyses in Heavily Treatment-Experienced People with HIV Treated with the Novel HIV Capsid Inhibitor Lenacapavir After 2 years.	J Infect Dis	2025	39873394	Yes
+3478	Demirdjian, S	Phenotypic Characterization of Replication-Impaired Lenacapavir-Resistant HIV Clinical Isolates.	J Med Virol	2025	40223733	Yes
+3480	Margot, N	Bictegravir + Lenacapavir: Baseline and Week 48 Resistance Analyses in ARTISTRY-1 Phase 2	CROI	2025		Yes
+3481	Tao, K	HIV-1 Subtype Diversity Trends in a Northern California Cohort, 2000–2019	AIDS	2025	41739080	Yes
+3502	Reddy, N	K103N, V106M and Y188L Significantly Reduce HIV-1 Subtype C Phenotypic Susceptibility to Doravirine.	Viruses	2024	39339969	Yes
+3503	Basson, AE	Impact of drug resistance-associated amino acid changes in HIV-1 subtype C on susceptibility to newer nonnucleoside reverse transcriptase inhibitors.	Antimicrob Agents Chemother	2015	25421485	Yes
+3504	Gatell, JM	Doravirine dose selection and 96-week safety and efficacy versus efavirenz in antiretroviral therapy-naive adults with HIV-1 infection in a Phase IIb trial.	Antivir Ther	2019	31355775	Yes
+3519	Aulicino, PC	Variable antiviral activity of islatravir against M184I/V mutant HIV-1 selected during antiretroviral therapy.	J Antimicrob Chemother	2024	38153245	Yes
+3521	Giammarino, F	Combined doravirine and islatravir cooperate to inhibit NRTI and NNRTI resistant HIV-1 in vitro.	Antiviral Res	2025	40254262	Yes
+3524	Hansen, D	Impact of HIV-1 capsid polymorphisms on viral infectivity and susceptibility to lenacapavir.	mBio	2025	40243329	Yes
+3528	D'Antoni, ML	Assessing phenotypic effect of integrase strand-transfer inhibitor (INSTI)-based resistance substitutions associated with failures on cabotegravir.	J Antimicrob Chemother	2025	39849846	Yes
+3556	Rockstroh, JK	Fixed-dose daily doravirine (100 mg) with islatravir (0*25 mg) versus bictegravir, emtricitabine, and tenofovir alafenamide for initial HIV-1 therapy: 48-week results of a phase 3, randomised, controlled, double-blind, non-inferiority trial.	Lancet HIV	2026	41763226	Yes
+3558	Hansen, D	Nonclinical Pharmacology of GS-3242, a Novel Long-Acting INSTI in Clinical Development	CROI	2026		Yes
+3561	Underwood, M	https://www.croiconference.org/abstract/2007-2026/	CROI	2026		Yes

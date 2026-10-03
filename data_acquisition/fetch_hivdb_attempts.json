@@ -1,0 +1,84 @@
+{
+  "source": "Stanford HIVDB genotype-phenotype datasets",
+  "release_date": "2026-4-22",
+  "stated_counts": {
+    "NRTI_filtered": "10666 results from 1867 isolates",
+    "NRTI_unfiltered": "29505 results from 5369 isolates",
+    "NNRTI_filtered": "5659 results from 2272 isolates",
+    "NNRTI_unfiltered": "11545 results from 4913 isolates"
+  },
+  "citation": "Rhee SY, Gonzales MJ, Kantor R, Betts BJ, Ravela J, Shafer RW. Human immunodeficiency virus reverse transcriptase and protease sequence database. Nucleic Acids Research. 2003;31(1):298-303. And: Shafer RW. Rationale and Uses of a Public HIV Drug-Resistance Database. J Infect Dis. 2006;194 Suppl 1:S51-8.",
+  "access_date": "2026-10-03",
+  "attempts": [
+    {
+      "label": "dataset page",
+      "url": "https://hivdb.stanford.edu/_wrapper/pages/genopheno.dataset.html",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes_received": 12273,
+      "sha256": "438f7366e942fd064eecce06273b6faced213deb9197c7253e8f42ec2bde06cd",
+      "outcome": "release 2026-4-22",
+      "detail": "NNRTI_filtered: 5659 results from 2272 isolates; NNRTI_unfiltered: 11545 results from 4913 isolates; NRTI_filtered: 10666 results from 1867 isolates; NRTI_unfiltered: 29505 results from 5369 isolates"
+    },
+    {
+      "label": "consensus amino acid sequences",
+      "url": "https://hivdb.stanford.edu/_wrapper/pages/documentPage/consensus_amino_acid_sequences.html",
+      "status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "bytes_received": 6615,
+      "sha256": "c7d876e5552875fc94919c6916746a60dda712f330e1327cf5f3af84f5b38262",
+      "outcome": "RT consensus extracted, 560 residues",
+      "detail": ""
+    },
+    {
+      "label": "NRTI, high quality filtered, PhenoSense only",
+      "url": "https://hivdb.stanford.edu/download/GenoPhenoDatasets/NRTI_DataSet.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=UTF-8",
+      "bytes_received": 1155388,
+      "sha256": "459a4c49f49b7ef960fc8da1ed2fe1c2fec68b04cc78be675a1fa83de7295fa0",
+      "outcome": "downloaded, 248 columns on the header line",
+      "detail": "1868 lines"
+    },
+    {
+      "label": "NRTI, complete unfiltered, mixed assay methods",
+      "url": "https://hivdb.stanford.edu/download/GenoPhenoDatasets/NRTI_DataSet.Full.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=UTF-8",
+      "bytes_received": 7053653,
+      "sha256": "3c9eceec29137799998b9928088cc9d7d57d9a783f5d26ba9e1a88fead134aeb",
+      "outcome": "downloaded, 575 columns on the header line",
+      "detail": "5370 lines"
+    },
+    {
+      "label": "NNRTI, high quality filtered, PhenoSense only",
+      "url": "https://hivdb.stanford.edu/download/GenoPhenoDatasets/NNRTI_DataSet.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=UTF-8",
+      "bytes_received": 1734850,
+      "sha256": "753bf2da2b323735cc5b310d903590e01ef481cbbbee6c30a3177c9c6db57a66",
+      "outcome": "downloaded, 325 columns on the header line",
+      "detail": "2273 lines"
+    },
+    {
+      "label": "NNRTI, complete unfiltered, mixed assay methods",
+      "url": "https://hivdb.stanford.edu/download/GenoPhenoDatasets/NNRTI_DataSet.Full.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=UTF-8",
+      "bytes_received": 6388693,
+      "sha256": "5585977ab84f3602cde2af2a3ef44eb42502444b4712b2207f834d1057d524f6",
+      "outcome": "downloaded, 574 columns on the header line",
+      "detail": "4914 lines"
+    },
+    {
+      "label": "publication references for the isolates",
+      "url": "https://hivdb.stanford.edu/download/GenoPhenoDatasets/references.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=UTF-8",
+      "bytes_received": 53870,
+      "sha256": "97f92ee9aac211e486bbc65a415444d9166285300f711a66ee20901d7cf7a648",
+      "outcome": "downloaded, 7 columns on the header line",
+      "detail": "295 lines"
+    }
+  ]
+}

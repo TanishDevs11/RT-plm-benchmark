@@ -1,0 +1,182 @@
+{
+  "ambiguity_rules": {
+    "#": "an insertion, encoded as X",
+    "*": "a stop codon, encoded as X",
+    "-": "the consensus residue from the reference",
+    ".": "not sequenced, encoded as X",
+    "X": "the source's own ambiguity code for an unresolved residue, kept as X",
+    "beyond the position columns": "taken from CompMutList, else the reference",
+    "letter": "that residue",
+    "two or more letters": "a mixture, encoded as X, never coerced to one residue",
+    "~": "a deletion, encoded as X"
+  },
+  "citation": "Rhee 2003 NAR 31(1):298-303; Shafer 2006 JID 194 Suppl 1:S51-8",
+  "curated_isolates_rows": 14421,
+  "curated_rows": 57375,
+  "datasets": {
+    "NNRTI_filtered": {
+      "conflict_examples": [],
+      "drugs": [
+        "EFV",
+        "NVP",
+        "ETR",
+        "RPV",
+        "DOR"
+      ],
+      "file": "NNRTI_DataSet.txt",
+      "isolates": 2272,
+      "isolates_advertised": 2272,
+      "mutations_per_isolate": {
+        "max": 45,
+        "median": 14,
+        "min": 0
+      },
+      "n_conflicts": 0,
+      "na_cells": 5701,
+      "position_cell_categories": {
+        "beyond_position_columns": 493,
+        "consensus": 621944,
+        "deletion": 1,
+        "mixture": 5661,
+        "not_sequenced": 68054,
+        "source_ambiguous_X": 267,
+        "substitution": 26569
+      },
+      "position_columns_reported": 318,
+      "results": 5659,
+      "results_advertised": 5659,
+      "sha256": "753bf2da2b323735cc5b310d903590e01ef481cbbbee6c30a3177c9c6db57a66",
+      "token_categories": {
+        "insertion": 24,
+        "null_token": 2,
+        "substitution": 33087
+      },
+      "unparsed_tokens": {}
+    },
+    "NNRTI_unfiltered": {
+      "conflict_examples": [],
+      "drugs": [
+        "EFV",
+        "NVP",
+        "ETR",
+        "RPV",
+        "DOR"
+      ],
+      "file": "NNRTI_DataSet.Full.txt",
+      "isolates": 4913,
+      "isolates_advertised": 4913,
+      "mutations_per_isolate": {
+        "max": 55,
+        "median": 15,
+        "min": 0
+      },
+      "n_conflicts": 0,
+      "na_cells": 13020,
+      "position_cell_categories": {
+        "consensus": 1582721,
+        "deletion": 21,
+        "mixture": 10805,
+        "not_sequenced": 1091959,
+        "source_ambiguous_X": 475,
+        "stop_codon": 3,
+        "substitution": 65296
+      },
+      "position_columns_reported": 560,
+      "results": 11545,
+      "results_advertised": 11545,
+      "sha256": "5585977ab84f3602cde2af2a3ef44eb42502444b4712b2207f834d1057d524f6",
+      "token_categories": {
+        "insertion": 79,
+        "null_token": 4,
+        "substitution": 76937
+      },
+      "unparsed_tokens": {}
+    },
+    "NRTI_filtered": {
+      "conflict_examples": [],
+      "drugs": [
+        "3TC",
+        "ABC",
+        "AZT",
+        "D4T",
+        "DDI",
+        "TDF"
+      ],
+      "file": "NRTI_DataSet.txt",
+      "isolates": 1867,
+      "isolates_advertised": 1867,
+      "mutations_per_isolate": {
+        "max": 45,
+        "median": 15,
+        "min": 0
+      },
+      "n_conflicts": 0,
+      "na_cells": 536,
+      "position_cell_categories": {
+        "beyond_position_columns": 5491,
+        "consensus": 418747,
+        "deletion": 7,
+        "mixture": 3979,
+        "not_sequenced": 6086,
+        "source_ambiguous_X": 168,
+        "substitution": 19093
+      },
+      "position_columns_reported": 240,
+      "results": 10666,
+      "results_advertised": 10666,
+      "sha256": "459a4c49f49b7ef960fc8da1ed2fe1c2fec68b04cc78be675a1fa83de7295fa0",
+      "token_categories": {
+        "insertion": 25,
+        "null_token": 3,
+        "substitution": 28713
+      },
+      "unparsed_tokens": {}
+    },
+    "NRTI_unfiltered": {
+      "conflict_examples": [],
+      "drugs": [
+        "3TC",
+        "ABC",
+        "AZT",
+        "D4T",
+        "DDI",
+        "TDF"
+      ],
+      "file": "NRTI_DataSet.Full.txt",
+      "isolates": 5369,
+      "isolates_advertised": 5369,
+      "mutations_per_isolate": {
+        "max": 55,
+        "median": 16,
+        "min": 0
+      },
+      "n_conflicts": 0,
+      "na_cells": 2709,
+      "position_cell_categories": {
+        "consensus": 1608670,
+        "deletion": 35,
+        "mixture": 13050,
+        "not_sequenced": 1307459,
+        "source_ambiguous_X": 590,
+        "stop_codon": 6,
+        "substitution": 76830
+      },
+      "position_columns_reported": 560,
+      "results": 29505,
+      "results_advertised": 29505,
+      "sha256": "3c9eceec29137799998b9928088cc9d7d57d9a783f5d26ba9e1a88fead134aeb",
+      "token_categories": {
+        "insertion": 124,
+        "null_token": 6,
+        "substitution": 90542
+      },
+      "unparsed_tokens": {}
+    }
+  },
+  "reference": "HIVDB consensus B RT, positions 1 to 560",
+  "reference_length": 560,
+  "reference_sha256": "e32e3981dfbab5378dccd677ac47378c6610ffebbb0d56f78e3e50b98bedfaea",
+  "source": "Stanford HIV Drug Resistance Database, genotype-phenotype datasets",
+  "wild_type_assertions": 229531,
+  "wild_type_mismatches": 0
+}
