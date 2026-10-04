@@ -111,3 +111,116 @@ Worth recording, because each was checked and ruled out:
   (`check_inputs.py --allow-missing`) is never reached.
 - Not a repository restructuring artifact. The import paths resolve correctly; only
   the dependency is absent.
+
+---
+
+# Second failure, revealed once the first was fixed
+
+Added 2026-10-04, after pushing the scikit-learn fix.
+
+The scikit-learn fix worked. `curation/test_splits.py` now passes in CI, and the
+`pipeline` job advanced three steps further. It then failed at step 10, a step that
+had never been reached before:
+
+```
+pipeline  Task A embedding files are aligned and the manifest is honest
+  pass test_every_embedding_file_is_in_curated_row_order
+  pass test_every_embedding_matrix_has_the_right_shape_and_dtype
+  FAIL test_the_manifest_describes_the_files_that_exist: the manifest was written
+       against a different curated.csv than the one on disk
+  pass test_the_manifest_records_one_pooling_strategy_and_no_sweep
+  tests: 4, failures: 1
+```
+
+Runs 37198657831 (push) and 37198660160 (pull_request). `ci / protocol` still passes.
+
+## This is also pre-existing, and also unrelated to the PR
+
+Proven from git, without needing a CI run, because neither file involved is touched by
+this PR. At the pre-PR commit `8d0d47a`, which is `main`'s HEAD:
+
+| quantity | value |
+| --- | --- |
+| `embeddings/MANIFEST_TASKA.json` field `curated_sha256` | `5e159976a37be07e797ad7048200a6a56fd1b0f396baff6e533f2c467e1b98dc` |
+| SHA256 of the **committed bytes** of `tasks/taskA_crossfamily/curated.csv` | `5a93b70b5ccd84e9e1586f5c8f5eb8073c22617309a7bedbfbf70d26a5ea39b3` |
+| SHA256 of the **Windows working-tree bytes** of the same file | `5e159976a37be07e797ad7048200a6a56fd1b0f396baff6e533f2c467e1b98dc` |
+
+The mismatch is baked into commit `8d0d47a`. `git diff --name-only 8d0d47a..HEAD`
+lists only `README.md`, `.github/workflows/ci.yml` and `review/`, so nothing in this
+PR can have caused it.
+
+It was previously invisible because the scikit-learn failure aborted the job at step 7,
+and this is step 10. Fixing the first failure did not create the second one; it stopped
+hiding it.
+
+## Root cause: recorded checksums are of CRLF bytes, and a fresh checkout is LF
+
+`embeddings/test_embeddings_taskA.py:94` asserts:
+
+```python
+assert data["curated_sha256"] == sha256_of(CURATED)
+```
+
+The repository has **no `.gitattributes`**. The author's machine is Windows with
+`core.autocrlf` effectively converting on checkout, so:
+
+- `curated.csv` in the author's working tree has 58 CRLF line endings and is 64876
+  bytes, hashing to `5e159976...`, which is the value recorded in the manifest;
+- the same file as committed, and therefore as checked out on the Linux runner, has LF
+  endings and is 64818 bytes, hashing to `5a93b70b...`.
+
+Normalizing the working-tree bytes to LF reproduces the committed hash exactly, which
+confirms line endings as the whole of the difference and rules out any content change:
+
+```
+worktree bytes: 64876  sha256: 5e159976...  (58 CRLF, 0 bare LF)
+blob bytes:     64818  sha256: 5a93b70b...  (0 CRLF)
+LF-normalized:  64818  sha256: 5a93b70b...  identical to the blob
+```
+
+So the test passes on the machine that wrote the manifest and cannot pass anywhere
+else. The same reasoning applies to every recorded SHA256 of a **text** artifact in
+this repository, including the curated-dataset hash quoted in
+`reports/FINAL_REPORT.md:8`. Binary artifacts (`.npz`, `.npy`) are unaffected, which is
+why the two shape and row-order tests in the same file pass.
+
+**The data is not corrupt and no result is wrong.** The sequences themselves are
+verified by a different route, 57 of 57 byte-identical to Table S1
+(`reports/reconciliation.md:102-106`). What is wrong is the recording convention: a
+checksum of a text file was taken after platform line-ending translation, which makes
+it a property of one machine rather than of the artifact.
+
+## Why this is not fixed in this PR
+
+Every available fix touches something a documentation PR must not touch:
+
+| candidate fix | why it is out of scope here |
+| --- | --- |
+| Regenerate `MANIFEST_TASKA.json` with the LF hash | modifies a result artifact |
+| Add `.gitattributes` with `* text eol=lf` | changes how every data file materialises in every checkout, and on its own does not fix the mismatch, because the recorded hash would still be the CRLF one |
+| Normalize line endings inside `sha256_of` | modifies `schemas/task_schema.py`, which is validation code, and silently changes what every recorded checksum in the repository means |
+| Skip or relax the assertion | removes an integrity check, which on this project is the worst of the four |
+
+Per the review's Phase 3 rule, this is where the review stops rather than reaching into
+the benchmark. **Reported as a separate issue, not fixed here.**
+
+The recommended fix, for that issue rather than this PR, is to do both of the first two
+together in one deliberate change: add a `.gitattributes` pinning data and text
+artifacts to LF, re-checkout so the working tree matches the committed bytes, then
+regenerate the affected manifests and re-record the hashes, and state in
+`PROGRESS.md` that the recorded checksums changed because of line-ending
+normalization and not because any content changed. That is a data-integrity change and
+deserves its own commit, its own review, and the owner's judgement.
+
+## Status of `ci / pipeline` at the merge gate
+
+Still red, and the failure is proven pre-existing and unrelated by the git evidence
+above. Net effect of the fix in this PR: the job advanced from failing at step 7 of 11
+to failing at step 10 of 11, with three previously unreachable steps now passing and
+`curation/test_splits.py` green in CI for the first time.
+
+| | before this PR | after |
+| --- | --- | --- |
+| `ci / protocol` | pass | pass |
+| `ci / pipeline` | fail at step 7, `ModuleNotFoundError: sklearn` | fail at step 10, manifest checksum mismatch |
+| steps passing | 6 of 11 | 9 of 11 |
