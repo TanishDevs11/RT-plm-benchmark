@@ -7,7 +7,8 @@ the review brief.
 Verdicts used: CORRECT, OVERSTATED, UNDERSTATED, UNSUPPORTED, CONTRADICTED, AMBIGUOUS.
 
 **Result: 31 claims checked. 23 CORRECT, 6 UNDERSTATED, 1 UNSUPPORTED, 1 AMBIGUOUS, 0
-OVERSTATED, 0 CONTRADICTED.** No number in this PR is fabricated, rounded favourably,
+OVERSTATED, 0 CONTRADICTED.** The AMBIGUOUS one, C30, was put to the project owner at
+the merge gate and resolved: see the ruling at the end of this document. No number in this PR is fabricated, rounded favourably,
 or misattributed to the wrong split regime. The failures are omissions of caveat, which
 on this project are treated with the same seriousness as overclaims and were corrected
 in the same direction: toward the stronger caveat.
@@ -300,14 +301,26 @@ intact, per hard rule 3.
 
 ## Claims still unverified after this review
 
-Two, neither of them a number, and neither blocking:
+One, and it is not a number:
 
-1. **C30, "Mandrake Bio Open Challenge".** No artifact carries the full name.
-   Corroborated in part by "Mandrake CLS Score" in `src/compute_cls_score.py:10`. Left
-   as the contributor wrote it; the project owner should confirm the styling. Nothing
-   in any result depends on it.
-2. **"project presentation"** in C29b. Not the kind of contribution git records.
-   Accepted as a contributor's own description of their non-code work.
+**"project presentation"** in C29b. Not the kind of contribution git records either
+way. Accepted as a contributor's own description of their non-code work.
 
 **No numeric claim remains unverified.** Every figure in the merged README traces to a
 named artifact and line.
+
+## Ruling on C30, the challenge name
+
+Raised at the merge gate rather than decided here, because no artifact could settle it
+and inventing or deleting a proper noun are both errors.
+
+**The project owner ruled that the name be dropped**, and the three occurrences now
+read "an earlier competition submission", "an earlier competition pipeline of my own"
+and "a competition submission". This matches `ORIGIN.md`, `WRITEUP.md` and
+`CITATION.cff`, which all describe the work as a competition and name no organiser.
+
+C30's verdict is therefore closed as **resolved by removal**: the README now asserts
+only what the repository's own artifacts support. The partial corroboration that
+prompted the flag, "Mandrake CLS Score" at `src/compute_cls_score.py:10`, remains in
+the code and is untouched; it simply is no longer used in the README to assert an
+organiser's full name that nothing else records.

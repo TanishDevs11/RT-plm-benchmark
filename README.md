@@ -4,7 +4,7 @@ A leakage-aware benchmark for evaluating whether protein language model
 (PLM) representations improve reverse transcriptase (RT) activity
 prediction across evolutionary families.
 
-This project builds on our work for the Mandrake Bio Open Challenge.
+This project builds on our own earlier competition submission.
 Rather than optimizing a leaderboard score, this repository focuses on a
 stricter question: **do learned protein representations actually
 generalize to unseen RT families better than simple sequence-derived
@@ -310,7 +310,7 @@ accuracy against 0.800 for the mean-pooled and residualized variants. See
 
 ## Leakage Audit of the Original Challenge Pipeline
 
-This project grew from an earlier Mandrake Bio Open Challenge pipeline.
+This project grew from an earlier competition pipeline of my own.
 
 ### Why the previously reported 0.975 is not a result
 
@@ -570,9 +570,9 @@ quoted source facts are in
 
 ## Acknowledgements
 
-This project builds on work originally developed for the **Mandrake Bio
-Open Challenge** and on experimental reverse-transcriptase datasets
-produced by the corresponding research groups.
+This project builds on work originally developed for a competition
+submission, and on experimental reverse-transcriptase datasets produced
+by the corresponding research groups.
 
 We thank the authors of the underlying experimental studies and the
 developers of the open-source protein modelling, bioinformatics, and
