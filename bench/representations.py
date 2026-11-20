@@ -487,15 +487,141 @@ def main():
 
 
 def plot_function_vs_lineage(rows, path):
+    """Scatter of lineage accuracy against out-of-family CLS, one point per build.
+
+    Label placement has to cope with exact coordinate collisions, not merely with
+    crowding: several representations land on identical (family accuracy, CLS)
+    pairs, because the residualization and core-pooling variants all scored a CLS
+    of exactly zero at the family accuracy of the build they modify. That
+    coincidence is the finding, so markers are drawn at their true coordinates and
+    the duplicates are disclosed with a multiplicity badge rather than separated by
+    jitter, which would misstate the data.
+
+    Points that share a coordinate get their labels stacked in the right-hand
+    gutter with leader lines back to the shared marker. Isolated points keep a
+    direct offset label, chosen from a fixed candidate list by a deterministic
+    greedy pass that rejects any placement whose bounding box overlaps an existing
+    label, a marker, or the axes edge.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
-    pts = [(r["family_accuracy"], r["cls"], r["method"]) for r in rows if np.isfinite(r["family_accuracy"])]
+    pts = [(r["family_accuracy"], r["cls"], r["method"])
+           for r in rows if np.isfinite(r["family_accuracy"])]
     if not pts:
         return
-    fig, ax = plt.subplots(figsize=(9, 6))
-    xs, ys, labels = zip(*pts)
-    ax.scatter(xs, ys, s=70)
+
+    # Group by exact coordinate. Rounding is only to defend against float noise;
+    # the plotted position is always the unrounded value.
+    groups: dict[tuple[float, float], list[str]] = {}
     for x, y, lab in pts:
-        ax.annotate(lab, (x, y), fontsize=7, xytext=(4, 4), textcoords="offset points")
+        groups.setdefault((round(x, 9), round(y, 9)), []).append(lab)
+    for key in groups:
+        groups[key].sort()
+
+    fig, ax = plt.subplots(figsize=(12.0, 6.6))
+    xs = [k[0] for k in groups]
+    ys = [k[1] for k in groups]
+
+    # Leave a gutter on the right for the stacked labels of collided points.
+    xlo, xhi = min(xs), max(xs)
+    ylo, yhi = min(ys), max(ys)
+    xpad = (xhi - xlo) * 0.10 or 0.01
+    ypad = (yhi - ylo) * 0.12 or 0.01
+    gutter = (xhi - xlo) * 0.46          # room for the right-hand fan
+    ax.set_xlim(xlo - xpad, xhi + gutter)
+    ax.set_ylim(ylo - ypad * 1.9, yhi + ypad * 1.35)
+
+    # Markers at true coordinates, sized so a stack is visibly heavier.
+    for (gx, gy), labs in groups.items():
+        n = len(labs)
+        ax.scatter([gx], [gy], s=90 + 38 * (n - 1), zorder=3,
+                   facecolor="#1f77b4", edgecolor="white", linewidth=1.1)
+        if n > 1:
+            ax.annotate(f"\u00d7{n}", (gx, gy), zorder=4, fontsize=7.5,
+                        color="white", ha="center", va="center", weight="bold")
+
+    renderer = fig.canvas.get_renderer()
+    placed: list[tuple[float, float, float, float]] = []   # display-space boxes
+
+    def box_of(artist):
+        b = artist.get_window_extent(renderer=renderer)
+        return (b.x0, b.y0, b.x1, b.y1)
+
+    def clashes(b, pad=3.0):
+        for q in placed:
+            if not (b[2] + pad < q[0] or b[0] - pad > q[2]
+                    or b[3] + pad < q[1] or b[1] - pad > q[3]):
+                return True
+        ab = ax.get_window_extent(renderer=renderer)
+        return b[0] < ab.x0 or b[2] > ab.x1 or b[1] < ab.y0 or b[3] > ab.y1
+
+    # Reserve the markers themselves so labels never sit on a point.
+    for (gx, gy), labs in groups.items():
+        dx, dy = ax.transData.transform((gx, gy))
+        r = 9 + 3 * (len(labs) - 1)
+        placed.append((dx - r, dy - r, dx + r, dy + r))
+
+    # ---- collided points: fan each group to its own side, so leaders cannot cross ----
+    # Two fans aimed at the same column always intersect when their anchors differ
+    # in x, so groups alternate sides by anchor position: leftmost fans left.
+    multi = sorted([(k, v) for k, v in groups.items() if len(v) > 1],
+                   key=lambda kv: kv[0][0])
+    span_x, span_y = xhi - xlo, (yhi - ylo) or 1.0
+    band_top = yhi - span_y * 0.04
+    band_bot = ylo + span_y * 0.42
+
+    for gi, ((cx, cy), labs) in enumerate(multi):
+        left_side = (gi % 2 == 0)
+        anchor_x = (xlo + span_x * 0.46) if left_side else (xhi + span_x * 0.09)
+        ha = "right" if left_side else "left"
+        rad = -0.08 if left_side else 0.08
+        n = len(labs)
+        if n == 1:
+            heights = [(band_top + band_bot) / 2]
+        else:
+            step = (band_top - band_bot) / (n - 1)
+            heights = [band_top - i * step for i in range(n)]
+        # Nearest label to the anchor goes lowest, which keeps each fan tidy.
+        for lab, ly in zip(labs, heights):
+            t = ax.annotate(
+                lab, xy=(cx, cy), xytext=(anchor_x, ly), textcoords="data",
+                fontsize=9, ha=ha, va="center", zorder=5,
+                arrowprops=dict(arrowstyle="-", linewidth=0.7,
+                                color="#6b6b6b", alpha=0.85,
+                                shrinkA=2, shrinkB=8,
+                                connectionstyle=f"arc3,rad={rad}"),
+            )
+            fig.canvas.draw()
+            placed.append(box_of(t))
+
+    if multi:
+        ax.text(xlo - xpad * 0.1, ylo - ypad * 0.72,
+                "Leader lines mark points that share an exact coordinate; the badge on the "
+                "marker gives how many representations coincide there.",
+                fontsize=7.5, color="#444444", ha="left", va="top", style="italic")
+
+    # ---- isolated points: direct label, deterministic offset search ----
+    CANDIDATES = [(10, 9), (10, -14), (-10, 9), (-10, -14),
+                  (12, 0), (-12, 0), (0, 15), (0, -18)]
+    singles = sorted([(k, v[0]) for k, v in groups.items() if len(v) == 1])
+    for (gx, gy), lab in singles:
+        for ox, oy in CANDIDATES:
+            ha = "left" if ox >= 0 else "right"
+            va = "bottom" if oy >= 0 else "top"
+            t = ax.annotate(lab, (gx, gy), textcoords="offset points",
+                            xytext=(ox, oy), fontsize=9, ha=ha, va=va, zorder=5)
+            fig.canvas.draw()
+            b = box_of(t)
+            if not clashes(b):
+                placed.append(b)
+                break
+            t.remove()
+        else:  # no candidate fitted; keep the last one rather than drop a label
+            t = ax.annotate(lab, (gx, gy), textcoords="offset points",
+                            xytext=(10, 9), fontsize=9, ha="left", va="bottom",
+                            zorder=5)
+            fig.canvas.draw()
+            placed.append(box_of(t))
+
     ax.set_xlabel("Lineage confound: 5-fold family classification accuracy")
     ax.set_ylabel("Function: nested out-of-family CLS")
     ax.set_title("Does the representation encode function, or lineage?")
@@ -566,5 +692,25 @@ def write_markdown(rows, blocked, comparisons, mrd, motif_missing, path):
     path.write_text("\n".join(L) + "\n", encoding="utf-8")
 
 
+def replot_from_results():
+    """Redraw the figure from the stored result file, recomputing nothing.
+
+    The benchmark behind this figure takes minutes and selects configurations
+    from data; re-running it to change a label position would put experimental
+    results at risk for a presentation fix. This path reads
+    bench/results/representations.json and redraws only, so every plotted
+    coordinate is byte-identical to the committed result.
+    """
+    src = ROOT / "bench" / "results" / "representations.json"
+    rows = json.loads(src.read_text(encoding="utf-8"))["rows"]
+    out = ROOT / "bench" / "figures" / "function_vs_lineage.png"
+    plot_function_vs_lineage(rows, out)
+    print(f"redrew {out.relative_to(ROOT)} from {src.relative_to(ROOT)} "
+          f"({len(rows)} representations, no recomputation)")
+    return 0
+
+
 if __name__ == "__main__":
+    if "--figure-only" in sys.argv:
+        raise SystemExit(replot_from_results())
     raise SystemExit(main())
