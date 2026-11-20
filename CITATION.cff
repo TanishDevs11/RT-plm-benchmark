@@ -5,6 +5,8 @@ type: software
 authors:
   - family-names: "Tanish"
     alias: "TanishDevs11"
+  - family-names: "Hemalakshmi"
+    alias: "Hemapushparaj"
 repository-code: "https://github.com/TanishDevs11/RT-plm-benchmark"
 abstract: >
   A methodological rebuild of an RT activity prediction submission, replacing a
