@@ -25,3 +25,4 @@ bench/cache_extract_log.txt
 
 # Downloaded archives opened once for a supplementary file, not artifacts
 .fetch_cache/
+node_modules/
