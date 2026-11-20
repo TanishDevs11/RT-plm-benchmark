@@ -1,0 +1,182 @@
+# Hayagriva bibliography for reports/report.typ.
+#
+# Verification note. The Doman et al. entry (author list, title, journal, volume,
+# issue, first page, DOI, PMID, licence) is transcribed from the article XML
+# committed at tasks/taskA_crossfamily/raw/PMC10482982_fulltext.xml, not recalled.
+# The Li et al. entry is transcribed from reports/taskB_mmlv_dms/FINAL_REPORT.md,
+# which records it from raw/preprint.pdf; note that the DOI below is the form that
+# resolves, and that the preprint's own header carries a 10.1101 form that does not.
+# The four tool and model references are standard published records for the exact
+# software versions used, listed in Table 16.
+
+doman2023:
+  type: Article
+  title: Phage-assisted evolution and protein engineering yield compact, efficient prime editors
+  author:
+    - Doman, Jordan L.
+    - Pandey, Smriti
+    - Neugebauer, Monica E.
+    - An, Meirui
+    - Davis, Jessie R.
+    - Randolph, Peyton B.
+    - McElroy, Amber
+    - Gao, Xin D.
+    - Raguram, Aditya
+    - Richter, Michelle F.
+    - Everette, Kelcee A.
+    - Banskota, Samagya
+    - Tian, Kathryn
+    - Tao, Y. Allen
+    - Tolar, Jakub
+    - Osborn, Mark J.
+    - Liu, David R.
+  date: 2023
+  page-range: 3983-4002.e26
+  parent:
+    type: Periodical
+    title: Cell
+    volume: 186
+    issue: 18
+  serial-number:
+    doi: 10.1016/j.cell.2023.07.039
+    pmid: "37657419"
+    pmcid: PMC10482982
+
+li2026:
+  type: Article
+  title: Saturated mutagenesis screen of M-MLV reverse transcriptase identifies variants enhancing prime editing efficiency
+  author:
+    - Li, H.
+    - Wang, Y.
+    - Zhang, C.
+    - Tun, T. T.
+    - Yu, S.
+    - Hu, C.
+    - Yu, H.
+  date: 2026-07-07
+  parent:
+    type: Repository
+    title: bioRxiv
+  note: Preprint, version 1. The per-variant activity values of Supplementary Tables S6 and S7 were never deposited.
+  serial-number:
+    doi: 10.64898/2026.07.06.736660
+
+lin2023:
+  type: Article
+  title: Evolutionary-scale prediction of atomic-level protein structure with a language model
+  author:
+    - Lin, Zeming
+    - Akin, Halil
+    - Rao, Roshan
+    - Hie, Brian
+    - Zhu, Zhongkai
+    - Lu, Wenting
+    - Smetanin, Nikita
+    - Verkuil, Robert
+    - Kabeli, Ori
+    - Shmueli, Yaniv
+    - dos Santos Costa, Allan
+    - Fazel-Zarandi, Maryam
+    - Sercu, Tom
+    - Candido, Salvatore
+    - Rives, Alexander
+  date: 2023
+  page-range: 1123-1130
+  parent:
+    type: Periodical
+    title: Science
+    volume: 379
+    issue: 6637
+  serial-number:
+    doi: 10.1126/science.ade2574
+
+mmseqs2:
+  type: Article
+  title: MMseqs2 enables sensitive protein sequence searching for the analysis of massive data sets
+  author:
+    - Steinegger, Martin
+    - Söding, Johannes
+  date: 2017
+  page-range: 1026-1028
+  parent:
+    type: Periodical
+    title: Nature Biotechnology
+    volume: 35
+    issue: 11
+  serial-number:
+    doi: 10.1038/nbt.3988
+
+sklearn:
+  type: Article
+  title: "Scikit-learn: Machine learning in Python"
+  author:
+    - Pedregosa, Fabian
+    - Varoquaux, Gaël
+    - Gramfort, Alexandre
+    - Michel, Vincent
+    - Thirion, Bertrand
+    - Grisel, Olivier
+    - Blondel, Mathieu
+    - Prettenhofer, Peter
+    - Weiss, Ron
+    - Dubourg, Vincent
+    - Vanderplas, Jake
+    - Passos, Alexandre
+    - Cournapeau, David
+    - Brucher, Matthieu
+    - Perrot, Matthieu
+    - Duchesnay, Édouard
+  date: 2011
+  page-range: 2825-2830
+  parent:
+    type: Periodical
+    title: Journal of Machine Learning Research
+    volume: 12
+
+scipy:
+  type: Article
+  title: "SciPy 1.0: fundamental algorithms for scientific computing in Python"
+  author:
+    - Virtanen, Pauli
+    - Gommers, Ralf
+    - Oliphant, Travis E.
+    - Haberland, Matt
+    - Reddy, Tyler
+    - Cournapeau, David
+    - Burovski, Evgeni
+    - Peterson, Pearu
+    - Weckesser, Warren
+    - Bright, Jonathan
+    - van der Walt, Stéfan J.
+    - Brett, Matthew
+    - Wilson, Joshua
+    - Millman, K. Jarrod
+    - Mayorov, Nikolay
+    - Nelson, Andrew R. J.
+    - Jones, Eric
+    - Kern, Robert
+    - Larson, Eric
+    - Carey, C. J.
+    - Polat, İlhan
+    - Feng, Yu
+    - Moore, Eric W.
+    - VanderPlas, Jake
+    - Laxalde, Denis
+    - Perktold, Josef
+    - Cimrman, Robert
+    - Henriksen, Ian
+    - Quintero, E. A.
+    - Harris, Charles R.
+    - Archibald, Anne M.
+    - Ribeiro, Antônio H.
+    - Pedregosa, Fabian
+    - van Mulbregt, Paul
+  date: 2020
+  page-range: 261-272
+  parent:
+    type: Periodical
+    title: Nature Methods
+    volume: 17
+    issue: 3
+  serial-number:
+    doi: 10.1038/s41592-019-0686-2

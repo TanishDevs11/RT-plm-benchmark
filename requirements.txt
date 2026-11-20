@@ -28,3 +28,7 @@ pydssp>=0.9
 # umap-learn, for the representation diagnostics UMAP projection
 umap-learn>=0.5
 psutil>=5.9
+
+# Technical report build (reports/build_pdf.py). Bundles the Typst compiler and its
+# fonts, so no TeX distribution is required. Optional: only the PDF build needs it.
+typst==0.15.2
