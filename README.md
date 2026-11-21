@@ -10,6 +10,33 @@ stricter question: **do learned protein representations actually
 generalize to unseen RT families better than simple sequence-derived
 baselines?**
 
+## Contents
+
+- [Provenance](#provenance)
+- [Research Question](#research-question)
+- [Background](#background)
+- [Status](#status)
+- [Dataset](#dataset)
+- [Representations](#representations)
+- [Evaluation Protocol](#evaluation-protocol)
+- [The Instrument](#the-instrument)
+- [Main Result](#main-result)
+- [What the PLMs Learned](#what-the-plms-learned)
+- [Leakage Audit of the Original Challenge Pipeline](#leakage-audit-of-the-original-challenge-pipeline)
+- [Why Null Controls Matter](#why-null-controls-matter)
+- [Protocol Integrity](#protocol-integrity)
+- [Repository Structure](#repository-structure)
+- [Reproducibility](#reproducibility)
+- [Limitations](#limitations)
+- [Blocked Experiments](#blocked-experiments)
+- [Future Work](#future-work)
+- [Reports](#reports)
+- [Contributors](#contributors)
+- [Data Source and Citation](#data-source-and-citation)
+- [Acknowledgements](#acknowledgements)
+- [Project Status](#project-status)
+- [Licence](#licence)
+
 ## Provenance
 
 This repository is a methodological rebuild of
@@ -50,7 +77,7 @@ benchmark, so that a cross-family transfer task can be contrasted against a
 within-protein variant effect task. Progress is in
 [reports/progress_2026-09-30.md](reports/progress_2026-09-30.md).
 
-| task | what it measures | assay | status |
+| Task | What it measures | Assay | Status |
 | --- | --- | --- | --- |
 | **A** cross-family | does a representation transfer across RT families | prime editing, percent precise edits, HEK293T | **complete**, 57 sequences from Table S1, endorsed through Gate G2; see [reports/FINAL_REPORT.md](reports/FINAL_REPORT.md) |
 | **A2** evolved | transfer onto selected variants, evaluation only | prime editing, evolved editors in their own scaffolds | not acquired |
@@ -163,10 +190,11 @@ fixed the lineage problem, and the two core-focused variants made it worse; see
 The benchmark was designed to reduce evolutionary shortcut learning and
 model-selection leakage.
 
-Twelve representations, two model heads (regularized logistic regression for `active`
-and ridge regression for `pe_efficiency_pct`, and nothing else), and one free
-parameter, the regularization strength, taken from a grid of 6 values fixed a priori
-and selected in the inner loop of a nested leave-one-family-out protocol. No other
+The benchmark evaluates twelve representations under two model heads (regularized
+logistic regression for `active` and ridge regression for `pe_efficiency_pct`, and
+nothing else), with a single free parameter: the regularization strength, taken from a
+grid of 6 values fixed a priori and selected in the inner loop of a nested
+leave-one-family-out protocol. No other
 model family appears anywhere. That single free parameter is what makes the
 search-capacity null comparison below legitimate.
 
@@ -190,7 +218,7 @@ The objective is not simply to obtain the highest score, but to
 determine whether an observed score contains evidence of generalizable
 biological signal.
 
-## The instrument
+## The Instrument
 
 The contribution here is the **search-capacity null**: run a selection procedure,
 unchanged, on K vectors of pure noise and record the score it reaches. That is how
@@ -206,8 +234,8 @@ interval. **A score that does not clear its null has reported nothing.**
 > prediction over simpler representations under family-held-out
 > evaluation on this dataset.**
 
-For the primary binary activity benchmark. All figures are out-of-fold, pooled over
-all 57 rows under the nested leave-one-family-out protocol.
+The table below is for the primary binary activity benchmark. All figures are
+out-of-fold, pooled over all 57 rows under the nested leave-one-family-out protocol.
 
 | Representation | PR-AUC | Gaussian noise control | Permutation p95 | Survives permutation control |
 | --- | --- | --- | --- | --- |
@@ -378,7 +406,7 @@ In other words:
 This motivates using multiple controls when benchmarking
 high-dimensional biological representations on small datasets.
 
-## Protocol integrity
+## Protocol Integrity
 
 `bench/test_protocol.py` corrupts every held-out label and requires the selected
 configuration to be byte-identical, and includes a deliberate **peeking positive
@@ -483,7 +511,7 @@ The main limitations are:
 These limitations are part of the benchmark rather than being hidden
 from the analysis.
 
-## Blocked experiments
+## Blocked Experiments
 
 ProtT5-XL-U50, inverse-folding likelihoods, and zero-shot ESM-1v masked marginals are
 marked **NOT RUN** with their exact blockers recorded in [WRITEUP.md](WRITEUP.md).
@@ -552,7 +580,7 @@ conclusions.
 -   **Hemalakshmi P.**: documentation, README development, and
     project presentation
 
-## Data source and citation
+## Data Source and Citation
 
 The Task A panel is derived from the supplementary material of:
 
